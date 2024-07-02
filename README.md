@@ -40,9 +40,9 @@ Any not logged user can search and browse events, but only registered and logged
 
 ### External technologies:
 
-- Ably
-- Cloudinary
-- Mapbox
+- Ably (chat API)
+- Cloudinary (upload file and link to image generate API)
+- Mapbox (autocomplete + map API)
 
 ## Getting Started
 
