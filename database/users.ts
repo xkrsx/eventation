@@ -1,4 +1,4 @@
-type User = {
+export type User = {
   id: number;
   username: string;
   fullName: string;
@@ -7,6 +7,6 @@ type User = {
   createdAt: Date;
 };
 
-type UserWithPasswordHash = User & {
+export type UserWithPasswordHash = User & {
   passwordHash: string;
 };
