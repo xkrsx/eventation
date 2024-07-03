@@ -8,12 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@upleveled/ley':
+        specifier: ^0.8.6
+        version: 0.8.6
       dotenv-safe:
         specifier: ^9.1.0
         version: 9.1.0(dotenv@16.4.5)
-      ley:
-        specifier: ^0.8.1
-        version: 0.8.1
       next:
         specifier: 15.0.0-canary.51
         version: 15.0.0-canary.51(@babel/core@7.24.7)(react-dom@19.0.0-rc.0(react@19.0.0-rc.0))(react@19.0.0-rc.0)(sass@1.77.6)
@@ -29,6 +29,9 @@ importers:
       sass:
         specifier: ^1.77.6
         version: 1.77.6
+      tsx:
+        specifier: ^4.16.2
+        version: 4.16.2
     devDependencies:
       '@ts-safeql/eslint-plugin':
         specifier: ^3.3.1
@@ -790,6 +793,11 @@ packages:
   '@typescript-eslint/visitor-keys@8.0.0-alpha.34':
     resolution: {integrity: sha512-Zs84EZx55fusxi4+6bzdZyNLy6nN8snh7HOcgs1jiRkqmf0qo+cgPjb7mGA1RgE1m60FQYgesj7je9KBE0HfSA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@upleveled/ley@0.8.6':
+    resolution: {integrity: sha512-FqFhvC85XRsAxr2B3Z8s0lcRmr+tnA0V4lebrM5rfgsXpxI0PFfH41KyPEQDFl//sKjQSyDmX3P0BUnfhL/+NQ==}
+    engines: {node: '>= 8'}
+    hasBin: true
 
   abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
@@ -1921,11 +1929,6 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  ley@0.8.1:
-    resolution: {integrity: sha512-8Nd5uzie4PxiEJcQNv5YL1IQCMzye/0sE8VPB4KczJkyd44NfDyK/7Vbmp9eHYt+dJ4hxaXy+gF4DORSxYGArg==}
-    engines: {node: '>= 8'}
-    hasBin: true
-
   libpg-query@15.2.0-rc.deparse.3:
     resolution: {integrity: sha512-e8OPjGPqy3H+rSdwQigkeibSIE6WMU4yyYZErPNgHeyZHcRGOuNSuSx0ifJhgVl7JkapVHtSau2ZCl3g65RTRg==}
 
@@ -2791,8 +2794,8 @@ packages:
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
 
-  tsx@4.16.0:
-    resolution: {integrity: sha512-MPgN+CuY+4iKxGoJNPv+1pyo5YWZAQ5XfsyobUG+zoKG7IkvCPLZDEyoIb8yLS2FcWci1nlxAqmvPlFWD5AFiQ==}
+  tsx@4.16.2:
+    resolution: {integrity: sha512-C1uWweJDgdtX2x600HjaFaucXTilT7tgUZHbOE4+ypskZ1OP8CRCSDkCxG6Vya9EwaFIVagWwpaVAn5wzypaqQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -3465,7 +3468,7 @@ snapshots:
       postgres: 3.4.4
       synckit: 0.9.0
       ts-pattern: 4.3.0
-      tsx: 4.16.0
+      tsx: 4.16.2
       zod: 3.23.8
       zod-to-json-schema: 3.20.1(zod@3.23.8)
     transitivePeerDependencies:
@@ -3662,6 +3665,13 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.0.0-alpha.34
       eslint-visitor-keys: 3.4.3
+
+  '@upleveled/ley@0.8.6':
+    dependencies:
+      kleur: 4.1.5
+      mk-dirs: 3.0.0
+      sade: 1.8.1
+      totalist: 2.0.0
 
   abbrev@1.1.1: {}
 
@@ -5026,13 +5036,6 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  ley@0.8.1:
-    dependencies:
-      kleur: 4.1.5
-      mk-dirs: 3.0.0
-      sade: 1.8.1
-      totalist: 2.0.0
-
   libpg-query@15.2.0-rc.deparse.3(encoding@0.1.13):
     dependencies:
       '@emnapi/runtime': 0.43.1
@@ -5995,7 +5998,7 @@ snapshots:
       tslib: 1.14.1
       typescript: 5.5.3
 
-  tsx@4.16.0:
+  tsx@4.16.2:
     dependencies:
       esbuild: 0.21.5
       get-tsconfig: 4.7.5

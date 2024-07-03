@@ -7,17 +7,18 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "migrate": "ley",
+    "migrate": "ley --require tsx/cjs",
     "start": "next start"
   },
   "dependencies": {
+    "@upleveled/ley": "^0.8.6",
     "dotenv-safe": "^9.1.0",
-    "ley": "^0.8.1",
     "next": "15.0.0-canary.51",
     "postgres": "^3.4.4",
     "react": "19.0.0-rc.0",
     "react-dom": "19.0.0-rc.0",
-    "sass": "^1.77.6"
+    "sass": "^1.77.6",
+    "tsx": "^4.16.2"
   },
   "devDependencies": {
     "@ts-safeql/eslint-plugin": "^3.3.1",
