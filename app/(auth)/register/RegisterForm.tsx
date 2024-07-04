@@ -51,7 +51,7 @@ export default function RegisterForm() {
   return (
     <div className="wrapper">
       <div className="register">
-        <h1>Register Form</h1>
+        <h1>Register</h1>
         <form
           className="form"
           onSubmit={async (event) => {

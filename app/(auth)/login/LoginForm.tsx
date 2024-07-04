@@ -54,7 +54,7 @@ export default function LoginForm(props: Props) {
   return (
     <div className="wrapper">
       <div className="register">
-        <h1>Login Form</h1>
+        <h1>Login</h1>
         <form
           className="form"
           onSubmit={async (event) => {
