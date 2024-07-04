@@ -1,53 +1,118 @@
 'use client';
 import { useState } from 'react';
+import { RegisterResponseBodyPost } from '../../api/register/route';
+import ErrorMessage from '../../ErrorMessage';
 
 export default function RegisterForm() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [newUser, setNewUser] = useState({
+    username: '',
+    password: '',
+    fullName: '',
+    location: '',
+    email: '',
+  });
+  const [errors, setErrors] = useState<{ message: string }[]>([]);
 
   async function handleRegister(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const response = await fetch('/api/register', {
       method: 'POST',
       body: JSON.stringify({
-        username,
-        password,
+        newUser,
       }),
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    const data = await response.json();
-    console.log('data: ', data);
+    const data: RegisterResponseBodyPost = await response.json();
+
+    if ('errors' in data) {
+      setErrors(data.errors);
+    }
+  }
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value;
+
+    setErrors([]);
+
+    setNewUser({
+      ...newUser,
+      [event.target.name]: value,
+    });
   }
 
   return (
     <div className="wrapper">
-      <div>Register Form</div>
-      <form
-        onSubmit={async (event) => {
-          event.preventDefault();
-          await handleRegister(event);
-        }}
-      >
-        <label>
-          username
-          <input
-            value={username}
-            onChange={(event) => setUsername(event.currentTarget.value)}
-          />
-        </label>
+      <div className="register">
+        <h1>Register Form</h1>
+        <form
+          className="form"
+          onSubmit={async (event) => {
+            // eslint error: no preventDefault() even though there is one in called function
+            event.preventDefault();
+            await handleRegister(event);
+          }}
+        >
+          <label>
+            username
+            <input
+              required
+              name="username"
+              value={newUser.username}
+              onChange={handleChange}
+            />
+          </label>
 
-        <label>
-          password
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.currentTarget.value)}
-          />
-        </label>
-        <button>Register</button>
-      </form>
+          <label>
+            {/* TODO write password rules */}
+            password (one X, one x, one #, one @)
+            <input
+              required
+              type="password"
+              name="password"
+              value={newUser.password}
+              onChange={handleChange}
+            />
+          </label>
+          {/* TODO password confirmation */}
+          <label>
+            full name
+            <input
+              required
+              name="fullName"
+              value={newUser.fullName}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            location
+            <input
+              required
+              name="location"
+              value={newUser.location}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            e-mail
+            <input
+              required
+              type="email"
+              name="email"
+              value={newUser.email}
+              onChange={handleChange}
+            />
+          </label>
+          <button>Register</button>
+
+          {errors.map((error) => (
+            <div className="error" key={`error-${error.message}`}>
+              <ErrorMessage>{error.message}</ErrorMessage>
+            </div>
+          ))}
+        </form>
+      </div>
     </div>
   );
 }

@@ -1,3 +1,6 @@
+import { cache } from 'react';
+import { sql } from './connect';
+
 export type User = {
   id: number;
   username: string;
@@ -10,3 +13,59 @@ export type User = {
 export type UserWithPasswordHash = User & {
   passwordHash: string;
 };
+
+export const getUserByUsernameInsecure = cache(async (username: string) => {
+  const [user] = await sql<Pick<User[], 'id' | 'username'>>`
+    SELECT
+      users.id,
+      users.username
+    FROM
+      users
+    WHERE
+      username = ${username}
+  `;
+  return user;
+});
+
+export const getUserByEmailInsecure = cache(async (email: string) => {
+  const [user] = await sql<Pick<User[], 'id' | 'email'>>`
+    SELECT
+      users.id,
+      users.username
+    FROM
+      users
+    WHERE
+      email = ${email}
+  `;
+  return user;
+});
+
+export const createUserInsecure = cache(
+  async (newUser: Omit<User, 'id' | 'createdAt'>, passwordHash: string) => {
+    const [user] = await sql<Omit<User[], 'createdAt'>>`
+      INSERT INTO
+        users (
+          username,
+          password_hash,
+          full_name,
+          location,
+          email
+        )
+      VALUES
+        (
+          ${newUser.username},
+          ${passwordHash},
+          ${newUser.fullName},
+          ${newUser.location},
+          ${newUser.email}
+        )
+      RETURNING
+        users.id,
+        users.username,
+        users.full_name,
+        users.location,
+        users.email
+    `;
+    return user;
+  },
+);

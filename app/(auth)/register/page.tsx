@@ -1,3 +1,4 @@
+import './page.scss';
 import RegisterForm from './RegisterForm';
 
 export default function RegisterPage() {
