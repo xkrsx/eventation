@@ -15,34 +15,34 @@ export type UserWithPasswordHash = User & {
 };
 
 export const getUserByUsernameInsecure = cache(async (username: string) => {
-  const [user] = await sql<Pick<User[], 'id' | 'username'>>`
+  const [user] = await sql<Pick<User, 'id' | 'username'>[]>`
     SELECT
       users.id,
       users.username
     FROM
       users
     WHERE
-      username = ${username}
+      username = ${username.toLowerCase()}
   `;
   return user;
 });
 
 export const getUserByEmailInsecure = cache(async (email: string) => {
-  const [user] = await sql<Pick<User[], 'id' | 'email'>>`
+  const [user] = await sql<Pick<User, 'id' | 'email'>[]>`
     SELECT
       users.id,
-      users.username
+      users.email
     FROM
       users
     WHERE
-      email = ${email}
+      email = ${email.toLowerCase()}
   `;
   return user;
 });
 
 export const createUserInsecure = cache(
   async (newUser: Omit<User, 'id' | 'createdAt'>, passwordHash: string) => {
-    const [user] = await sql<Omit<User[], 'createdAt'>>`
+    const [user] = await sql<Omit<User, 'createdAt'>[]>`
       INSERT INTO
         users (
           username,
@@ -53,11 +53,11 @@ export const createUserInsecure = cache(
         )
       VALUES
         (
-          ${newUser.username},
+          ${newUser.username.toLowerCase()},
           ${passwordHash},
           ${newUser.fullName},
           ${newUser.location},
-          ${newUser.email}
+          ${newUser.email.toLowerCase()}
         )
       RETURNING
         users.id,
@@ -65,6 +65,20 @@ export const createUserInsecure = cache(
         users.full_name,
         users.location,
         users.email
+    `;
+    return user;
+  },
+);
+
+export const getUserWithPasswordHashInsecure = cache(
+  async (username: string) => {
+    const [user] = await sql<UserWithPasswordHash[]>`
+      SELECT
+        *
+      FROM
+        users
+      WHERE
+        username = ${username.toLowerCase()}
     `;
     return user;
   },

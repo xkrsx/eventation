@@ -10,7 +10,7 @@ import {
 
 export type RegisterResponseBodyPost =
   | {
-      user: User;
+      user: Omit<User, 'createdAt'>;
     }
   | { errors: { message: string }[] };
 
@@ -81,7 +81,7 @@ export async function POST(
     return NextResponse.json(
       { errors: [{ message: 'Registration failed.' }] },
       {
-        status: 400,
+        status: 500,
       },
     );
   }
