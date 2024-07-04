@@ -1,12 +1,16 @@
+import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
+import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { createSessionInsecure } from '../../../../database/sessions';
 import {
   createUserInsecure,
   getUserByEmailInsecure,
   getUserByUsernameInsecure,
   User,
 } from '../../../../database/users';
+import { secureCookieOptions } from '../../../../util/cookies';
 
 export type RegisterResponseBodyPost =
   | {
@@ -97,8 +101,7 @@ export async function POST(
     );
   }
 
-  // TODO password confirmation
-  // use zod refine
+  // TODO ask Victor if validation of password confirmation up above by zod is enough
 
   // 4. Hash the plain password from the user
   const passwordHash = await bcrypt.hash(result.data.password, 12);
@@ -115,5 +118,29 @@ export async function POST(
     );
   }
 
+  // 6. Create session token
+  const token = crypto.randomBytes(100).toString('base64');
+
+  // 7. Insert token to session table
+  const session = await createSessionInsecure(token, newUser.id);
+
+  if (!session) {
+    return NextResponse.json(
+      { errors: [{ message: 'Sessions creation failed.' }] },
+      {
+        status: 401,
+      },
+    );
+  }
+
+  // 8. Send new session token cookie in the header
+  cookies().set({
+    name: 'sessionToken',
+    value: session.token,
+    ...secureCookieOptions,
+  });
+
+  console.log('newUser: ', newUser);
+  // 8. Return the new user information without the password hash
   return NextResponse.json({ user: newUser });
 }
