@@ -2,8 +2,8 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { getSafeReturnToPath } from '../../../util/validation';
-import { LoginResponseBodyPost } from '../../api/login/route';
 import ErrorMessage from '../../ErrorMessage';
+import { LoginResponseBodyPost } from '../api/login/route';
 
 type Props = { returnTo?: string | string[] };
 

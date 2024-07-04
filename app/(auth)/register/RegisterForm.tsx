@@ -1,8 +1,8 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { RegisterResponseBodyPost } from '../../api/register/route';
 import ErrorMessage from '../../ErrorMessage';
+import { RegisterResponseBodyPost } from '../api/register/route';
 
 export default function RegisterForm() {
   const [newUser, setNewUser] = useState({

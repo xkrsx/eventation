@@ -6,7 +6,7 @@ import {
   getUserByEmailInsecure,
   getUserByUsernameInsecure,
   User,
-} from '../../../database/users';
+} from '../../../../database/users';
 
 export type RegisterResponseBodyPost =
   | {

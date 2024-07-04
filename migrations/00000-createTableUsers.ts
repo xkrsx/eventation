@@ -9,7 +9,7 @@ export async function up(sql: Sql) {
       password_hash varchar(80) NOT NULL,
       location varchar(50) NOT NULL,
       email varchar(80) NOT NULL UNIQUE,
-      created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
+      created_at timestamp DEFAULT now() NOT NULL
     )
   `;
 }

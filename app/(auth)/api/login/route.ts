@@ -1,7 +1,10 @@
 import bcrypt from 'bcrypt';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getUserWithPasswordHashInsecure, User } from '../../../database/users';
+import {
+  getUserWithPasswordHashInsecure,
+  User,
+} from '../../../../database/users';
 
 export type LoginResponseBodyPost =
   | {
