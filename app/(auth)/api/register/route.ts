@@ -14,17 +14,46 @@ export type RegisterResponseBodyPost =
     }
   | { errors: { message: string }[] };
 
-const userSchema = z.object({
-  username: z.string().min(3).max(30),
-  password: z
-    .string()
-    .min(4)
-    .max(10)
-    .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{4,}$/),
-  fullName: z.string().min(3).max(100),
-  location: z.string().min(2).max(50),
-  email: z.string().email().max(80),
-});
+const userSchema = z
+  .object({
+    username: z
+      .string()
+      .min(3, { message: 'Username must have at least 3 characters.' })
+      .max(30, { message: 'Username must have maximum 30 characters.' }),
+    password: z
+      .string()
+      .min(4, { message: 'Password must be have least 4 characters.' })
+      .max(10, { message: 'Username must have maximum 10 characters.' })
+      .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{4,}$/, {
+        message:
+          'Password must have one uppercase letter, one lowercase letter, one number and one special character.',
+      }),
+    confirmPassword: z
+      .string()
+      .min(4, { message: 'Password must be have least 4 characters.' })
+      .max(10, { message: 'Username must have maximum 10 characters.' })
+      .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{4,}$/, {
+        message:
+          'Password must have one uppercase letter, one lowercase letter, one number and one special character.',
+      }),
+    fullName: z
+      .string()
+      .min(3, { message: 'Name must have at least 3 characters.' })
+      .max(100, { message: 'Name must have maximum 100 characters.' }),
+    location: z
+      .string()
+      .min(2, { message: 'Location must have at least 2 characters.' })
+      .max(50, { message: 'Location must have maximum 50 characters.' }),
+    email: z
+      .string()
+      .min(3, { message: 'E-mail must have at least 3 characters.' })
+      .max(80, { message: 'E-mail must have maximum 80 characters.' })
+      .email({ message: 'E-mail must a valid address.' }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Passwords do not match.',
+  });
 
 export async function POST(
   request: NextRequest,

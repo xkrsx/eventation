@@ -8,6 +8,7 @@ export default function RegisterForm() {
   const [newUser, setNewUser] = useState({
     username: '',
     password: '',
+    confirmPassword: '',
     fullName: '',
     location: '',
     email: '',
@@ -77,6 +78,17 @@ export default function RegisterForm() {
               type="password"
               name="password"
               value={newUser.password}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            {/* TODO write password rules */}
+            confirm password
+            <input
+              required
+              type="password"
+              name="confirmPassword"
+              value={newUser.confirmPassword}
               onChange={handleChange}
             />
           </label>

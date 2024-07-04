@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -44,7 +45,6 @@ export async function POST(
   const userWithPasswordHash = await getUserWithPasswordHashInsecure(
     result.data.username,
   );
-  console.log(userWithPasswordHash);
 
   if (!userWithPasswordHash) {
     return NextResponse.json(
@@ -70,17 +70,7 @@ export async function POST(
     );
   }
 
-  // // 5. Save the user information with the hashed password in the database
-  // const newUser = await createUserInsecure(result.data, passwordHash);
-
-  // if (!newUser) {
-  //   return NextResponse.json(
-  //     { errors: [{ message: 'Registration failed.' }] },
-  //     {
-  //       status: 500,
-  //     },
-  //   );
-  // }
+  const token = crypto.randomBytes(100).toString('base64');
 
   return NextResponse.json({
     user: { username: userWithPasswordHash.username },
