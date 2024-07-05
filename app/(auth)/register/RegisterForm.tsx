@@ -1,4 +1,5 @@
 'use client';
+import { AddressAutofill } from '@mapbox/search-js-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ErrorMessage from '../../ErrorMessage';
@@ -102,6 +103,28 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
+          <AddressAutofill
+            className="form"
+            accessToken="pk.eyJ1Ijoia3J5enlzIiwiYSI6ImNseThyYnJsNDBmeWYycXM3M2tidWJtcXQifQ.by4Renbq_rAvqpOxM_gflg"
+          >
+            <label>
+              street + number
+              <input name="address-1" autocomplete="address-line1" />
+            </label>
+            <label>
+              {' '}
+              city
+              <input name="city" autocomplete="address-level2" />
+            </label>
+            <label>
+              state
+              <input name="state" autocomplete="address-level1" />
+            </label>
+            <label>
+              postal code
+              <input name="zip" autocomplete="postal-code" />
+            </label>
+          </AddressAutofill>
           <label>
             location
             <input
