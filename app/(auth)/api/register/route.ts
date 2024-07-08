@@ -101,8 +101,6 @@ export async function POST(
     );
   }
 
-  // TODO ask Victor if validation of password confirmation up above by zod is enough
-
   // 4. Hash the plain password from the user
   const passwordHash = await bcrypt.hash(result.data.password, 12);
 

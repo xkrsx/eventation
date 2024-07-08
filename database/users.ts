@@ -5,7 +5,9 @@ export type User = {
   id: number;
   username: string;
   fullName: string;
-  location: string;
+  location: string | null;
+  latitude: string | null;
+  longitude: string | null;
   email: string;
   createdAt: Date;
 };
@@ -39,7 +41,7 @@ export const getUserByEmailInsecure = cache(async (email: string) => {
   `;
   return user;
 });
-
+// TODO saving user to DB with long/lat (empty fields now)
 export const createUserInsecure = cache(
   async (newUser: Omit<User, 'id' | 'createdAt'>, passwordHash: string) => {
     const [user] = await sql<Omit<User, 'createdAt'>[]>`
@@ -49,6 +51,8 @@ export const createUserInsecure = cache(
           password_hash,
           full_name,
           location,
+          latitude,
+          longitude,
           email
         )
       VALUES
@@ -57,6 +61,8 @@ export const createUserInsecure = cache(
           ${passwordHash},
           ${newUser.fullName},
           ${newUser.location},
+          ${newUser.latitude},
+          ${newUser.longitude},
           ${newUser.email.toLowerCase()}
         )
       RETURNING
@@ -64,6 +70,8 @@ export const createUserInsecure = cache(
         users.username,
         users.full_name,
         users.location,
+        users.latitude,
+        users.longitude,
         users.email
     `;
     return user;

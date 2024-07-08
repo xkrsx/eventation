@@ -1,5 +1,10 @@
 'use client';
-import { AddressAutofill } from '@mapbox/search-js-react';
+
+import '@geoapify/geocoder-autocomplete/styles/minimal.css';
+import {
+  GeoapifyContext,
+  GeoapifyGeocoderAutocomplete,
+} from '@geoapify/react-geocoder-autocomplete';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ErrorMessage from '../../ErrorMessage';
@@ -12,8 +17,11 @@ export default function RegisterForm() {
     confirmPassword: '',
     fullName: '',
     location: '',
+    latitude: '',
+    longitude: '',
     email: '',
   });
+  const [userLocation, setUserLocation] = useState(false);
   const [errors, setErrors] = useState<{ message: string }[]>([]);
 
   const router = useRouter();
@@ -31,11 +39,28 @@ export default function RegisterForm() {
     });
     const data: RegisterResponseBodyPost = await response.json();
 
+    console.log('newUser: ', newUser);
+
     if ('errors' in data) {
       setErrors(data.errors);
       return;
     }
     router.push(`/profile/${data.user.username}`);
+  }
+  // TODO type req object
+  function sendGeocoderRequest(value: string, geocoder: any) {
+    return geocoder.sendGeocoderRequest(value);
+  }
+
+  // TODO type res object
+  function sendPlaceDetailsRequest(feature: any, geocoder: any) {
+    setNewUser({
+      ...newUser,
+      location: feature.properties.formatted,
+      latitude: String(feature.properties.lat),
+      longitude: String(feature.properties.lon),
+    });
+    return geocoder.sendPlaceDetailsRequest(feature);
   }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -71,9 +96,9 @@ export default function RegisterForm() {
             />
           </label>
 
+          {/* TODO write password rules */}
           <label>
-            {/* TODO write password rules */}
-            password (one X, one x, one #, one @)
+            password
             <input
               required
               type="password"
@@ -83,7 +108,6 @@ export default function RegisterForm() {
             />
           </label>
           <label>
-            {/* TODO write password rules */}
             confirm password
             <input
               required
@@ -93,7 +117,7 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
-          {/* TODO password confirmation */}
+
           <label>
             full name
             <input
@@ -103,28 +127,63 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
-          <AddressAutofill
-            className="form"
-            accessToken="pk.eyJ1Ijoia3J5enlzIiwiYSI6ImNseThyYnJsNDBmeWYycXM3M2tidWJtcXQifQ.by4Renbq_rAvqpOxM_gflg"
-          >
+          <div className="location">
+            <div>
+              <input
+                type="checkbox"
+                checked={userLocation}
+                onChange={() => setUserLocation(!userLocation)}
+              />{' '}
+              I want to add my default location for events (city or country)
+            </div>
             <label>
-              street + number
-              <input name="address-1" autocomplete="address-line1" />
+              {userLocation ? (
+                <div>
+                  <label>
+                    <input
+                      type="radio"
+                      value="City"
+                      name="type"
+                      disabled={!userLocation}
+                    />
+                    City
+                  </label>
+                  <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
+                    <GeoapifyGeocoderAutocomplete
+                      placeholder="City"
+                      type="city"
+                      limit={3}
+                      allowNonVerifiedHouseNumber={true}
+                      sendGeocoderRequestFunc={sendGeocoderRequest}
+                      addDetails={true}
+                      sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
+                    />
+                  </GeoapifyContext>
+                  <label>
+                    <input
+                      type="radio"
+                      value="Country"
+                      name="type"
+                      disabled={!userLocation}
+                    />
+                    Country
+                  </label>
+                  <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
+                    <GeoapifyGeocoderAutocomplete
+                      placeholder="Country"
+                      type="country"
+                      limit={3}
+                      allowNonVerifiedHouseNumber={true}
+                      sendGeocoderRequestFunc={sendGeocoderRequest}
+                      addDetails={true}
+                      sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
+                    />
+                  </GeoapifyContext>
+                </div>
+              ) : null}
             </label>
-            <label>
-              {' '}
-              city
-              <input name="city" autocomplete="address-level2" />
-            </label>
-            <label>
-              state
-              <input name="state" autocomplete="address-level1" />
-            </label>
-            <label>
-              postal code
-              <input name="zip" autocomplete="postal-code" />
-            </label>
-          </AddressAutofill>
+          </div>
+          {/*
           <label>
             location
             <input
@@ -133,7 +192,7 @@ export default function RegisterForm() {
               value={newUser.location}
               onChange={handleChange}
             />
-          </label>
+          </label> */}
           <label>
             e-mail
             <input
