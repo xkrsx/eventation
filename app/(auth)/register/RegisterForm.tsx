@@ -1,12 +1,15 @@
 'use client';
 
 import '@geoapify/geocoder-autocomplete/styles/minimal.css';
+import './RegisterForm.scss';
 import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { ReactTags } from 'react-tag-autocomplete';
+import { suggestions } from '../../../database/categories';
 import ErrorMessage from '../../ErrorMessage';
 import { RegisterResponseBodyPost } from '../api/register/route';
 
@@ -22,7 +25,38 @@ export default function RegisterForm() {
     email: '',
   });
   const [userLocation, setUserLocation] = useState(false);
+  const [selected, setSelected] = useState([]);
   const [errors, setErrors] = useState<{ message: string }[]>([]);
+
+  const SELECTED_LENGTH = 3;
+
+  const [options, setOptions] = useState({
+    activateFirstOption: false,
+    allowBackspace: false,
+    collapseOnSelect: false,
+    isDisabled: false,
+  });
+
+  const onAdd = useCallback(
+    (newTag) => {
+      setSelected([...selected, newTag]);
+    },
+    [selected],
+  );
+
+  const onDelete = useCallback(
+    (index) => {
+      setSelected(selected.filter((_, i) => i !== index));
+    },
+    [selected],
+  );
+
+  const onOptionChange = useCallback(
+    (e) => {
+      setOptions({ ...options, [e.target.name]: e.target.checked });
+    },
+    [options],
+  );
 
   const router = useRouter();
 
@@ -95,7 +129,6 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
-
           {/* TODO write password rules */}
           <label>
             password
@@ -117,7 +150,6 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
-
           <label>
             full name
             <input
@@ -193,14 +225,28 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
-
-          {/*
-          TODO Add default category input
-        https://www.npmjs.com/package/react-tag-autocomplete
-      */}
-
+          default categories (max 3)
+          <ReactTags
+            id="category-selector"
+            labelText="Select categories"
+            isInvalid={selected.length >= SELECTED_LENGTH}
+            onAdd={onAdd}
+            onDelete={onDelete}
+            selected={selected}
+            suggestions={suggestions}
+            {...options}
+          />
+          {selected.length < SELECTED_LENGTH ? (
+            <p id="error" style={{ color: '#fd5956' }}>
+              You can select {SELECTED_LENGTH - selected.length} more tags
+            </p>
+          ) : null}
+          {selected.length > SELECTED_LENGTH ? (
+            <p id="error" style={{ color: '#fd5956' }}>
+              You must remove {selected.length - SELECTED_LENGTH} tags
+            </p>
+          ) : null}
           <button>Register</button>
-
           {errors.map((error) => (
             <div className="error" key={`error-${error.message}`}>
               <ErrorMessage>{error.message}</ErrorMessage>
