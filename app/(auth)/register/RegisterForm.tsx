@@ -183,16 +183,6 @@ export default function RegisterForm() {
               ) : null}
             </label>
           </div>
-          {/*
-          <label>
-            location
-            <input
-              required
-              name="location"
-              value={newUser.location}
-              onChange={handleChange}
-            />
-          </label> */}
           <label>
             e-mail
             <input
@@ -203,6 +193,12 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
+
+          {/*
+          TODO Add default category input
+        https://www.npmjs.com/package/react-tag-autocomplete
+      */}
+
           <button>Register</button>
 
           {errors.map((error) => (
