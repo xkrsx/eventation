@@ -34,7 +34,7 @@ export default function RegisterForm() {
   // TODO FIX newTag typing
   // TODO FIX async issue with adding one less than selected
   const onAdd = useCallback(
-    (newTag: { value: number; label: string }) => {
+    (newTag: never) => {
       setSelected([...selected, newTag]);
       newCategory = selected.map((category) => category.label);
       setNewUser({
@@ -74,6 +74,8 @@ export default function RegisterForm() {
       return;
     }
     router.push(`/profile/${data.user.username}`);
+
+    router.refresh();
   }
   // TODO type req object
   function sendGeocoderRequest(value: string, geocoder: any) {

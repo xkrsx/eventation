@@ -21,18 +21,21 @@ export default async function UserProfile() {
   }
 
   // 4. if the sessionToken cookie is valid, allow access to profile page
-  if (session) {
-    const profile = await getUser(session.token);
 
-    return (
-      <div className="wrapper">
-        <div className="profile">
-          <h1>Welcome, {profile.username}</h1>
-          <Link href={`/profile/${profile.username}`}>
-            See your public profile
-          </Link>
-        </div>
-      </div>
-    );
+  const profile = await getUser(session.token);
+
+  if (!profile) {
+    redirect('/');
   }
+
+  return (
+    <div className="wrapper">
+      <div className="profile">
+        <h1>Welcome, {profile.username}</h1>
+        <Link href={`/profile/${profile.username}`}>
+          See your public profile
+        </Link>
+      </div>
+    </div>
+  );
 }
