@@ -1,15 +1,29 @@
+import { cookies } from 'next/headers';
 import Link from 'next/link';
 import LogoutButton from '../../(auth)/logout/LogoutButton';
+import { getUser } from '../../../database/users';
 
-export default function Nav() {
+export default async function Nav() {
+  // 1. Check if sessionToken in cookies exists
+  const sessionCookie = cookies().get('sessionToken');
+
+  // 2. Check if the sessionToken from cookie is still valid in DB
+  const user = sessionCookie && (await getUser(sessionCookie.value));
+
   return (
     <div className="nav">
-      <Link href="/profile">Profile</Link>
-      {' | '}
-      <Link href="/login">Login</Link>
-      {' | '}
-      <Link href="/register">Register</Link>
-      <LogoutButton />
+      {user ? (
+        <>
+          <Link href="/profile">{user.username}</Link>
+          <LogoutButton />
+        </>
+      ) : (
+        <>
+          <Link href="/login">Login</Link>
+          {' | '}
+          <Link href="/register">Register</Link>
+        </>
+      )}
     </div>
   );
 }
