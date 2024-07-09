@@ -18,6 +18,8 @@ export type RegisterResponseBodyPost =
     }
   | { errors: { message: string }[] };
 
+const categoriesSchema = z.object({});
+
 const userSchema = z
   .object({
     username: z
@@ -44,10 +46,10 @@ const userSchema = z
       .string()
       .min(3, { message: 'Name must have at least 3 characters.' })
       .max(100, { message: 'Name must have maximum 100 characters.' }),
-    location: z
-      .string()
-      .min(2, { message: 'Location must have at least 2 characters.' })
-      .max(50, { message: 'Location must have maximum 50 characters.' }),
+    location: z.string(),
+    latitude: z.string(),
+    longitude: z.string(),
+    categories: z.array(categoriesSchema),
     email: z
       .string()
       .min(3, { message: 'E-mail must have at least 3 characters.' })
@@ -138,7 +140,6 @@ export async function POST(
     ...secureCookieOptions,
   });
 
-  console.log('newUser: ', newUser);
   // 8. Return the new user information without the password hash
   return NextResponse.json({ user: newUser });
 }

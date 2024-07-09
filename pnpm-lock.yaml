@@ -38,6 +38,9 @@ importers:
       react-dom:
         specifier: 19.0.0-rc.0
         version: 19.0.0-rc.0(react@19.0.0-rc.0)
+      react-tag-autocomplete:
+        specifier: ^7.3.0
+        version: 7.3.0(react@19.0.0-rc.0)
       sass:
         specifier: ^1.77.6
         version: 1.77.6
@@ -2541,6 +2544,12 @@ packages:
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+
+  react-tag-autocomplete@7.3.0:
+    resolution: {integrity: sha512-YgbGlZ4ZkfQw23yMIvw0gCsex0LtYojLiVsfAb8w05r1npMo5+Q699KXfrUZ3W01U7mrxvd/YcMcw7WVkDdZQA==}
+    engines: {node: '>= 16.12.0'}
+    peerDependencies:
+      react: ^18.0.0
 
   react@19.0.0-rc.0:
     resolution: {integrity: sha512-8nrDCl5uE54FHeKqKrEO0TS+10bT4cxutJGb2okiJc0FHMQ6I3FeItaqly/1nbijlhSO3HmAVyPIexIQQWYAtQ==}
@@ -5832,6 +5841,10 @@ snapshots:
       scheduler: 0.25.0-rc.0
 
   react-is@16.13.1: {}
+
+  react-tag-autocomplete@7.3.0(react@19.0.0-rc.0):
+    dependencies:
+      react: 19.0.0-rc.0
 
   react@19.0.0-rc.0: {}
 

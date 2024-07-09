@@ -84,7 +84,6 @@ export default function LoginForm(props: Props) {
               onChange={handleChange}
             />
           </label>
-          {/* TODO password confirmation */}
 
           <button>Login</button>
 

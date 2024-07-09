@@ -8,6 +8,7 @@ export type User = {
   location: string | null;
   latitude: string | null;
   longitude: string | null;
+  categories: [] | null;
   email: string;
   createdAt: Date;
 };
@@ -74,6 +75,7 @@ export const createUserInsecure = cache(
           location,
           latitude,
           longitude,
+          categories,
           email
         )
       VALUES
@@ -84,6 +86,7 @@ export const createUserInsecure = cache(
           ${newUser.location},
           ${newUser.latitude},
           ${newUser.longitude},
+          ${newUser.categories},
           ${newUser.email.toLowerCase()}
         )
       RETURNING
@@ -93,6 +96,7 @@ export const createUserInsecure = cache(
         users.location,
         users.latitude,
         users.longitude,
+        users.categories,
         users.email
     `;
     return user;

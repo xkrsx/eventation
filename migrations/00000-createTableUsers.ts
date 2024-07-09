@@ -10,6 +10,7 @@ export async function up(sql: Sql) {
       location varchar(50),
       latitude varchar(50),
       longitude varchar(50),
+      categories text,
       email varchar(80) NOT NULL UNIQUE,
       created_at timestamp DEFAULT now() NOT NULL
     )
