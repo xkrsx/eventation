@@ -1,13 +1,9 @@
 import { cookies } from 'next/headers';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { getValidSession } from '../../database/sessions';
-import { getUser } from '../../database/users';
+import { getValidSession } from '../../../database/sessions';
+import { getUser } from '../../../database/users';
 
-// when logged out: login/registration forms
-// when logged in: view with settings, links to event manager etc
-export default async function UserProfile() {
-  // authentication
+export default async function AddEvent() {
   // 1. Check if sessionToken in cookies exists
   const sessionCookie = cookies().get('sessionToken');
 
@@ -16,7 +12,7 @@ export default async function UserProfile() {
 
   // 3. Redirect to login if sessionToken cookie is invalid
   if (!session) {
-    redirect('/login?returnTo=/profile');
+    redirect('/login?returnTo=/events/add');
     return;
   }
 
@@ -30,11 +26,27 @@ export default async function UserProfile() {
 
   return (
     <div className="wrapper">
-      <div className="profile">
-        <h1>Welcome, {profile.username}</h1>
-        <Link href={`/profile/${profile.username}`}>
-          See your public profile
-        </Link>
+      <div className="event">
+        <h1>Add event</h1>
+        <form>
+          <label>
+            Name
+            <input />
+          </label>
+          <label>
+            Price
+            <input type="number" />
+          </label>
+          <label>
+            Description
+            <input />
+          </label>
+          <label>
+            Links
+            <input />
+          </label>
+          <button>Add event</button>
+        </form>
       </div>
     </div>
   );
