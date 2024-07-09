@@ -12,6 +12,12 @@ export default async function Nav() {
 
   return (
     <div className="nav">
+      <Link href="/">Main</Link>
+      {' | '}
+      <Link href="/events/add">Add</Link>
+      {' | '}
+      <Link href="/events/find">Find</Link>
+      {' | '}
       {user ? (
         <>
           <Link href="/profile">{user.username}</Link>
