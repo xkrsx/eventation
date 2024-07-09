@@ -28,10 +28,25 @@ export default async function AddEvent() {
     <div className="wrapper">
       <div className="event">
         <h1>Add event</h1>
+        {/* TODO add API functionality */}
+        {/* add picture upload */}
+        {/* fix time editing */}
+        {/* fix location */}
+        {/* fix category */}
         <form>
           <label>
             Name
             <input />
+          </label>
+          <label>
+            Start time
+            <input type="time" />
+            <input type="date" />
+          </label>
+          <label>
+            End time
+            <input type="time" />
+            <input type="date" />
           </label>
           <label>
             Price
