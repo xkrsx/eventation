@@ -16,6 +16,27 @@ export type UserWithPasswordHash = User & {
   passwordHash: string;
 };
 
+export const getUser = cache(async (sessionToken: string) => {
+  const [user] = await sql<User[]>`
+    SELECT
+      users.id,
+      users.username,
+      users.full_name,
+      users.location,
+      users.latitude,
+      users.longitude,
+      users.email,
+      users.created_at
+    FROM
+      users
+      INNER JOIN sessions ON (
+        sessions.token = ${sessionToken}
+        AND expiry_timestamp > now()
+      )
+  `;
+  return user;
+});
+
 export const getUserByUsernameInsecure = cache(async (username: string) => {
   const [user] = await sql<Pick<User, 'id' | 'username'>[]>`
     SELECT
@@ -41,7 +62,7 @@ export const getUserByEmailInsecure = cache(async (email: string) => {
   `;
   return user;
 });
-// TODO saving user to DB with long/lat (empty fields now)
+
 export const createUserInsecure = cache(
   async (newUser: Omit<User, 'id' | 'createdAt'>, passwordHash: string) => {
     const [user] = await sql<Omit<User, 'createdAt'>[]>`
