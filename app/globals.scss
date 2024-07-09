@@ -25,6 +25,11 @@ body {
     width: 95vw;
     margin: 0 auto;
     padding: 1rem;
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   * {

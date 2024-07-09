@@ -5,7 +5,7 @@ import { logout } from './actions';
 export default function LogoutButton() {
   const router = useRouter();
   return (
-    <form>
+    <form style={{ flexDirection: 'row' }}>
       <button
         formAction={async () => {
           await logout();
