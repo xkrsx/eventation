@@ -3,6 +3,7 @@ export default function FindEvent() {
     <div className="wrapper">
       <div className="event">
         <h1>Find event</h1>
+        {/* TODO add functionality to the form */}
         <form>
           <label>
             Name
