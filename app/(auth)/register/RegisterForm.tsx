@@ -1,15 +1,15 @@
 'use client';
 
 import '@geoapify/geocoder-autocomplete/styles/minimal.css';
-// import './RegisterForm.scss';
+import './RegisterForm.scss';
 import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
-// import { ReactTags } from 'react-tag-autocomplete';
-// import { categories, suggestions } from '../../../database/categories';
+import { ReactTags } from 'react-tag-autocomplete';
+import { categories, suggestions } from '../../../database/categories';
 import ErrorMessage from '../../ErrorMessage';
 import { RegisterResponseBodyPost } from '../api/register/route';
 
@@ -30,14 +30,21 @@ export default function RegisterForm() {
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const SELECTED_LENGTH = 3;
 
+  let newCategory;
   // TODO FIX newTag typing
   const onAdd = useCallback(
-    (newTag: never) => {
+    (newTag: { value: number; label: string }) => {
       setSelected([...selected, newTag]);
-      setNewUser({ ...newUser, categories: selected });
+      newCategory = selected.map((category) => category.label);
+      setNewUser({
+        ...newUser,
+        categories: newCategory,
+      });
     },
     [selected],
   );
+  console.log('newcategory: ', newCategory);
+  console.log('newUser: ', newUser);
 
   const onDelete = useCallback(
     (index: number) => {
@@ -212,7 +219,7 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
-          {/* favorite categories (max 3)
+          favorite categories (max 3)
           <ReactTags
             id="category-selector"
             labelText="Select selected"
@@ -231,7 +238,7 @@ export default function RegisterForm() {
             <p id="error" style={{ color: '#fd5956' }}>
               You must remove {selected.length - SELECTED_LENGTH} tags
             </p>
-          ) : null} */}
+          ) : null}
           <button>Register</button>
           {errors.map((error) => (
             <div className="error" key={`error-${error.message}`}>
