@@ -18,7 +18,7 @@ export type RegisterResponseBodyPost =
     }
   | { errors: { message: string }[] };
 
-const categoriesSchema = z.object({});
+// const categoriesSchema = z.object(string);
 
 const userSchema = z
   .object({
@@ -49,7 +49,7 @@ const userSchema = z
     location: z.string(),
     latitude: z.string(),
     longitude: z.string(),
-    categories: z.array(categoriesSchema),
+    categories: z.array(z.string()),
     email: z
       .string()
       .min(3, { message: 'E-mail must have at least 3 characters.' })
