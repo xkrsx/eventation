@@ -1,3 +1,5 @@
+// works for not logged users too
+
 export default function FindEvent() {
   return (
     <div className="wrapper">
@@ -8,6 +10,16 @@ export default function FindEvent() {
           <label>
             Name
             <input />
+          </label>
+          <label>
+            Start time
+            <input type="time" />
+            <input type="date" />
+          </label>
+          <label>
+            End time
+            <input type="time" />
+            <input type="date" />
           </label>
           <label>
             Price from <input type="number" />
