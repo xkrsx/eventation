@@ -1,15 +1,15 @@
 'use client';
 
 import '@geoapify/geocoder-autocomplete/styles/minimal.css';
-import './RegisterForm.scss';
+// import './RegisterForm.scss';
 import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
-import { ReactTags } from 'react-tag-autocomplete';
-import { suggestions } from '../../../database/categories';
+// import { ReactTags } from 'react-tag-autocomplete';
+// import { categories, suggestions } from '../../../database/categories';
 import ErrorMessage from '../../ErrorMessage';
 import { RegisterResponseBodyPost } from '../api/register/route';
 
@@ -22,46 +22,35 @@ export default function RegisterForm() {
     location: '',
     latitude: '',
     longitude: '',
+    categories: [],
     email: '',
   });
   const [userLocation, setUserLocation] = useState(false);
   const [selected, setSelected] = useState([]);
   const [errors, setErrors] = useState<{ message: string }[]>([]);
-
   const SELECTED_LENGTH = 3;
-
-  const [options, setOptions] = useState({
-    activateFirstOption: false,
-    allowBackspace: false,
-    collapseOnSelect: false,
-    isDisabled: false,
-  });
 
   const onAdd = useCallback(
     (newTag) => {
       setSelected([...selected, newTag]);
+      setNewUser({ ...newUser, categories: selected });
     },
     [selected],
   );
 
   const onDelete = useCallback(
-    (index) => {
+    (index: number) => {
       setSelected(selected.filter((_, i) => i !== index));
+      setNewUser({ ...newUser, categories: selected });
     },
     [selected],
-  );
-
-  const onOptionChange = useCallback(
-    (e) => {
-      setOptions({ ...options, [e.target.name]: e.target.checked });
-    },
-    [options],
   );
 
   const router = useRouter();
 
   async function handleRegister(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
     const response = await fetch('/api/register', {
       method: 'POST',
       body: JSON.stringify({
@@ -72,8 +61,6 @@ export default function RegisterForm() {
       },
     });
     const data: RegisterResponseBodyPost = await response.json();
-
-    console.log('newUser: ', newUser);
 
     if ('errors' in data) {
       setErrors(data.errors);
@@ -129,7 +116,6 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
-          {/* TODO write password rules */}
           <label>
             password
             <input
@@ -225,16 +211,15 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
-          default categories (max 3)
+          {/* favorite categories (max 3)
           <ReactTags
             id="category-selector"
-            labelText="Select categories"
+            labelText="Select selected"
             isInvalid={selected.length >= SELECTED_LENGTH}
             onAdd={onAdd}
             onDelete={onDelete}
             selected={selected}
             suggestions={suggestions}
-            {...options}
           />
           {selected.length < SELECTED_LENGTH ? (
             <p id="error" style={{ color: '#fd5956' }}>
@@ -245,7 +230,7 @@ export default function RegisterForm() {
             <p id="error" style={{ color: '#fd5956' }}>
               You must remove {selected.length - SELECTED_LENGTH} tags
             </p>
-          ) : null}
+          ) : null} */}
           <button>Register</button>
           {errors.map((error) => (
             <div className="error" key={`error-${error.message}`}>
