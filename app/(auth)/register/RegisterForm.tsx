@@ -32,6 +32,7 @@ export default function RegisterForm() {
 
   let newCategory;
   // TODO FIX newTag typing
+  // TODO FIX async issue with adding one less than selected
   const onAdd = useCallback(
     (newTag: { value: number; label: string }) => {
       setSelected([...selected, newTag]);
@@ -43,8 +44,6 @@ export default function RegisterForm() {
     },
     [selected],
   );
-  console.log('newcategory: ', newCategory);
-  console.log('newUser: ', newUser);
 
   const onDelete = useCallback(
     (index: number) => {
