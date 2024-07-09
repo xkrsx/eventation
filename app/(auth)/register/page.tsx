@@ -15,6 +15,6 @@ export default async function RegisterPage() {
   if (session) {
     redirect('/');
   }
-  // 4. Redirect to login page if sessionToken cookie is invalid or doesn't exist
+  // 4. Redirect to reg/login page if sessionToken cookie is invalid or doesn't exist
   return <RegisterForm />;
 }
