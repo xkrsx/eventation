@@ -74,7 +74,6 @@ export default function LoginForm(props: Props) {
           </label>
 
           <label>
-            {/* TODO write password rules */}
             password (one X, one x, one #, one @)
             <input
               required

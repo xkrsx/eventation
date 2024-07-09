@@ -30,8 +30,9 @@ export default function RegisterForm() {
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const SELECTED_LENGTH = 3;
 
+  // TODO FIX newTag typing
   const onAdd = useCallback(
-    (newTag) => {
+    (newTag: never) => {
       setSelected([...selected, newTag]);
       setNewUser({ ...newUser, categories: selected });
     },

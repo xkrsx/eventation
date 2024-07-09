@@ -8,7 +8,7 @@ export type User = {
   location: string | null;
   latitude: string | null;
   longitude: string | null;
-  categories: [] | null;
+  categories: string | null;
   email: string;
   createdAt: Date;
 };
@@ -26,6 +26,7 @@ export const getUser = cache(async (sessionToken: string) => {
       users.location,
       users.latitude,
       users.longitude,
+      users.categories,
       users.email,
       users.created_at
     FROM
