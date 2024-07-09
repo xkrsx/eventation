@@ -39,6 +39,23 @@ export const getUser = cache(async (sessionToken: string) => {
   return user;
 });
 
+export const getUserPublicInsecure = cache(async (username: string) => {
+  const [user] = await sql<Omit<User, 'fullName' | 'categories' | 'email'>[]>`
+    SELECT
+      users.id,
+      users.username,
+      users.location,
+      users.latitude,
+      users.longitude,
+      users.created_at
+    FROM
+      users
+    WHERE
+      username = ${username.toLowerCase()}
+  `;
+  return user;
+});
+
 export const getUserByUsernameInsecure = cache(async (username: string) => {
   const [user] = await sql<Pick<User, 'id' | 'username'>[]>`
     SELECT

@@ -1,37 +1,25 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { getValidSession } from '../../../database/sessions';
-import { getUser } from '../../../database/users';
+import { getUserPublicInsecure } from '../../../database/users';
 
 type Props = {
   params: {
     username: string;
   };
 };
-// when logged out: login/registration forms
-// when logged in: view with settings, links to event manager etc
+// when logged in/out: public profile
 export default async function UserProfile(props: Props) {
-  // authentication
-  // 1. Check if sessionToken in cookies exists
-  const sessionCookie = cookies().get('sessionToken');
-
-  // 2. Check if the sessionToken from cookie is still valid in DB
-  const session = sessionCookie && (await getValidSession(sessionCookie.value));
-
-  // 3. Redirect to login if sessionToken cookie is valid
-  if (!session) {
-    redirect('/login?returnTo=/profile');
-  }
-
-  const profile = await getUser(session.token);
-
-  // 4. if the sessionToken cookie is valid, allow access to profile page
-
-  return (
-    <div className="wrapper">
-      <div className="profile">
-        <h1>User: {props.params.username}</h1>
+  const profile = await getUserPublicInsecure(props.params.username);
+  if (profile) {
+    return (
+      <div className="wrapper">
+        <div className="profile">
+          <h1>User: {profile.username}</h1>
+          <h2>Location: {profile.location}</h2>
+          <h3>Account since: {String(profile.createdAt)}</h3>
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    redirect('/');
+  }
 }
