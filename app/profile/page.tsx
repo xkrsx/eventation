@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import LogoutButton from '../(auth)/logout/LogoutButton';
 import { getValidSession } from '../../database/sessions';
 import { getUser } from '../../database/users';
 
@@ -32,9 +33,22 @@ export default async function UserProfile() {
     <div className="wrapper">
       <div className="profile">
         <h1>Welcome, {profile.username}</h1>
-        <Link href={`/profile/${profile.username}`}>
-          See your public profile
-        </Link>
+        <ul>
+          <li>
+            <Link href={`/profile/${profile.username}`}>
+              See your public profile
+            </Link>
+          </li>
+          <li>
+            <Link href="/profile/edit">Edit your profile</Link>
+          </li>
+          <li>
+            <Link href="/profile/settings">Settings</Link>
+          </li>
+          <li>
+            <LogoutButton />
+          </li>
+        </ul>
       </div>
     </div>
   );

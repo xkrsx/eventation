@@ -55,7 +55,7 @@ export default async function UserProfile(props: Props) {
         <h2>Location: {profile.location}</h2>
         <h3>Account since: {String(profile.createdAt)}</h3>
 
-        <Link href="/profile">Edit your profile</Link>
+        <Link href="/profile/edit">Edit your profile</Link>
       </div>
     </div>
   );

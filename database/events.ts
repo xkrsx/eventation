@@ -8,8 +8,10 @@ export type Event = {
   timeStart: Date;
   timeEnd: Date;
   category: string;
-  location: string;
-  price: number;
+  location: string | null;
+  latitude: string | null;
+  longitude: string | null;
+  price: number | null;
   description: string | null;
   links: string | null;
   images: string | null;
@@ -20,7 +22,7 @@ export type Event = {
 
 export const createEvent = cache(
   async (sessionToken: string, newEvent: Event) => {
-    const [event] = await sql<Omit<Event, 'id' | 'createdAt'>[]>`
+    const [event] = await sql<Event[]>`
       INSERT INTO
         events (
           name,
@@ -29,6 +31,8 @@ export const createEvent = cache(
           time_end,
           category,
           location,
+          latitude,
+          longitude,
           price,
           description,
           links,
@@ -43,6 +47,8 @@ export const createEvent = cache(
             ${newEvent.timeEnd},
             ${newEvent.category},
             ${newEvent.location},
+            ${newEvent.latitude},
+            ${newEvent.longitude},
             ${newEvent.price},
             ${newEvent.description},
             ${newEvent.links},
@@ -56,18 +62,22 @@ export const createEvent = cache(
             AND sessions.expiry_timestamp > now()
         )
       RETURNING
+        events.id,
         events.name,
         events.user_id,
         events.time_start,
         events.time_end,
         events.category,
         events.location,
+        events.latitude,
+        events.longitude,
         events.price,
         events.description,
         events.links,
         events.images,
         events.public,
-        events.cancelled
+        events.cancelled,
+        events.created_at
     `;
     return event;
   },
