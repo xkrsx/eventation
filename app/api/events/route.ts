@@ -3,17 +3,6 @@ import { NextResponse } from 'next/server';
 import { createEvent, NewEvent } from '../../../database/events';
 import { eventSchema } from '../../../migrations/00002-createTableEvents';
 
-// type AnimalsResponseBodyGet = {
-//   animals: Animal[];
-// };
-
-// Warning: You probably don't need this, because you can just do
-// a database query directly in your server component
-// export async function GET(): Promise<NextResponse<AnimalsResponseBodyGet>> {
-//   const animals = await getAnimalsInsecure();
-//   return NextResponse.json({ animals: animals });
-// }
-
 export type EventsResponseBodyPost =
   | {
       event: NewEvent;
@@ -74,7 +63,7 @@ export async function POST(
   if (!newEvent) {
     return NextResponse.json(
       {
-        error: 'Animal not created or access denied creating animals',
+        error: 'Event not created or access denied creating animals',
       },
       { status: 500 },
     );
