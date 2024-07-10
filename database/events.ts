@@ -2,7 +2,6 @@ import { cache } from 'react';
 import { sql } from './connect';
 
 export type Event = {
-  id: number;
   name: string;
   userId: number;
   timeStart: Date;
@@ -15,14 +14,18 @@ export type Event = {
   description: string | null;
   links: string | null;
   images: string | null;
+};
+
+export type NewEvent = Event & {
+  id: number;
+  createdAt: Date;
   public: boolean;
   cancelled: boolean;
-  createdAt: Date;
 };
 
 export const createEvent = cache(
   async (sessionToken: string, newEvent: Event) => {
-    const [event] = await sql<Event[]>`
+    const [event] = await sql<NewEvent[]>`
       INSERT INTO
         events (
           name,
@@ -36,9 +39,7 @@ export const createEvent = cache(
           price,
           description,
           links,
-          images,
-          public,
-          cancelled
+          images
         ) (
           SELECT
             ${newEvent.name},
@@ -52,9 +53,7 @@ export const createEvent = cache(
             ${newEvent.price},
             ${newEvent.description},
             ${newEvent.links},
-            ${newEvent.images},
-            ${newEvent.public},
-            ${newEvent.cancelled}
+            ${newEvent.images}
           FROM
             sessions
           WHERE
@@ -75,9 +74,9 @@ export const createEvent = cache(
         events.description,
         events.links,
         events.images,
+        events.created_at,
         events.public,
-        events.cancelled,
-        events.created_at
+        events.cancelled
     `;
     return event;
   },
