@@ -15,8 +15,8 @@ export default function AddEventForm() {
   const [newEvent, setNewEvent] = useState({
     name: '',
     userId: 12,
-    timeStart: '11',
-    timeEnd: '12',
+    timeStart: undefined,
+    timeEnd: undefined,
     category: 'Activism / Politics',
     location: '',
     latitude: '',
@@ -42,7 +42,7 @@ export default function AddEventForm() {
       },
     });
     const data: EventsResponseBodyPost = await response.json();
-    console.log('data: ', data);
+    console.log(data);
 
     if ('errors' in data) {
       // setErrorMessage(data.errors);
@@ -92,7 +92,6 @@ export default function AddEventForm() {
   //   setBirthDate(new Date());
 
   const categories = categoriesObject;
-  console.log('newEvent: ', newEvent);
 
   return (
     <div className="wrapper">
@@ -121,24 +120,28 @@ export default function AddEventForm() {
             />
           </label>
           {/* TODO handle time/date saving */}
-          {/* <label>
+          <label>
             Start time
             <input
-            type="time"
-            required
-            name="name"
-            value={newEvent.name}
-            onChange={handleChange}
+              aria-label="Date and time"
+              type="datetime-local"
+              required
+              name="timeStart"
+              value={newEvent.timeStart}
+              onChange={handleChange}
             />
+          </label>
+          <label>
+            End time
             <input
-            type="date"
-            required
-            name="name"
-            value={newEvent.name}
-            onChange={handleChange}
+              aria-label="Date and time"
+              type="datetime-local"
+              required
+              name="timeEnd"
+              value={newEvent.timeEnd}
+              onChange={handleChange}
             />
-          </label> */}
-
+          </label>
           {/* <input
                   type="date"
                   value={dayjs(birthDate).format('YYYY-MM-DD')}
@@ -152,13 +155,14 @@ export default function AddEventForm() {
             <input type="date" />
           </label> */}
           <label>
-            Price
+            Price €{' '}
             <input
               type="number"
               name="price"
               value={newEvent.price}
               onChange={handleChange}
             />
+            ,-
           </label>
 
           <label>
@@ -176,7 +180,6 @@ export default function AddEventForm() {
               })}
             </select>
           </label>
-
           {/* <div className="location">
             <label>
               <label>
