@@ -1,19 +1,21 @@
 import { Sql } from 'postgres';
 import { z } from 'zod';
 
-const eventSchema = z.object({
+export const eventSchema = z.object({
   name: z
     .string()
     .min(3, { message: 'Event name must have at least 3 characters.' })
     .max(255, { message: 'Event name must have maximum 255 characters.' }),
   userId: z.number(),
-  timeStart: z.date(),
-  timeEnd: z.date(),
+  // timeStart: z.date(),
+  // timeEnd: z.date(),
+  timeStart: z.string(),
+  timeEnd: z.string(),
   category: z.string(),
-  location: z.string().min(3).nullable(),
-  latitude: z.string().min(6).nullable(),
-  longitude: z.string().min(6).nullable(),
-  price: z.number().nullable(),
+  location: z.string().nullable(),
+  latitude: z.string().nullable(),
+  longitude: z.string().nullable(),
+  price: z.string().nullable(),
   description: z
     .string()
     .min(3, {
@@ -22,8 +24,8 @@ const eventSchema = z.object({
     .nullable(),
   links: z.string().nullable(),
   images: z.string().nullable(),
-  public: z.boolean(),
-  cancelled: z.boolean(),
+  public: z.boolean().optional(),
+  cancelled: z.boolean().optional(),
 });
 
 export async function up(sql: Sql) {
@@ -42,8 +44,8 @@ export async function up(sql: Sql) {
       description text NULL,
       links text NULL,
       images text NULL,
-      public boolean NOT NULL DEFAULT '1',
-      cancelled boolean NOT NULL DEFAULT '0',
+      public boolean NOT NULL DEFAULT TRUE,
+      cancelled boolean NOT NULL DEFAULT FALSE,
       created_at timestamp DEFAULT now() NOT NULL
     );
   `;
