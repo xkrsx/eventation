@@ -120,6 +120,7 @@ export default function AddEventForm() {
             />
           </label>
           {/* TODO handle time/date saving */}
+          {/* https://www.npmjs.com/package/react-datetime-picker */}
           <label>
             Start time
             <input

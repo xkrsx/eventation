@@ -1,11 +1,19 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { createEvent, NewEvent } from '../../../database/events';
+import { createEvent, Event } from '../../../database/events';
 import { eventSchema } from '../../../migrations/00002-createTableEvents';
+
+export type EventsResponseBodyGet =
+  | {
+      events: Event[];
+    }
+  | {
+      error: string;
+    };
 
 export type EventsResponseBodyPost =
   | {
-      event: NewEvent;
+      event: Event;
     }
   | {
       error: string;
