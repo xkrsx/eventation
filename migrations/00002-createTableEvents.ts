@@ -27,7 +27,7 @@ export const eventSchema = z.object({
   public: z.boolean().optional(),
   cancelled: z.boolean().optional(),
 });
-
+// TODO add optional short name to generate link with, instead of id
 export async function up(sql: Sql) {
   await sql`
     CREATE TABLE events (

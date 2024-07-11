@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import { sql } from './connect';
 
-export type Event = {
+export type NewEvent = {
   name: string;
   userId: number;
   timeStart: Date;
@@ -16,7 +16,7 @@ export type Event = {
   images: string | null;
 };
 
-export type NewEvent = Event & {
+export type Event = NewEvent & {
   id: number;
   createdAt: Date;
   public: boolean;
@@ -24,8 +24,8 @@ export type NewEvent = Event & {
 };
 
 export const createEvent = cache(
-  async (sessionToken: string, newEvent: Event) => {
-    const [event] = await sql<NewEvent[]>`
+  async (sessionToken: string, newEvent: NewEvent) => {
+    const [event] = await sql<Event[]>`
       INSERT INTO
         events (
           name,
@@ -81,3 +81,13 @@ export const createEvent = cache(
     return event;
   },
 );
+
+export const getAllEventsInsecure = cache(async () => {
+  const event = await sql<Event[]>`
+    SELECT
+      *
+    FROM
+      events
+  `;
+  return event;
+});
