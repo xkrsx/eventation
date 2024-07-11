@@ -1,3 +1,5 @@
+// TODO export categories to DB
+
 export type Category = {
   id: number;
   name: string;

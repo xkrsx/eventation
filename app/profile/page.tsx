@@ -14,6 +14,7 @@ export default async function UserProfile() {
 
   // 2. Check if the sessionToken from cookie is still valid in DB
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
+  console.log(session);
 
   // 3. Redirect to login if sessionToken cookie is invalid
   if (!session) {
