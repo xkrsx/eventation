@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getValidSession } from '../../../database/sessions';
 import {
-  getUser,
+  getUserPublic,
   getUserPublicByUsernameInsecure,
 } from '../../../database/users';
 
@@ -23,6 +23,7 @@ export default async function UserProfile(props: Props) {
 
   // 2. Check if the sessionToken from cookie is still valid in DB
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
+  console.log('session: ', session);
 
   // 3. Preview public profile if sessionToken cookie is invalid
   // If username does not exists, redirect to main page
@@ -51,7 +52,7 @@ export default async function UserProfile(props: Props) {
   // TODO authenticate if it's user's profile to have 'edit' button
   // TODO FIX show profile of user's from params!
   // this is a profile of logged in person
-  const profile = await getUser(session.token);
+  const profile = await getUserPublic(session.token, props.params.username);
 
   if (!profile) {
     redirect('/');
@@ -63,8 +64,11 @@ export default async function UserProfile(props: Props) {
         <h1>User: {profile.username}</h1>
         <h2>Location: {profile.location}</h2>
         <h3>Account since: {String(profile.createdAt)}</h3>
-
-        <Link href="/profile/edit">Edit your profile</Link>
+        {session.userId === profile.id ? (
+          <Link href="/profile/edit">Edit your profile</Link>
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );

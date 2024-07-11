@@ -42,7 +42,6 @@ export default function AddEventForm() {
       },
     });
     const data: EventsResponseBodyPost = await response.json();
-    console.log(data);
 
     if ('errors' in data) {
       // setErrorMessage(data.errors);
