@@ -11,10 +11,14 @@ import { categoriesObject } from '../../../database/categories';
 import { EventsResponseBodyPost } from '../../api/events/route';
 import ErrorMessage from '../../ErrorMessage';
 
-export default function AddEventForm() {
+type Props = {
+  userId: number;
+};
+
+export default function AddEventForm(props: Props) {
   const [newEvent, setNewEvent] = useState({
     name: '',
-    userId: 12,
+    userId: props.userId,
     timeStart: undefined,
     timeEnd: undefined,
     category: 'Activism / Politics',
@@ -42,7 +46,6 @@ export default function AddEventForm() {
       },
     });
     const data: EventsResponseBodyPost = await response.json();
-    console.log(data);
 
     if ('errors' in data) {
       // setErrorMessage(data.errors);
