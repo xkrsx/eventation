@@ -56,6 +56,24 @@ export const getUserPublicInsecure = cache(async (username: string) => {
   return user;
 });
 
+// events organiser
+export const getUserPublicByIdInsecure = cache(async (id: number) => {
+  const [user] = await sql<Omit<User, 'fullName' | 'categories' | 'email'>[]>`
+    SELECT
+      users.id,
+      users.username,
+      users.location,
+      users.latitude,
+      users.longitude,
+      users.created_at
+    FROM
+      users
+    WHERE
+      id = ${Number(id)}
+  `;
+  return user;
+});
+
 export const getUserByUsernameInsecure = cache(async (username: string) => {
   const [user] = await sql<Pick<User, 'id' | 'username'>[]>`
     SELECT
