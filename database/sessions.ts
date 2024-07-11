@@ -3,11 +3,10 @@ import { Session } from '../migrations/00001-createTableSessions';
 import { sql } from './connect';
 
 export const getValidSession = cache(async (sessionToken: string) => {
-  const [session] = await sql<Session[]>`
+  const [session] = await sql<Omit<Session, 'id'>[]>`
     SELECT
-      sessions.id,
-      sessions.user_id,
-      sessions.token
+      sessions.token,
+      sessions.user_id
     FROM
       sessions
     WHERE

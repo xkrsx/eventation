@@ -17,8 +17,7 @@ export default async function UserProfile() {
 
   // 3. Redirect to login if sessionToken cookie is invalid
   if (!session) {
-    redirect('/login?returnTo=/profile');
-    return;
+    return redirect('/login?returnTo=/profile');
   }
 
   // 4. if the sessionToken cookie is valid, allow access to profile page
@@ -26,7 +25,7 @@ export default async function UserProfile() {
   const profile = await getUser(session.token);
 
   if (!profile) {
-    redirect('/');
+    return redirect('/');
   }
 
   return (

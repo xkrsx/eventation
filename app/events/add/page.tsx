@@ -18,7 +18,6 @@ export default async function AddEvent() {
 
   // 4. if the sessionToken cookie is valid, allow access to add event page
   const profile = await getUser(session.token);
-  console.log(profile);
 
   if (!profile) {
     redirect('/');
