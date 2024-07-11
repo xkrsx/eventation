@@ -31,7 +31,7 @@ export const userRegistrationSchema = z
     latitude: z.string(),
     longitude: z.string(),
     // categories: z.array(z.string()),
-    categories: z.string(),
+    categories: z.string().optional(),
     email: z
       .string()
       .min(3, { message: 'E-mail must have at least 3 characters.' })

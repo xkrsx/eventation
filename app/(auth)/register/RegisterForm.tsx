@@ -22,7 +22,7 @@ export default function RegisterForm() {
     location: '',
     latitude: '',
     longitude: '',
-    categories: [],
+    categories: '',
     email: '',
   });
   const [userLocation, setUserLocation] = useState(false);
