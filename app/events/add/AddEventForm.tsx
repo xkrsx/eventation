@@ -11,10 +11,14 @@ import { categoriesObject } from '../../../database/categories';
 import { EventsResponseBodyPost } from '../../api/events/route';
 import ErrorMessage from '../../ErrorMessage';
 
-export default function AddEventForm() {
+type Props = {
+  userId: number;
+};
+
+export default function AddEventForm(props: Props) {
   const [newEvent, setNewEvent] = useState({
     name: '',
-    userId: 12,
+    userId: props.userId,
     timeStart: undefined,
     timeEnd: undefined,
     category: 'Activism / Politics',
@@ -34,6 +38,7 @@ export default function AddEventForm() {
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    // TODO add session token to validate if it's really same user?
     const response = await fetch('/api/events/', {
       method: 'POST',
       body: JSON.stringify(newEvent),

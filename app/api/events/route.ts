@@ -30,15 +30,6 @@ export async function POST(
   // If client sends request body with incorrect data,
   // return a response with a 400 status code to the client
   if (!result.success) {
-    // error.issues [
-    //   {
-    //     code: 'invalid_type',
-    //     expected: 'string',
-    //     received: 'undefined',
-    //     path: [ 'name' ],
-    //     message: 'Required'
-    //   }
-    // ]
     return NextResponse.json(
       {
         error: 'Request does not contain event object.',
