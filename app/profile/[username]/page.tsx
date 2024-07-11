@@ -46,12 +46,8 @@ export default async function UserProfile(props: Props) {
     }
   }
 
-  // if it's someone else's profile, no 'edit' button
   // 4. if the sessionToken cookie is valid, allow access to profile page
 
-  // TODO authenticate if it's user's profile to have 'edit' button
-  // TODO FIX show profile of user's from params!
-  // this is a profile of logged in person
   const profile = await getUserPublic(session.token, props.params.username);
 
   if (!profile) {
@@ -64,10 +60,8 @@ export default async function UserProfile(props: Props) {
         <h1>User: {profile.username}</h1>
         <h2>Location: {profile.location}</h2>
         <h3>Account since: {String(profile.createdAt)}</h3>
-        {session.userId === profile.id ? (
+        {session.userId === profile.id && (
           <Link href="/profile/edit">Edit your profile</Link>
-        ) : (
-          ''
         )}
       </div>
     </div>
