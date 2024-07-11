@@ -8,7 +8,7 @@ export type User = {
   location: string | null;
   latitude: string | null;
   longitude: string | null;
-  categories: [] | null;
+  categories: string | null;
   email: string;
   createdAt: Date;
 };
@@ -17,6 +17,7 @@ export type UserWithPasswordHash = User & {
   passwordHash: string;
 };
 
+// logged profile
 export const getUser = cache(async (sessionToken: string) => {
   const [user] = await sql<User[]>`
     SELECT
@@ -26,18 +27,85 @@ export const getUser = cache(async (sessionToken: string) => {
       users.location,
       users.latitude,
       users.longitude,
+      users.categories,
       users.email,
       users.created_at
     FROM
       users
       INNER JOIN sessions ON (
         sessions.token = ${sessionToken}
+        AND sessions.user_id = users.id
         AND expiry_timestamp > now()
       )
   `;
   return user;
 });
 
+export const getUserPublic = cache(
+  async (sessionToken: string, username: string) => {
+    const [user] = await sql<User[]>`
+      SELECT
+        users.id,
+        users.username,
+        users.full_name,
+        users.location,
+        users.latitude,
+        users.longitude,
+        users.categories,
+        users.email,
+        users.created_at
+      FROM
+        users
+        INNER JOIN sessions ON (
+          sessions.token = ${sessionToken}
+          AND expiry_timestamp > now()
+        )
+      WHERE
+        users.username = ${username}
+    `;
+    return user;
+  },
+);
+
+// public profile
+export const getUserPublicByUsernameInsecure = cache(
+  async (username: string) => {
+    const [user] = await sql<Omit<User, 'fullName' | 'categories' | 'email'>[]>`
+      SELECT
+        users.id,
+        users.username,
+        users.location,
+        users.latitude,
+        users.longitude,
+        users.created_at
+      FROM
+        users
+      WHERE
+        username = ${username.toLowerCase()}
+    `;
+    return user;
+  },
+);
+
+// events organiser
+export const getUserPublicByIdInsecure = cache(async (id: number) => {
+  const [user] = await sql<Omit<User, 'fullName' | 'categories' | 'email'>[]>`
+    SELECT
+      users.id,
+      users.username,
+      users.location,
+      users.latitude,
+      users.longitude,
+      users.created_at
+    FROM
+      users
+    WHERE
+      id = ${Number(id)}
+  `;
+  return user;
+});
+
+// login
 export const getUserByUsernameInsecure = cache(async (username: string) => {
   const [user] = await sql<Pick<User, 'id' | 'username'>[]>`
     SELECT
@@ -51,6 +119,7 @@ export const getUserByUsernameInsecure = cache(async (username: string) => {
   return user;
 });
 
+// login
 export const getUserByEmailInsecure = cache(async (email: string) => {
   const [user] = await sql<Pick<User, 'id' | 'email'>[]>`
     SELECT
@@ -64,6 +133,7 @@ export const getUserByEmailInsecure = cache(async (email: string) => {
   return user;
 });
 
+// registration
 export const createUserInsecure = cache(
   async (newUser: Omit<User, 'id' | 'createdAt'>, passwordHash: string) => {
     const [user] = await sql<Omit<User, 'createdAt'>[]>`
@@ -103,6 +173,7 @@ export const createUserInsecure = cache(
   },
 );
 
+// login
 export const getUserWithPasswordHashInsecure = cache(
   async (username: string) => {
     const [user] = await sql<UserWithPasswordHash[]>`

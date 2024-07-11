@@ -3,9 +3,8 @@ import { cookies } from 'next/headers';
 import { deleteSession } from '../../../database/sessions';
 
 export async function logout() {
-  const cookieStore = cookies();
-
   // 1. Get the session token from the cookie
+  const cookieStore = cookies();
   const session = cookieStore.get('sessionToken');
 
   // 2. Delete the session from the DB

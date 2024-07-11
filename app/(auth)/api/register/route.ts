@@ -2,7 +2,6 @@ import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { createSessionInsecure } from '../../../../database/sessions';
 import {
   createUserInsecure,
@@ -10,6 +9,7 @@ import {
   getUserByUsernameInsecure,
   User,
 } from '../../../../database/users';
+import { userRegistrationSchema } from '../../../../migrations/00000-createTableUsers';
 import { secureCookieOptions } from '../../../../util/cookies';
 
 export type RegisterResponseBodyPost =
@@ -18,49 +18,6 @@ export type RegisterResponseBodyPost =
     }
   | { errors: { message: string }[] };
 
-const categoriesSchema = z.object({});
-
-const userSchema = z
-  .object({
-    username: z
-      .string()
-      .min(3, { message: 'Username must have at least 3 characters.' })
-      .max(30, { message: 'Username must have maximum 30 characters.' }),
-    password: z
-      .string()
-      .min(4, { message: 'Password must be have least 4 characters.' })
-      .max(10, { message: 'Username must have maximum 10 characters.' })
-      .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{4,}$/, {
-        message:
-          'Password must have one uppercase letter, one lowercase letter, one number and one special character.',
-      }),
-    confirmPassword: z
-      .string()
-      .min(4, { message: 'Password must be have least 4 characters.' })
-      .max(10, { message: 'Username must have maximum 10 characters.' })
-      .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{4,}$/, {
-        message:
-          'Password must have one uppercase letter, one lowercase letter, one number and one special character.',
-      }),
-    fullName: z
-      .string()
-      .min(3, { message: 'Name must have at least 3 characters.' })
-      .max(100, { message: 'Name must have maximum 100 characters.' }),
-    location: z.string(),
-    latitude: z.string(),
-    longitude: z.string(),
-    categories: z.array(categoriesSchema),
-    email: z
-      .string()
-      .min(3, { message: 'E-mail must have at least 3 characters.' })
-      .max(80, { message: 'E-mail must have maximum 80 characters.' })
-      .email({ message: 'E-mail must a valid address.' }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'Passwords do not match.',
-  });
-
 export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<RegisterResponseBodyPost>> {
@@ -68,7 +25,7 @@ export async function POST(
   const body = await request.json();
 
   // 2. Validate the user data with zod
-  const result = userSchema.safeParse(body.newUser);
+  const result = userRegistrationSchema.safeParse(body.newUser);
 
   if (!result.success) {
     return NextResponse.json(

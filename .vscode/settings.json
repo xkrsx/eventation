@@ -9,5 +9,6 @@
     "javascript",
     "typescriptreact"
   ],
-  "cSpell.words": ["geoapify"]
+  "cSpell.words": ["geoapify"],
+  "totalTypeScript.hideAllTips": true
 }

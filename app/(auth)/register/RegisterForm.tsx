@@ -1,15 +1,15 @@
 'use client';
 
 import '@geoapify/geocoder-autocomplete/styles/minimal.css';
-// import './RegisterForm.scss';
+import './RegisterForm.scss';
 import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
-// import { ReactTags } from 'react-tag-autocomplete';
-// import { categories, suggestions } from '../../../database/categories';
+import { ReactTags } from 'react-tag-autocomplete';
+import { categories, suggestions } from '../../../database/categories';
 import ErrorMessage from '../../ErrorMessage';
 import { RegisterResponseBodyPost } from '../api/register/route';
 
@@ -22,7 +22,7 @@ export default function RegisterForm() {
     location: '',
     latitude: '',
     longitude: '',
-    categories: [],
+    categories: '',
     email: '',
   });
   const [userLocation, setUserLocation] = useState(false);
@@ -30,10 +30,17 @@ export default function RegisterForm() {
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const SELECTED_LENGTH = 3;
 
+  let newCategory;
+  // TODO FIX newTag typing
+  // TODO FIX async issue with adding one less than selected
   const onAdd = useCallback(
-    (newTag) => {
+    (newTag: never) => {
       setSelected([...selected, newTag]);
-      setNewUser({ ...newUser, categories: selected });
+      newCategory = selected.map((category) => category.label);
+      setNewUser({
+        ...newUser,
+        categories: newCategory,
+      });
     },
     [selected],
   );
@@ -67,6 +74,8 @@ export default function RegisterForm() {
       return;
     }
     router.push(`/profile/${data.user.username}`);
+
+    router.refresh();
   }
   // TODO type req object
   function sendGeocoderRequest(value: string, geocoder: any) {
@@ -211,7 +220,7 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
-          {/* favorite categories (max 3)
+          favorite categories (max 3)
           <ReactTags
             id="category-selector"
             labelText="Select selected"
@@ -230,7 +239,7 @@ export default function RegisterForm() {
             <p id="error" style={{ color: '#fd5956' }}>
               You must remove {selected.length - SELECTED_LENGTH} tags
             </p>
-          ) : null} */}
+          ) : null}
           <button>Register</button>
           {errors.map((error) => (
             <div className="error" key={`error-${error.message}`}>

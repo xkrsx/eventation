@@ -34,10 +34,11 @@ export default function LoginForm(props: Props) {
       return;
     }
 
-    // router.push(`/profile/${data.user.username}`);
     router.push(
       getSafeReturnToPath(props.returnTo) || `/profile/${data.user.username}`,
     );
+
+    router.refresh();
   }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -74,7 +75,6 @@ export default function LoginForm(props: Props) {
           </label>
 
           <label>
-            {/* TODO write password rules */}
             password (one X, one x, one #, one @)
             <input
               required
