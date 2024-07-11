@@ -38,6 +38,7 @@ export default function AddEventForm(props: Props) {
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    // TODO add session token to validate if it's really same user?
     const response = await fetch('/api/events/', {
       method: 'POST',
       body: JSON.stringify(newEvent),
