@@ -82,12 +82,16 @@ export const createEvent = cache(
   },
 );
 
+export const getUsersEvents = cache(async (sessionToken: string) => {
+  // const events;
+});
+
 export const getAllEventsInsecure = cache(async () => {
-  const event = await sql<Event[]>`
+  const events = await sql<Event[]>`
     SELECT
       *
     FROM
       events
   `;
-  return event;
+  return events;
 });

@@ -23,7 +23,6 @@ export default async function UserProfile(props: Props) {
 
   // 2. Check if the sessionToken from cookie is still valid in DB
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
-  console.log('session: ', session);
 
   // 3. Preview public profile if sessionToken cookie is invalid
   // If username does not exists, redirect to main page
