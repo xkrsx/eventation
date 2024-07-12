@@ -8,7 +8,7 @@
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import { categoriesObject } from '../../../database/categories';
-import { EventsResponseBodyPost } from '../../api/events/route';
+import { EventResponseBodyPost } from '../../api/events/route';
 import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
@@ -46,7 +46,7 @@ export default function AddEventForm(props: Props) {
         'Content-Type': 'application/json',
       },
     });
-    const data: EventsResponseBodyPost = await response.json();
+    const data: EventResponseBodyPost = await response.json();
 
     if ('errors' in data) {
       // setErrorMessage(data.errors);

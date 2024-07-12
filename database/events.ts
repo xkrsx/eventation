@@ -97,6 +97,23 @@ export const getUsersEventsOrganising = cache(async (sessionToken: string) => {
   return events;
 });
 
+export const deleteUsersEventOrganising = cache(
+  async (sessionToken: string, eventId: number) => {
+    const [event] = await sql<Event[]>`
+      DELETE FROM events USING sessions
+      WHERE
+        sessions.token = ${sessionToken}
+        AND sessions.expiry_timestamp > now()
+        AND sessions.user_id = events.user_id
+        AND expiry_timestamp > now()
+        AND events.id = ${eventId}
+      RETURNING
+        events.*
+    `;
+    return event;
+  },
+);
+
 export const getAllEventsInsecure = cache(async () => {
   const events = await sql<Event[]>`
     SELECT

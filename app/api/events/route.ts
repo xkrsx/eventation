@@ -3,15 +3,7 @@ import { NextResponse } from 'next/server';
 import { createEvent, Event } from '../../../database/events';
 import { eventSchema } from '../../../migrations/00002-createTableEvents';
 
-export type EventsResponseBodyGet =
-  | {
-      events: Event[];
-    }
-  | {
-      error: string;
-    };
-
-export type EventsResponseBodyPost =
+export type EventResponseBodyPost =
   | {
       event: Event;
     }
@@ -21,7 +13,7 @@ export type EventsResponseBodyPost =
 
 export async function POST(
   request: Request,
-): Promise<NextResponse<EventsResponseBodyPost>> {
+): Promise<NextResponse<EventResponseBodyPost>> {
   const requestBody = await request.json();
 
   // Validation schema for request body
