@@ -4,23 +4,23 @@ import { sql } from './connect';
 export type NewEvent = {
   name: string;
   userId: number;
-  timeStart: Date;
-  timeEnd: Date;
+  timeStart: string;
+  timeEnd: string;
   category: string;
-  location: string | null;
-  latitude: string | null;
-  longitude: string | null;
-  price: number | null;
-  description: string | null;
-  links: string | null;
-  images: string | null;
+  location: string;
+  latitude: string;
+  longitude: string;
+  price: string;
+  description: string;
+  links: string;
+  images: string;
 };
 
 export type Event = NewEvent & {
   id: number;
   createdAt: Date;
-  public: boolean | undefined;
-  cancelled: boolean | undefined;
+  public: boolean;
+  cancelled: boolean;
 };
 
 export const createEvent = cache(

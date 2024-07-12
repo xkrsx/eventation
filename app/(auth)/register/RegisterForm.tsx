@@ -1,11 +1,11 @@
 'use client';
 
-// import '@geoapify/geocoder-autocomplete/styles/minimal.css';
+import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 import './RegisterForm.scss';
-// import {
-//   GeoapifyContext,
-//   GeoapifyGeocoderAutocomplete,
-// } from '@geoapify/react-geocoder-autocomplete';
+import {
+  GeoapifyContext,
+  GeoapifyGeocoderAutocomplete,
+} from '@geoapify/react-geocoder-autocomplete';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { ReactTags } from 'react-tag-autocomplete';
@@ -73,7 +73,7 @@ export default function RegisterForm() {
       setErrors(data.errors);
       return;
     }
-    router.push(`/profile/${data.user.username}`);
+    router.push('/profile');
 
     router.refresh();
   }
@@ -154,7 +154,7 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
-          {/* <div className="location">
+          <div className="location">
             <div>
               <input
                 type="checkbox"
@@ -209,7 +209,7 @@ export default function RegisterForm() {
                 </div>
               ) : null}
             </label>
-          </div> */}
+          </div>
           <label>
             e-mail
             <input
