@@ -83,7 +83,18 @@ export const createEvent = cache(
 );
 
 export const getUsersEvents = cache(async (sessionToken: string) => {
-  // const events;
+  const events = await sql<Event[]>`
+    SELECT
+      events.*
+    FROM
+      events
+      INNER JOIN sessions ON (
+        sessions.token = ${sessionToken}
+        AND sessions.user_id = events.user_id
+        AND expiry_timestamp > now()
+      )
+  `;
+  return events;
 });
 
 export const getAllEventsInsecure = cache(async () => {
