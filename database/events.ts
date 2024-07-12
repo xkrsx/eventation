@@ -82,7 +82,7 @@ export const createEvent = cache(
   },
 );
 
-export const getUsersEvents = cache(async (sessionToken: string) => {
+export const getUsersEventsOrganising = cache(async (sessionToken: string) => {
   const events = await sql<Event[]>`
     SELECT
       events.*

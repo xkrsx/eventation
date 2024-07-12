@@ -8,7 +8,7 @@ export default async function AllEvents() {
     return (
       <div key={`event-${event.id}`} style={{ border: '1px solid black' }}>
         <Link href={`/events/${event.id}`}>
-          <h1>{event.name}</h1>
+          <h2>{event.name}</h2>
         </Link>
         <p>
           Organiser:{' '}

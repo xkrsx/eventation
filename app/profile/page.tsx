@@ -32,6 +32,7 @@ export default async function UserProfile() {
     <div className="wrapper">
       <div className="profile">
         <h1>Welcome, {profile.username}</h1>
+        <h2>{profile.fullName}</h2>
         <ul>
           <li>
             <Link href={`/profile/${profile.username}`}>
@@ -43,6 +44,9 @@ export default async function UserProfile() {
           </li>
           <li>
             <Link href="/profile/settings">Settings</Link>
+          </li>
+          <li>
+            <Link href="/profile/events">My Events</Link>
           </li>
           <li>
             <LogoutButton />
