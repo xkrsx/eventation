@@ -14,6 +14,21 @@ type Props = {
 };
 
 export default function OrganisingEvents(props: Props) {
+  const [editedEvent, setEditedEvent] = useState({
+    name: '',
+    timeStart: '',
+    timeEnd: '',
+    category: '',
+    location: '',
+    latitude: '',
+    longitude: '',
+    price: '',
+    description: '',
+    links: '',
+    images: '',
+    public: '',
+    cancelled: '',
+  });
   const [errorMessage, setErrorMessage] = useState('');
 
   const router = useRouter();
@@ -30,37 +45,53 @@ export default function OrganisingEvents(props: Props) {
         <p>category: {event.category}</p>
         <p>description: {event.description}</p>
         <Link href={`/events/${event.id}`}>See more...</Link>
+        <p>
+          <button
+            disabled={id === animal.id}
+            onClick={() => {
+              setId(animal.id);
+              setFirstName(animal.firstName);
+              setType(animal.type);
+              // Default to an empty string to avoid
+              // errors with passing null to input
+              // values
+              setAccessory(animal.accessory || '');
+              setBirthDate(animal.birthDate);
+            }}
+          >
+            Edit
+          </button>
+          <button
+            onClick={async () => {
+              const response = await fetch(`/api/events/${event.id}`, {
+                method: 'DELETE',
+              });
 
-        <button
-          onClick={async () => {
-            const response = await fetch(`/api/events/${event.id}`, {
-              method: 'DELETE',
-            });
+              setErrorMessage('');
 
-            setErrorMessage('');
+              if (!response.ok) {
+                let newErrorMessage = 'Error deleting the event';
 
-            if (!response.ok) {
-              let newErrorMessage = 'Error deleting the event';
+                try {
+                  const body = await response.json();
+                  newErrorMessage = body.error;
+                } catch {
+                  // Don't fail if response JSON body
+                  // cannot be parsed
+                }
 
-              try {
-                const body = await response.json();
-                newErrorMessage = body.error;
-              } catch {
-                // Don't fail if response JSON body
-                // cannot be parsed
+                // TODO: Use toast instead of showing
+                // this below creation / update form
+                setErrorMessage(newErrorMessage);
+                return;
               }
 
-              // TODO: Use toast instead of showing
-              // this below creation / update form
-              setErrorMessage(newErrorMessage);
-              return;
-            }
-
-            router.refresh();
-          }}
-        >
-          Delete event
-        </button>
+              router.refresh();
+            }}
+          >
+            Delete event
+          </button>
+        </p>
       </div>
     );
   });

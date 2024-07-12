@@ -19,8 +19,8 @@ export type NewEvent = {
 export type Event = NewEvent & {
   id: number;
   createdAt: Date;
-  public: boolean;
-  cancelled: boolean;
+  public: boolean | undefined;
+  cancelled: boolean | undefined;
 };
 
 export const createEvent = cache(
@@ -96,6 +96,38 @@ export const getUsersEventsOrganising = cache(async (sessionToken: string) => {
   `;
   return events;
 });
+
+export const updateEvent = cache(
+  async (sessionToken: string, updatedEvent: Event) => {
+    const [event] = await sql<Event[]>`
+      UPDATE events
+      SET
+        name = ${updatedEvent.name},
+        user_id = ${updatedEvent.userId},
+        time_start = ${updatedEvent.timeStart},
+        time_end = ${updatedEvent.timeEnd},
+        category = ${updatedEvent.category},
+        location = ${updatedEvent.location},
+        latitude = ${updatedEvent.latitude},
+        longitude = ${updatedEvent.longitude},
+        price = ${updatedEvent.price},
+        description = ${updatedEvent.description},
+        links = ${updatedEvent.links},
+        images = ${updatedEvent.images},
+        public = ${updatedEvent.public},
+        cancelled = ${updatedEvent.cancelled}
+      FROM
+        sessions
+      WHERE
+        sessions.token = ${sessionToken}
+        AND sessions.expiry_timestamp > now()
+        AND events.id = ${updatedEvent.id}
+      RETURNING
+        events.*
+    `;
+    return event;
+  },
+);
 
 export const deleteUsersEventOrganising = cache(
   async (sessionToken: string, eventId: number) => {
