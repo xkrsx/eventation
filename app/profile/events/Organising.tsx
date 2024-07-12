@@ -47,10 +47,22 @@ export default function OrganisingEvents(props: Props) {
         <Link href={`/events/${event.id}`}>See more...</Link>
         <p>
           <button
-            // TODO check what's id in animals dashboard
-            disabled={id === event.id}
             onClick={() => {
-              setEditedEvent({});
+              setEditedEvent({
+                ...editedEvent,
+                name: event.name,
+                timeStart: event.timeStart,
+                timeEnd: event.timeStart,
+                category: event.category,
+                location: event.location | null,
+                latitude: event.latitude | null,
+                longitude: event.longitude | null,
+                price: event.price | null,
+                description: event.description,
+                links: event.links,
+                images: event.images,
+                cancelled: event.cancelled || undefined,
+              });
               // Default to an empty string to avoid
               // errors with passing null to input
               // values
@@ -95,6 +107,73 @@ export default function OrganisingEvents(props: Props) {
   return (
     <div className="organising">
       <h2>Organising</h2>
+
+      <form
+        onSubmit={async (event) => {
+          event.preventDefault();
+          // TODO FIX api route
+          const response = await fetch(`/api/events/${}`, {
+            method: 'PUT',
+            body: JSON.stringify(editedEvent),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          setErrorMessage('');
+
+          if (!response.ok) {
+            let newErrorMessage = 'Error updating the event.';
+
+            try {
+              const body = await response.json();
+              newErrorMessage = body.error;
+            } catch (error) {
+              console.log('err', error);
+              // Don't fail if response JSON body cannot
+              // be parsed
+            }
+
+            setErrorMessage(newErrorMessage);
+            return;
+          }
+
+          router.refresh();
+        }}
+      >
+        <label>
+          Name
+          <input
+            value={name}
+            onChange={(event) => setFirstName(event.currentTarget.value)}
+          />
+        </label>
+        <label>
+          Type
+          <input
+            value={type}
+            onChange={(event) => setType(event.currentTarget.value)}
+          />
+        </label>
+        <label>
+          Accessory
+          <input
+            value={accessory}
+            onChange={(event) => setAccessory(event.currentTarget.value)}
+          />
+        </label>
+        <label>
+          Birth Date
+          <input
+            type="date"
+            value={dayjs(birthDate).format('YYYY-MM-DD')}
+            onChange={(event) =>
+              setBirthDate(new Date(event.currentTarget.value))
+            }
+          />
+        </label>
+        <button>Save Changes</button>
+      </form>
       {events}
       <ErrorMessage>{errorMessage}</ErrorMessage>
     </div>
