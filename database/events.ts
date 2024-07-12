@@ -4,8 +4,8 @@ import { sql } from './connect';
 export type NewEvent = {
   name: string;
   userId: number;
-  timeStart: string;
-  timeEnd: string;
+  timeStart: Date;
+  timeEnd: Date;
   category: string;
   location: string;
   latitude: string;
@@ -146,12 +146,26 @@ export const deleteUsersEventOrganising = cache(
   },
 );
 
-export const getAllEventsInsecure = cache(async () => {
+export const getAllEventsSortDateInsecure = cache(async () => {
   const events = await sql<Event[]>`
     SELECT
       *
     FROM
       events
+    ORDER BY
+      events.time_start
+  `;
+  return events;
+});
+
+export const getAllEventsSortPriceInsecure = cache(async () => {
+  const events = await sql<Event[]>`
+    SELECT
+      *
+    FROM
+      events
+    ORDER BY
+      events.price
   `;
   return events;
 });
