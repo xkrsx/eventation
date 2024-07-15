@@ -7,6 +7,12 @@ import {
 } from '../../../../database/events';
 import { eventSchema } from '../../../../migrations/00002-createTableEvents';
 
+type EventParams = {
+  params: {
+    eventId: string;
+  };
+};
+
 type EventResponseBodyPut =
   | {
       event: Event;
@@ -41,7 +47,7 @@ export async function PUT(
   const updatedEvent =
     sessionCookie &&
     (await updateEvent(sessionCookie.value, {
-      eventId: Number(params.eventId),
+      id: Number(params.eventId),
       userId: result.data.userId,
       name: result.data.name,
       timeStart: result.data.timeStart,
@@ -77,12 +83,6 @@ type EventResponseBodyDelete =
   | {
       error: string;
     };
-
-type EventParams = {
-  params: {
-    eventId: string;
-  };
-};
 
 export async function DELETE(
   request: Request,

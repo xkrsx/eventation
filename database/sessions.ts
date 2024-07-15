@@ -17,14 +17,14 @@ export const getValidSession = cache(async (sessionToken: string) => {
 });
 
 export const createSessionInsecure = cache(
-  async (token: string, userId: number) => {
+  async (token: string, id: number) => {
     const [session] = await sql<Session[]>`
       INSERT INTO
         sessions (token, user_id)
       VALUES
         (
           ${token},
-          ${userId}
+          ${id}
         )
       RETURNING
         sessions.id,

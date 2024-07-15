@@ -222,6 +222,9 @@ export default function RegisterForm() {
           </label>
           favorite categories (max 3)
           <ReactTags
+            onClick={(event) => {
+              event.preventDefault();
+            }}
             id="category-selector"
             labelText="Select selected"
             isInvalid={selected.length >= SELECTED_LENGTH}

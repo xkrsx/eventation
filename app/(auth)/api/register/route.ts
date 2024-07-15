@@ -79,7 +79,7 @@ export async function POST(
   const token = crypto.randomBytes(100).toString('base64');
 
   // 7. Insert token to session table
-  const session = await createSessionInsecure(token, newUser.userId);
+  const session = await createSessionInsecure(token, newUser.id);
 
   if (!session) {
     return NextResponse.json(

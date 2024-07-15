@@ -23,5 +23,5 @@ export default async function AddEvent() {
     redirect('/');
   }
 
-  return <AddEventForm userId={profile.userId} />;
+  return <AddEventForm userId={profile.id} />;
 }

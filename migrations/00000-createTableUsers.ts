@@ -60,7 +60,7 @@ export const userLoginSchema = z.object({
 export async function up(sql: Sql) {
   await sql`
     CREATE TABLE users (
-      user_id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+      id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
       username varchar(30) NOT NULL UNIQUE,
       full_name varchar(100) NOT NULL,
       password_hash varchar(80) NOT NULL,
