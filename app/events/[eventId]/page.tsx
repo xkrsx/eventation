@@ -8,6 +8,7 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSingleEvent } from '../../../database/events';
+import { getValidSession } from '../../../database/sessions';
 import { getUserPublicByIdInsecure } from '../../../database/users';
 
 type Props = {
@@ -20,16 +21,16 @@ export default async function SingleEvent(props: Props) {
   // // Task: Protect the dashboard page and redirect to login if the user is not logged in
 
   // // 1. Checking if the sessionToken cookie exists
-  const session = cookies().get('sessionToken');
+  const sessionCookie = cookies().get('sessionToken');
   // // 2. Check if the sessionToken cookie is still valid
-  // const session = sessionCookie && (await getValidSession(sessionCookie.value));
+  const session = sessionCookie && (await getValidSession(sessionCookie.value));
   // // 3. If the sessionToken cookie is invalid or doesn't exist, redirect to login with returnTo
 
   if (!session) {
     redirect(`/login?returnTo=/events/${props.params.eventId}`);
   }
   const event = await getSingleEvent(
-    session.value,
+    session.token,
     Number(props.params.eventId),
   );
   if (!event) {
@@ -54,7 +55,7 @@ export default async function SingleEvent(props: Props) {
       <p>location: {event.location}</p>
       <p>category: {event.category}</p>
       <p>description: {event.description}</p>
-      {/* <SingleEventInfo event={event} />; */}
+      <button>YES</button> <button>MAYBE</button> <button>NO</button>{' '}
     </div>
   );
 }

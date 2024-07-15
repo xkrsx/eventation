@@ -17,11 +17,13 @@ export type NewEvent = {
 };
 
 export type Event = NewEvent & {
-  id: number;
+  eventId: number;
   createdAt: Date;
   public: boolean;
   cancelled: boolean;
 };
+
+export type JoinedEvent = Event & {};
 
 export const createEvent = cache(
   async (sessionToken: string, newEvent: NewEvent) => {
@@ -61,7 +63,7 @@ export const createEvent = cache(
             AND sessions.expiry_timestamp > now()
         )
       RETURNING
-        events.id,
+        events.event_id,
         events.name,
         events.user_id,
         events.time_start,
@@ -83,7 +85,7 @@ export const createEvent = cache(
 );
 
 export const getSingleEvent = cache(
-  async (sessionToken: string, id: number) => {
+  async (sessionToken: string, eventId: number) => {
     const [event] = await sql<Event[]>`
       SELECT
         events.*
@@ -94,7 +96,7 @@ export const getSingleEvent = cache(
           AND expiry_timestamp > now()
         )
       WHERE
-        events.id = ${id}
+        events.event_id = ${eventId}
     `;
     return event;
   },
@@ -139,7 +141,7 @@ export const updateEvent = cache(
       WHERE
         sessions.token = ${sessionToken}
         AND sessions.expiry_timestamp > now()
-        AND events.id = ${updatedEvent.id}
+        AND events.event_id = ${updatedEvent.eventId}
       RETURNING
         events.*
     `;
@@ -156,7 +158,7 @@ export const deleteUsersEventOrganising = cache(
         AND sessions.expiry_timestamp > now()
         AND sessions.user_id = events.user_id
         AND expiry_timestamp > now()
-        AND events.id = ${eventId}
+        AND events.event_id = ${eventId}
       RETURNING
         events.*
     `;

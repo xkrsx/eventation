@@ -2,7 +2,7 @@ import { cache } from 'react';
 import { sql } from './connect';
 
 export type User = {
-  id: number;
+  userId: number;
   username: string;
   fullName: string;
   location: string | null;
@@ -21,7 +21,7 @@ export type UserWithPasswordHash = User & {
 export const getUser = cache(async (sessionToken: string) => {
   const [user] = await sql<User[]>`
     SELECT
-      users.id,
+      users.user_id,
       users.username,
       users.full_name,
       users.location,
@@ -34,7 +34,7 @@ export const getUser = cache(async (sessionToken: string) => {
       users
       INNER JOIN sessions ON (
         sessions.token = ${sessionToken}
-        AND sessions.user_id = users.id
+        AND sessions.user_id = users.user_id
         AND expiry_timestamp > now()
       )
   `;
@@ -45,7 +45,7 @@ export const getUserPublic = cache(
   async (sessionToken: string, username: string) => {
     const [user] = await sql<User[]>`
       SELECT
-        users.id,
+        users.user_id,
         users.username,
         users.full_name,
         users.location,
@@ -72,7 +72,7 @@ export const getUserPublicByUsernameInsecure = cache(
   async (username: string) => {
     const [user] = await sql<Omit<User, 'fullName' | 'categories' | 'email'>[]>`
       SELECT
-        users.id,
+        users.user_id,
         users.username,
         users.location,
         users.latitude,
@@ -91,7 +91,7 @@ export const getUserPublicByUsernameInsecure = cache(
 export const getUserPublicByIdInsecure = cache(async (id: number) => {
   const [user] = await sql<Omit<User, 'fullName' | 'categories' | 'email'>[]>`
     SELECT
-      users.id,
+      users.user_id,
       users.username,
       users.location,
       users.latitude,
@@ -107,9 +107,9 @@ export const getUserPublicByIdInsecure = cache(async (id: number) => {
 
 // login
 export const getUserByUsernameInsecure = cache(async (username: string) => {
-  const [user] = await sql<Pick<User, 'id' | 'username'>[]>`
+  const [user] = await sql<Pick<User, 'userId' | 'username'>[]>`
     SELECT
-      users.id,
+      users.user_id,
       users.username
     FROM
       users
@@ -121,9 +121,9 @@ export const getUserByUsernameInsecure = cache(async (username: string) => {
 
 // login
 export const getUserByEmailInsecure = cache(async (email: string) => {
-  const [user] = await sql<Pick<User, 'id' | 'email'>[]>`
+  const [user] = await sql<Pick<User, 'userId' | 'email'>[]>`
     SELECT
-      users.id,
+      users.user_id,
       users.email
     FROM
       users
@@ -135,7 +135,7 @@ export const getUserByEmailInsecure = cache(async (email: string) => {
 
 // registration
 export const createUserInsecure = cache(
-  async (newUser: Omit<User, 'id' | 'createdAt'>, passwordHash: string) => {
+  async (newUser: Omit<User, 'userId' | 'createdAt'>, passwordHash: string) => {
     const [user] = await sql<Omit<User, 'createdAt'>[]>`
       INSERT INTO
         users (
@@ -160,7 +160,7 @@ export const createUserInsecure = cache(
           ${newUser.email.toLowerCase()}
         )
       RETURNING
-        users.id,
+        users.user_id,
         users.username,
         users.full_name,
         users.location,
