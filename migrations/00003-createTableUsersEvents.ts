@@ -1,10 +1,21 @@
 import { Sql } from 'postgres';
+import { z } from 'zod';
+
+const isAttendingEnum = z.enum(['yes', 'maybe', 'no']);
+
+export const userEventSchema = z.object({
+  userId: z.number(),
+  eventId: z.number(),
+  isOrganising: isAttendingEnum,
+  isAttending: z.string(),
+});
 
 export async function up(sql: Sql) {
   await sql`
     CREATE TABLE users_events (
-      user_id integer NOT NULL,
-      event_id integer NOT NULL,
+      id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+      user_id integer NOT NULL REFERENCES users (id) ON DELETE cascade,
+      event_id integer NOT NULL REFERENCES events (id),
       is_organising boolean NOT NULL DEFAULT FALSE,
       is_attending varchar(5) NOT NULL
     )
