@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { getSingleEvent } from '../../../database/events';
+import { getSingleEventInsecure } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { getUserPublicByIdInsecure } from '../../../database/users';
 
@@ -26,13 +26,10 @@ export default async function SingleEvent(props: Props) {
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
   // // 3. If the sessionToken cookie is invalid or doesn't exist, redirect to login with returnTo
 
-  if (!session) {
-    redirect(`/login?returnTo=/events/${props.params.eventId}`);
-  }
-  const event = await getSingleEvent(
-    session.token,
-    Number(props.params.eventId),
-  );
+  // if (!session) {
+  //   redirect(`/login?returnTo=/events/${props.params.eventId}`);
+  // }
+  const event = await getSingleEventInsecure(Number(props.params.eventId));
   if (!event) {
     redirect('/');
   }
@@ -56,6 +53,7 @@ export default async function SingleEvent(props: Props) {
       <p>category: {event.category}</p>
       <p>description: {event.description}</p>
       <button>YES</button> <button>MAYBE</button> <button>NO</button>{' '}
+      {session ? <button>edit</button> : ''}
     </div>
   );
 }

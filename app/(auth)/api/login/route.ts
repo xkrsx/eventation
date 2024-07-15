@@ -33,7 +33,7 @@ export async function POST(
       },
     );
   }
-
+  console.log('result.data.username: ', result.data.username);
   // 3. Verify user credentials
   const userWithPasswordHash = await getUserWithPasswordHashInsecure(
     result.data.username,
@@ -67,7 +67,10 @@ export async function POST(
   const token = crypto.randomBytes(100).toString('base64');
 
   // 6. Insert token to session table
-  const session = await createSessionInsecure(token, userWithPasswordHash.id);
+  const session = await createSessionInsecure(
+    token,
+    userWithPasswordHash.userId,
+  );
 
   if (!session) {
     return NextResponse.json(

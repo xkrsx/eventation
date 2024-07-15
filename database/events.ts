@@ -84,23 +84,17 @@ export const createEvent = cache(
   },
 );
 
-export const getSingleEvent = cache(
-  async (sessionToken: string, eventId: number) => {
-    const [event] = await sql<Event[]>`
-      SELECT
-        events.*
-      FROM
-        events
-        INNER JOIN sessions ON (
-          sessions.token = ${sessionToken}
-          AND expiry_timestamp > now()
-        )
-      WHERE
-        events.event_id = ${eventId}
-    `;
-    return event;
-  },
-);
+export const getSingleEventInsecure = cache(async (eventId: number) => {
+  const [event] = await sql<Event[]>`
+    SELECT
+      events.*
+    FROM
+      events
+    WHERE
+      events.event_id = ${eventId}
+  `;
+  return event;
+});
 
 export const getUsersEventsOrganising = cache(async (sessionToken: string) => {
   const events = await sql<Event[]>`
