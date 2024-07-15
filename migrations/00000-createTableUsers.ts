@@ -64,10 +64,10 @@ export async function up(sql: Sql) {
       username varchar(30) NOT NULL UNIQUE,
       full_name varchar(100) NOT NULL,
       password_hash varchar(80) NOT NULL,
-      location varchar(50),
-      latitude varchar(50),
-      longitude varchar(50),
-      categories text,
+      location varchar(50) NULL,
+      latitude varchar(50) NULL,
+      longitude varchar(50) NULL,
+      categories VARCHAR[] NULL,
       email varchar(80) NOT NULL UNIQUE,
       created_at timestamp DEFAULT now() NOT NULL
     )

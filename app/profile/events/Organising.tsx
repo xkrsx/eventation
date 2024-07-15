@@ -48,8 +48,6 @@ export default function OrganisingEvents(props: Props) {
   }
 
   const events = props.events.map((event) => {
-    console.log('start: ', event.timeStart);
-    console.log('end: ', event.timeEnd);
     return (
       <div key={`event-${event.id}`} style={{ border: '1px solid black' }}>
         <Link href={`/events/${event.id}`}>

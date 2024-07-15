@@ -9,7 +9,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { ReactTags } from 'react-tag-autocomplete';
-import { categories, suggestions } from '../../../database/categories';
+import { suggestions } from '../../../database/categories';
 import ErrorMessage from '../../ErrorMessage';
 import { RegisterResponseBodyPost } from '../api/register/route';
 
@@ -22,25 +22,20 @@ export default function RegisterForm() {
     location: '',
     latitude: '',
     longitude: '',
-    categories: '',
+    categories: [],
     email: '',
   });
   const [userLocation, setUserLocation] = useState(false);
+  const [userCategory, setUserCategory] = useState(false);
   const [selected, setSelected] = useState([]);
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const SELECTED_LENGTH = 3;
 
-  let newCategory;
   // TODO FIX newTag typing
   // TODO FIX async issue with adding one less than selected
   const onAdd = useCallback(
-    (newTag: never) => {
+    (newTag) => {
       setSelected([...selected, newTag]);
-      newCategory = selected.map((category) => category.label);
-      setNewUser({
-        ...newUser,
-        categories: newCategory,
-      });
     },
     [selected],
   );
@@ -48,26 +43,37 @@ export default function RegisterForm() {
   const onDelete = useCallback(
     (index: number) => {
       setSelected(selected.filter((_, i) => i !== index));
-      setNewUser({ ...newUser, categories: selected });
     },
     [selected],
   );
+
+  // const onChange = useCallback(
+  //   (category) => {
+  //     const newCategory = selected.map((category) => category.label);
+  //     setNewUser({ ...newUser, categories: newCategory });
+  //     console.log('newCategory: ', newCategory);
+  //   },
+  //   [onAdd],
+  // );
 
   const router = useRouter();
 
   async function handleRegister(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const newCategory = selected.map((category) => category.label);
 
     const response = await fetch('/api/register', {
       method: 'POST',
       body: JSON.stringify({
-        newUser,
+        ...newUser,
+        categories: newCategory,
       }),
       headers: {
         'Content-Type': 'application/json',
       },
     });
     const data: RegisterResponseBodyPost = await response.json();
+    console.log('data: ', data);
 
     if ('errors' in data) {
       setErrors(data.errors);
@@ -156,25 +162,25 @@ export default function RegisterForm() {
           </label>
           <div className="location">
             <div>
-              <input
-                type="checkbox"
-                checked={userLocation}
-                onChange={() => setUserLocation(!userLocation)}
-              />{' '}
-              I want to add my default location for events (city or country)
+              <label>
+                <input
+                  type="checkbox"
+                  checked={userLocation}
+                  onChange={() => setUserLocation(!userLocation)}
+                />{' '}
+                I want to add my default location for events (city or country)
+              </label>
             </div>
-            <label>
-              {userLocation ? (
-                <div>
-                  <label>
-                    <input
-                      type="radio"
-                      value="City"
-                      name="type"
-                      disabled={!userLocation}
-                    />
-                    City
-                  </label>
+            {userLocation ? (
+              <div>
+                <label>
+                  <input
+                    type="radio"
+                    value="City"
+                    name="type"
+                    disabled={!userLocation}
+                  />
+                  City
                   <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
                     <GeoapifyGeocoderAutocomplete
                       placeholder="City"
@@ -186,15 +192,16 @@ export default function RegisterForm() {
                       sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
                     />
                   </GeoapifyContext>
-                  <label>
-                    <input
-                      type="radio"
-                      value="Country"
-                      name="type"
-                      disabled={!userLocation}
-                    />
-                    Country
-                  </label>
+                </label>
+
+                <label>
+                  <input
+                    type="radio"
+                    value="Country"
+                    name="type"
+                    disabled={!userLocation}
+                  />
+                  Country
                   <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
                     <GeoapifyGeocoderAutocomplete
                       placeholder="Country"
@@ -206,9 +213,9 @@ export default function RegisterForm() {
                       sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
                     />
                   </GeoapifyContext>
-                </div>
-              ) : null}
-            </label>
+                </label>
+              </div>
+            ) : null}
           </div>
           <label>
             e-mail
@@ -220,29 +227,50 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
-          favorite categories (max 3)
-          <ReactTags
-            onClick={(event) => {
-              event.preventDefault();
-            }}
-            id="category-selector"
-            labelText="Select selected"
-            isInvalid={selected.length >= SELECTED_LENGTH}
-            onAdd={onAdd}
-            onDelete={onDelete}
-            selected={selected}
-            suggestions={suggestions}
-          />
-          {selected.length < SELECTED_LENGTH ? (
-            <p id="error" style={{ color: '#fd5956' }}>
-              You can select {SELECTED_LENGTH - selected.length} more tags
-            </p>
-          ) : null}
-          {selected.length > SELECTED_LENGTH ? (
-            <p id="error" style={{ color: '#fd5956' }}>
-              You must remove {selected.length - SELECTED_LENGTH} tags
-            </p>
-          ) : null}
+
+          <div className="categories">
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={userCategory}
+                  onChange={() => setUserCategory(!userCategory)}
+                />{' '}
+                I want to add my default favorite categories (max 3)
+              </label>
+            </div>
+
+            {userCategory ? (
+              <div>
+                <ReactTags
+                  id="category-selector"
+                  labelText="Select selected"
+                  isInvalid={selected.length >= SELECTED_LENGTH}
+                  onAdd={onAdd}
+                  onDelete={onDelete}
+                  selected={selected}
+                  suggestions={suggestions}
+                />
+                {selected.length < SELECTED_LENGTH ? (
+                  <p id="error" style={{ color: '#fd5956' }}>
+                    You can select {SELECTED_LENGTH - selected.length} more tags
+                  </p>
+                ) : (
+                  ''
+                )}
+                {selected.length > SELECTED_LENGTH ? (
+                  <p id="error" style={{ color: '#fd5956' }}>
+                    You must remove {selected.length - SELECTED_LENGTH} tags
+                  </p>
+                ) : (
+                  ''
+                )}
+              </div>
+            ) : (
+              ''
+            )}
+          </div>
+
           <button>Register</button>
           {errors.map((error) => (
             <div className="error" key={`error-${error.message}`}>
