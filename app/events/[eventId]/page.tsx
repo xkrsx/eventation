@@ -1,4 +1,3 @@
-// TODO single event page
 // not logged in: authenticate after join/chat button
 // logged in: can join/chat, can remove themselves from event
 // organiser: edit/delete event
@@ -10,6 +9,7 @@ import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { getUserPublicByIdInsecure } from '../../../database/users';
+import AttendanceStatusForm from '../../common/AttendanceStatusForm/AttendanceStatusForm';
 
 type Props = {
   params: {
@@ -25,16 +25,20 @@ export default async function SingleEvent(props: Props) {
   // // 2. Check if the sessionToken cookie is still valid
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
   // // 3. If the sessionToken cookie is invalid or doesn't exist, redirect to login with returnTo
+  if (!session) {
+    redirect(`/events/find`);
+  }
 
-  // if (!session) {
-  //   redirect(`/login?returnTo=/events/${props.params.eventId}`);
-  // }
   const event = await getSingleEventInsecure(Number(props.params.eventId));
   if (!event) {
     redirect('/');
   }
 
+  // TODO FIX when there's no organiser profile
   const organiser = await getUserPublicByIdInsecure(event.userId);
+  if (!organiser) {
+    redirect(`/events/find`);
+  }
 
   // 4. If the sessionToken cookie is valid, allow access to dashboard page
   return (
@@ -42,8 +46,8 @@ export default async function SingleEvent(props: Props) {
       <h1>{event.name}</h1>
       <p>
         Organiser:{' '}
-        <Link href={`/profile/${organiser!.username}`}>
-          {organiser!.username}
+        <Link href={`/profile/${organiser.username}`}>
+          {organiser.username}
         </Link>
       </p>
       <p>start: {dayjs(event.timeStart).format('dddd, HH:mm, DD/MM/YYYY')}</p>
@@ -52,20 +56,12 @@ export default async function SingleEvent(props: Props) {
       <p>location: {event.location}</p>
       <p>category: {event.category}</p>
       <p>description: {event.description}</p>
-      <form>
-        <ul>
-          <li>
-            <button name="yes">YES</button>
-          </li>
-          <li>
-            <button name="maybe">MAYBE</button>
-          </li>
-          <li>
-            <button name="no">NO</button>
-          </li>
-        </ul>
-      </form>
-      {session?.userId === organiser?.id ? <button>edit</button> : ''}
+      {session.userId === organiser.id ? (
+        <button>edit</button>
+      ) : (
+        <AttendanceStatusForm session={session} event={event} />
+        // ''
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { createEvent, Event } from '../../../database/events';
+import { updateStatus } from '../../../database/usersEventsStatus';
 import { eventSchema } from '../../../migrations/00002-createTableEvents';
 
 export type EventResponseBodyPost =
@@ -59,6 +60,14 @@ export async function POST(
       { status: 500 },
     );
   }
+
+  await updateStatus(
+    sessionCookie.value,
+    newEvent.userId,
+    newEvent.id,
+    true,
+    'yes',
+  );
 
   return NextResponse.json({ event: newEvent });
 }

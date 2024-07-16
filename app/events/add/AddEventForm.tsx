@@ -49,13 +49,10 @@ export default function AddEventForm(props: Props) {
     const data: EventResponseBodyPost = await response.json();
 
     if ('errors' in data) {
-      // setErrorMessage(data.errors);
+      setErrorMessage(data.errors);
       return;
     }
-    // TODO redirect to new event page
     router.push(`/events/${data.event.id}`);
-
-    // router.refresh();
   }
   // TODO type req object
   // function sendGeocoderRequest(value: string, geocoder: any) {
