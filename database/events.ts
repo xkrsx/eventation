@@ -91,7 +91,7 @@ export const getSingleEventInsecure = cache(async (id: number) => {
     FROM
       events
     WHERE
-      events.id = ${eventId}
+      events.id = ${id}
   `;
   return event;
 });

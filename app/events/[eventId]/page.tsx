@@ -53,7 +53,7 @@ export default async function SingleEvent(props: Props) {
       <p>category: {event.category}</p>
       <p>description: {event.description}</p>
       <button>YES</button> <button>MAYBE</button> <button>NO</button>{' '}
-      {session ? <button>edit</button> : ''}
+      {session?.userId === organiser?.id ? <button>edit</button> : ''}
     </div>
   );
 }
