@@ -53,9 +53,9 @@ export default function AddEventForm(props: Props) {
       return;
     }
     // TODO redirect to new event page
-    // router.push(`/events/${data.}`);
+    router.push(`/events/${data.event.id}`);
 
-    router.refresh();
+    // router.refresh();
   }
   // TODO type req object
   // function sendGeocoderRequest(value: string, geocoder: any) {

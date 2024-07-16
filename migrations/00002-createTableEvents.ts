@@ -9,13 +9,13 @@ export const eventSchema = z.object({
   userId: z.number(),
   // timeStart: z.date(),
   // timeEnd: z.date(),
-  timeStart: z.date(),
-  timeEnd: z.date(),
+  timeStart: z.string(),
+  timeEnd: z.string(),
   category: z.string(),
   location: z.string().optional(),
   latitude: z.string().optional(),
   longitude: z.string().optional(),
-  price: z.number().optional(),
+  price: z.string().optional(),
   description: z
     .string()
     .min(3, {

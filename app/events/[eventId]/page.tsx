@@ -52,7 +52,19 @@ export default async function SingleEvent(props: Props) {
       <p>location: {event.location}</p>
       <p>category: {event.category}</p>
       <p>description: {event.description}</p>
-      <button>YES</button> <button>MAYBE</button> <button>NO</button>{' '}
+      <form>
+        <ul>
+          <li>
+            <button name="yes">YES</button>
+          </li>
+          <li>
+            <button name="maybe">MAYBE</button>
+          </li>
+          <li>
+            <button name="no">NO</button>
+          </li>
+        </ul>
+      </form>
       {session?.userId === organiser?.id ? <button>edit</button> : ''}
     </div>
   );

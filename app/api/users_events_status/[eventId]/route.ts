@@ -6,6 +6,7 @@ import {
   updateEvent,
 } from '../../../../database/events';
 import { eventSchema } from '../../../../migrations/00002-createTableEvents';
+import { usersEventsStatusSchema } from '../../../../migrations/00003-createTableUsersEvents';
 
 type EventParams = {
   params: {
@@ -27,7 +28,7 @@ export async function POST(
   const requestBody = await request.json();
 
   // Validation schema for request body
-  const result = eventSchema.safeParse(requestBody);
+  const result = usersEventsStatusSchema.safeParse(requestBody);
 
   // If client sends request body with incorrect data,
   // return a response with a 400 status code to the client

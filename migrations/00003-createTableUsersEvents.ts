@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 const isAttendingEnum = z.enum(['yes', 'maybe', 'no']);
 
-export const userEventSchema = z.object({
+export const usersEventsStatusSchema = z.object({
   userId: z.number(),
   eventId: z.number(),
   isOrganising: z.boolean(),
