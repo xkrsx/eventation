@@ -103,6 +103,7 @@ export async function PUT(
   // 1. Checking if the sessionToken cookie exists
   const sessionCookie = cookies().get('sessionToken');
 
+  // TODO FIX it doesn't update, but apparently post new record
   const updatedAttendance =
     sessionCookie &&
     (await updateStatus(
