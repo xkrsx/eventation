@@ -9,37 +9,24 @@ export type UsersEventsStatus = {
   isAttending: string;
 };
 
-export const checkStatusInsecure = cache(
-  async (userId: number, eventId: number) => {
+export const checkStatus = cache(
+  async (sessionToken: string, userId: number, eventId: number) => {
     const [checkedStatus] = await sql<UsersEventsStatus[]>`
       SELECT
         users_events.*
       FROM
         users_events
+        INNER JOIN sessions ON (
+          sessions.token = ${sessionToken}
+          AND expiry_timestamp > now()
+        )
       WHERE
-        user_id = ${userId}
-        AND event_id = ${eventId}
+        users_events.user_id = ${userId}
+        AND users_events.event_id = ${eventId}
     `;
     return checkedStatus;
   },
 );
-// export const checkStatus = cache(
-//   async (session, eventId: number) => {
-//     const [checkedStatus] = await sql<UsersEventsStatus[]>`
-//       SELECT
-//         users_events.*
-//       FROM
-//         users_events
-//         INNER JOIN sessions ON (
-//           sessions.token = ${session.}
-//           AND expiry_timestamp > now()
-//           AND users_events.user_id = ${userId}
-//           AND users_events.event_id = ${eventId}
-//         )
-//     `;
-//     return checkedStatus;
-//   },
-// );
 
 export const addStatus = cache(
   async (
@@ -49,7 +36,7 @@ export const addStatus = cache(
     isOrganising: boolean,
     isAttending: string,
   ) => {
-    const [addedStatus] = await sql<Omit<UsersEventsStatus, 'id'>[]>`
+    const [addedStatus] = await sql<UsersEventsStatus[]>`
       INSERT INTO
         users_events (
           user_id,
@@ -69,10 +56,7 @@ export const addStatus = cache(
             AND sessions.expiry_timestamp > now()
         )
       RETURNING
-        users_events.user_id,
-        users_events.event_id,
-        users_events.is_organising,
-        users_events.is_attending
+        users_events.*
     `;
     return addedStatus;
   },
@@ -86,7 +70,7 @@ export const updateStatus = cache(
     isOrganising: boolean,
     isAttending: string,
   ) => {
-    const [updatedStatus] = await sql<Omit<UsersEventsStatus, 'id'>[]>`
+    const [updatedStatus] = await sql<UsersEventsStatus[]>`
       UPDATE users_events
       SET
         user_id = ${userId},
@@ -99,10 +83,7 @@ export const updateStatus = cache(
         sessions.token = ${sessionToken}
         AND sessions.expiry_timestamp > now()
       RETURNING
-        users_events.user_id,
-        users_events.event_id,
-        users_events.is_organising,
-        users_events.is_attending
+        users_events.*
     `;
     return updatedStatus;
   },

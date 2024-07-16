@@ -6,6 +6,7 @@ import {
   updateEvent,
 } from '../../../../database/events';
 import {
+  addStatus,
   updateStatus,
   UsersEventsStatus,
 } from '../../../../database/usersEventsStatus';
@@ -39,7 +40,7 @@ export async function POST(
   if (!result.success) {
     return NextResponse.json(
       {
-        error: 'Request does not contain event object.',
+        error: 'Request does not contain attendance object.',
         errorIssues: result.error.issues,
       },
       { status: 400 },
@@ -51,7 +52,7 @@ export async function POST(
 
   const newAttendanceStatus =
     sessionCookie &&
-    (await updateStatus(
+    (await addStatus(
       sessionCookie.value,
       result.data.userId,
       result.data.eventId,
@@ -73,7 +74,7 @@ export async function POST(
 
 type UsersEventsStatusResponseBodyPut =
   | {
-      event: Event;
+      status: UsersEventsStatus;
     }
   | {
       error: string;
@@ -87,7 +88,7 @@ export async function PUT(
 
   // If client sends request body with incorrect data,
   // return a response with a 400 status code to the client
-  const result = eventSchema.safeParse(requestBody);
+  const result = usersEventsStatusSchema.safeParse(requestBody);
 
   if (!result.success) {
     return NextResponse.json(
@@ -102,41 +103,32 @@ export async function PUT(
   // 1. Checking if the sessionToken cookie exists
   const sessionCookie = cookies().get('sessionToken');
 
-  const updatedEvent =
+  const updatedAttendance =
     sessionCookie &&
-    (await updateEvent(sessionCookie.value, {
-      id: Number(params.eventId),
-      userId: result.data.userId,
-      name: result.data.name,
-      timeStart: result.data.timeStart,
-      timeEnd: result.data.timeEnd,
-      category: result.data.category,
-      location: result.data.location,
-      latitude: result.data.latitude,
-      longitude: result.data.longitude,
-      price: Number(result.data.price),
-      description: result.data.description,
-      links: result.data.links,
-      images: result.data.images,
-      public: result.data.public,
-      cancelled: result.data.cancelled,
-    }));
+    (await updateStatus(
+      sessionCookie.value,
+      result.data.userId,
+      result.data.eventId,
+      result.data.isOrganising,
+      result.data.isAttending,
+    ));
 
-  if (!updatedEvent) {
+  if (!updatedAttendance) {
     return NextResponse.json(
       {
-        error: 'Event not created or access denied creating events',
+        error:
+          'Attendance not changed or access denied changing attendance status.',
       },
       { status: 500 },
     );
   }
 
-  return NextResponse.json({ event: updatedEvent });
+  return NextResponse.json({ status: updatedAttendance });
 }
 
 type UsersEventsStatusResponseBodyDelete =
   | {
-      event: Event;
+      status: UsersEventsStatus;
     }
   | {
       error: string;

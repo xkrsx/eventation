@@ -15,7 +15,7 @@ export async function up(sql: Sql) {
     CREATE TABLE users_events (
       id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
       user_id integer NOT NULL REFERENCES users (id) ON DELETE cascade,
-      event_id integer NOT NULL REFERENCES events (id),
+      event_id integer NOT NULL REFERENCES events (id) ON DELETE cascade,
       is_organising boolean NOT NULL DEFAULT FALSE,
       is_attending varchar(5) NOT NULL
     )

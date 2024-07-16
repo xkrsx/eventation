@@ -30,7 +30,7 @@ export default async function SingleEvent(props: Props) {
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
   // // 3. If the sessionToken cookie is invalid or doesn't exist, redirect to login with returnTo
   if (!session) {
-    return '';
+    return;
   }
 
   const event = await getSingleEventInsecure(Number(props.params.eventId));
@@ -44,18 +44,19 @@ export default async function SingleEvent(props: Props) {
     redirect(`/events/find`);
   }
 
-  // let methodAPI;
-  // if (!(checkStatus(session?.token, session?.userId, event.id))) {methodAPI = 'POST'}
+  let methodAPI = 'PUT';
 
-  // const test = await checkStatus(session, event.id);
-  // const test = await checkStatusInsecure(2, 6);
-  const test = await checkStatusInsecure(
+  const attendance = await checkStatus(
+    session.token,
     Number(session.userId),
     Number(props.params.eventId),
   );
-  console.log('session.userId: ', session.userId);
-  console.log('props.params.eventId: ', props.params.eventId);
-  console.log('test: ', test);
+
+  if (!attendance) {
+    methodAPI = 'POST';
+  } else if (!!attendance.isAttending) {
+    methodAPI = 'PUT';
+  }
 
   return (
     <div>
@@ -79,7 +80,7 @@ export default async function SingleEvent(props: Props) {
           session={session}
           event={event}
           isOrganising={false}
-          methodAPI="test"
+          methodAPI={methodAPI}
         />
         // ''
       )}
