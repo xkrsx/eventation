@@ -5,6 +5,10 @@ import {
   Event,
   updateEvent,
 } from '../../../../database/events';
+import {
+  updateStatus,
+  UsersEventsStatus,
+} from '../../../../database/usersEventsStatus';
 import { eventSchema } from '../../../../migrations/00002-createTableEvents';
 import { usersEventsStatusSchema } from '../../../../migrations/00003-createTableUsersEvents';
 
@@ -16,7 +20,7 @@ type EventParams = {
 
 export type UsersEventsStatusResponseBodyPost =
   | {
-      event: Event;
+      status: UsersEventsStatus;
     }
   | {
       error: string;
@@ -45,33 +49,26 @@ export async function POST(
   // 1. Checking if the sessionToken cookie exists
   const sessionCookie = cookies().get('sessionToken');
 
-  const newEvent =
+  const newAttendanceStatus =
     sessionCookie &&
-    (await createEvent(sessionCookie.value, {
-      name: result.data.name,
-      userId: result.data.userId,
-      timeStart: result.data.timeStart,
-      timeEnd: result.data.timeEnd,
-      category: result.data.category,
-      location: result.data.location,
-      latitude: result.data.latitude,
-      longitude: result.data.longitude,
-      price: result.data.price,
-      description: result.data.description,
-      links: result.data.links,
-      images: result.data.images,
-    }));
+    (await updateStatus(
+      sessionCookie.value,
+      result.data.userId,
+      result.data.eventId,
+      result.data.isOrganising,
+      result.data.isAttending,
+    ));
 
-  if (!newEvent) {
+  if (!newAttendanceStatus) {
     return NextResponse.json(
       {
-        error: 'Event not created or access denied creating animals',
+        error: 'Attendance status not changed or access denied updating it.',
       },
       { status: 500 },
     );
   }
 
-  return NextResponse.json({ event: newEvent });
+  return NextResponse.json({ status: newAttendanceStatus });
 }
 
 type UsersEventsStatusResponseBodyPut =

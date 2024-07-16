@@ -1,19 +1,21 @@
 import { cache } from 'react';
 import { sql } from './connect';
 
+// TODO type | 'undefined' gives promise problem on queries
+// type | null gives a problem of incompatible types
 export type NewEvent = {
   name: string;
   userId: number;
-  timeStart: Date;
-  timeEnd: Date;
+  timeStart: string;
+  timeEnd: string;
   category: string;
-  location: string | null;
-  latitude: string | null;
-  longitude: string | null;
-  price: number | null;
-  description: string | null;
-  links: string | null;
-  images: string | null;
+  location: string | undefined;
+  latitude: string | undefined;
+  longitude: string | undefined;
+  price: string | undefined;
+  description: string | undefined;
+  links: string | undefined;
+  images: string | undefined;
 };
 
 export type Event = NewEvent & {

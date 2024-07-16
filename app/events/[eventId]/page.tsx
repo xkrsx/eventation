@@ -9,6 +9,10 @@ import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { getUserPublicByIdInsecure } from '../../../database/users';
+import {
+  checkStatus,
+  checkStatusInsecure,
+} from '../../../database/usersEventsStatus';
 import AttendanceStatusForm from '../../common/AttendanceStatusForm/AttendanceStatusForm';
 
 type Props = {
@@ -26,12 +30,12 @@ export default async function SingleEvent(props: Props) {
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
   // // 3. If the sessionToken cookie is invalid or doesn't exist, redirect to login with returnTo
   if (!session) {
-    redirect(`/events/find`);
+    return '';
   }
 
   const event = await getSingleEventInsecure(Number(props.params.eventId));
   if (!event) {
-    redirect('/');
+    redirect('/events/find');
   }
 
   // TODO FIX when there's no organiser profile
@@ -40,7 +44,19 @@ export default async function SingleEvent(props: Props) {
     redirect(`/events/find`);
   }
 
-  // 4. If the sessionToken cookie is valid, allow access to dashboard page
+  // let methodAPI;
+  // if (!(checkStatus(session?.token, session?.userId, event.id))) {methodAPI = 'POST'}
+
+  // const test = await checkStatus(session, event.id);
+  // const test = await checkStatusInsecure(2, 6);
+  const test = await checkStatusInsecure(
+    Number(session.userId),
+    Number(props.params.eventId),
+  );
+  console.log('session.userId: ', session.userId);
+  console.log('props.params.eventId: ', props.params.eventId);
+  console.log('test: ', test);
+
   return (
     <div>
       <h1>{event.name}</h1>
@@ -59,7 +75,12 @@ export default async function SingleEvent(props: Props) {
       {session.userId === organiser.id ? (
         <button>edit</button>
       ) : (
-        <AttendanceStatusForm session={session} event={event} />
+        <AttendanceStatusForm
+          session={session}
+          event={event}
+          isOrganising={false}
+          methodAPI="test"
+        />
         // ''
       )}
     </div>

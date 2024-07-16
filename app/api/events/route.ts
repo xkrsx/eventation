@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { createEvent, Event } from '../../../database/events';
-import { updateStatus } from '../../../database/usersEventsStatus';
+import { addStatus, updateStatus } from '../../../database/usersEventsStatus';
 import { eventSchema } from '../../../migrations/00002-createTableEvents';
 
 export type EventResponseBodyPost =
@@ -52,22 +52,22 @@ export async function POST(
       images: result.data.images,
     }));
 
-  if (!newEvent) {
+  if (newEvent) {
+    await addStatus(
+      sessionCookie.value,
+      result.data.userId,
+      newEvent.id,
+      true,
+      'yes',
+    );
+  } else {
     return NextResponse.json(
       {
-        error: 'Event not created or access denied creating animals',
+        error: 'Event not created or access denied creating it.',
       },
       { status: 500 },
     );
   }
-
-  await updateStatus(
-    sessionCookie.value,
-    newEvent.userId,
-    newEvent.id,
-    true,
-    'yes',
-  );
 
   return NextResponse.json({ event: newEvent });
 }
