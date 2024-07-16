@@ -7,13 +7,13 @@ export type NewEvent = {
   timeStart: Date;
   timeEnd: Date;
   category: string;
-  location: string;
-  latitude: string;
-  longitude: string;
-  price: string;
-  description: string;
-  links: string;
-  images: string;
+  location: string | null;
+  latitude: string | null;
+  longitude: string | null;
+  price: number | null;
+  description: string | null;
+  links: string | null;
+  images: string | null;
 };
 
 export type Event = NewEvent & {
@@ -52,7 +52,7 @@ export const createEvent = cache(
             ${newEvent.location},
             ${newEvent.latitude},
             ${newEvent.longitude},
-            ${newEvent.price},
+            ${Number(newEvent.price)},
             ${newEvent.description},
             ${newEvent.links},
             ${newEvent.images}
@@ -124,7 +124,7 @@ export const updateEvent = cache(
         location = ${updatedEvent.location},
         latitude = ${updatedEvent.latitude},
         longitude = ${updatedEvent.longitude},
-        price = ${updatedEvent.price},
+        price = ${Number(updatedEvent.price)},
         description = ${updatedEvent.description},
         links = ${updatedEvent.links},
         images = ${updatedEvent.images},

@@ -6,8 +6,8 @@ const isAttendingEnum = z.enum(['yes', 'maybe', 'no']);
 export const userEventSchema = z.object({
   userId: z.number(),
   eventId: z.number(),
-  isOrganising: isAttendingEnum,
-  isAttending: z.string(),
+  isOrganising: z.boolean(),
+  isAttending: isAttendingEnum,
 });
 
 export async function up(sql: Sql) {
