@@ -156,7 +156,7 @@ export const createUserInsecure = cache(
           ${newUser.location},
           ${newUser.latitude},
           ${newUser.longitude},
-          array ${newUser.categories},
+          ${newUser.categories},
           ${newUser.email.toLowerCase()}
         )
       RETURNING

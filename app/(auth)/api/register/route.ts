@@ -23,6 +23,7 @@ export async function POST(
 ): Promise<NextResponse<RegisterResponseBodyPost>> {
   // 1. Get the user data from the request
   const body = await request.json();
+  console.log('body: ', body);
 
   // 2. Validate the user data with zod
   const result = userRegistrationSchema.safeParse(body.newUser);

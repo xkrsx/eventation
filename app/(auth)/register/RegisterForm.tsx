@@ -14,6 +14,7 @@ import ErrorMessage from '../../ErrorMessage';
 import { RegisterResponseBodyPost } from '../api/register/route';
 
 export default function RegisterForm() {
+  const [selected, setSelected] = useState([]);
   const [newUser, setNewUser] = useState({
     username: '',
     password: '',
@@ -27,15 +28,21 @@ export default function RegisterForm() {
   });
   const [userLocation, setUserLocation] = useState(false);
   const [userCategory, setUserCategory] = useState(false);
-  const [selected, setSelected] = useState([]);
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const SELECTED_LENGTH = 3;
 
+  // TODO FIX adding categories to the profile
   // TODO FIX newTag typing
   // TODO FIX async issue with adding one less than selected
   const onAdd = useCallback(
-    (newTag) => {
+    (newTag: never) => {
       setSelected([...selected, newTag]);
+      // newCategory = selected.map((category) => category.label);
+      // setNewUser({
+      //   ...newUser,
+      //   ...newUser.categories,
+      //   categories: newTag.label,
+      // });
     },
     [selected],
   );
@@ -47,33 +54,21 @@ export default function RegisterForm() {
     [selected],
   );
 
-  // const onChange = useCallback(
-  //   (category) => {
-  //     const newCategory = selected.map((category) => category.label);
-  //     setNewUser({ ...newUser, categories: newCategory });
-  //     console.log('newCategory: ', newCategory);
-  //   },
-  //   [onAdd],
-  // );
-
   const router = useRouter();
 
   async function handleRegister(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const newCategory = selected.map((category) => category.label);
 
     const response = await fetch('/api/register', {
       method: 'POST',
       body: JSON.stringify({
-        ...newUser,
-        categories: newCategory,
+        newUser,
       }),
       headers: {
         'Content-Type': 'application/json',
       },
     });
     const data: RegisterResponseBodyPost = await response.json();
-    console.log('data: ', data);
 
     if ('errors' in data) {
       setErrors(data.errors);
