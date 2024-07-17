@@ -72,7 +72,7 @@ export async function POST(
   return NextResponse.json({ status: newAttendanceStatus });
 }
 
-type UsersEventsStatusResponseBodyPut =
+export type UsersEventsStatusResponseBodyPut =
   | {
       status: UsersEventsStatus;
     }

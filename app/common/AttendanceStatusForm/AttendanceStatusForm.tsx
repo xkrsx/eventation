@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Event } from '../../../database/events';
 import { Session } from '../../../migrations/00001-createTableSessions';
+import { UsersEventsStatusResponseBodyPut } from '../../api/users_events_status/[eventId]/route';
 import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
 
 export default function AttendanceStatusForm(props: Props) {
   const [errors, setErrors] = useState<{ message: string }[]>([]);
+  const [attendanceStatus, setAttendanceStatus] = useState('');
 
   const router = useRouter();
 
@@ -34,16 +36,24 @@ export default function AttendanceStatusForm(props: Props) {
     });
     router.refresh();
 
-    const data = await response.json();
+    const data: UsersEventsStatusResponseBodyPut = await response.json();
 
-    if ('errors' in data) {
-      setErrors(data.errors);
+    if ('error' in data) {
+      setErrors(data.error);
       return;
     }
+
+    setAttendanceStatus(data.status.isAttending);
   }
 
   return (
     <form>
+      {/* TODO style attendance status */}
+      {attendanceStatus ? (
+        <strong>attending? {attendanceStatus}</strong>
+      ) : (
+        <strong>you have not responded yet</strong>
+      )}
       <ul>
         <li>
           <button onClick={handleStatusChange} name="yes">
