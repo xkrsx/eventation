@@ -9,7 +9,10 @@ import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { getUserPublicByIdInsecure } from '../../../database/users';
-import { checkStatus } from '../../../database/usersEventsStatus';
+import {
+  checkStatus,
+  countAttendantsInsecure,
+} from '../../../database/usersEventsStatus';
 import AttendanceStatusForm from '../../common/AttendanceStatusForm/AttendanceStatusForm';
 
 type Props = {
@@ -34,6 +37,8 @@ export default async function SingleEvent(props: Props) {
   if (!event) {
     redirect('/events/find');
   }
+
+  const attendantsCount = await countAttendantsInsecure(event.id);
 
   // TODO FIX when there's no organiser profile
   const organiser = await getUserPublicByIdInsecure(event.userId);
@@ -70,6 +75,12 @@ export default async function SingleEvent(props: Props) {
       <p>location: {event.location}</p>
       <p>category: {event.category}</p>
       <p>description: {event.description}</p>
+      <p>
+        number of attendants:{' '}
+        {attendantsCount?.count
+          ? attendantsCount.count
+          : 'No one yet. Be first!'}
+      </p>
       {session.userId === organiser.id ? (
         <button>edit</button>
       ) : (

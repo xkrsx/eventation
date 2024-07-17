@@ -90,3 +90,15 @@ export const updateStatus = cache(
     return updatedStatus;
   },
 );
+
+export const countAttendantsInsecure = cache(async (eventId: number) => {
+  const [attendantsCount] = await sql`
+    SELECT
+      count(*)
+    FROM
+      users_events
+    WHERE
+      users_events.event_id = ${eventId}
+  `;
+  return attendantsCount;
+});

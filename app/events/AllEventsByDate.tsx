@@ -6,7 +6,10 @@ import Link from 'next/link';
 import { Event, getAllEventsSortDateInsecure } from '../../database/events';
 import { getValidSession } from '../../database/sessions';
 import { getUserPublicByIdInsecure } from '../../database/users';
-import { checkStatus } from '../../database/usersEventsStatus';
+import {
+  checkStatus,
+  countAttendantsInsecure,
+} from '../../database/usersEventsStatus';
 import AttendanceStatusForm from '../common/AttendanceStatusForm/AttendanceStatusForm';
 
 export default async function AllEventsByDate() {
@@ -20,7 +23,7 @@ export default async function AllEventsByDate() {
     async (event: Event) => {
       const organiser = await getUserPublicByIdInsecure(event.userId);
 
-      // const showStatus = await AttendanceStatus(session, event.id);
+      const attendantsCount = await countAttendantsInsecure(event.id);
 
       const attendanceStatus =
         session && (await checkStatus(session.token, session.userId, event.id));
@@ -70,6 +73,12 @@ export default async function AllEventsByDate() {
           <p>location: {event.location}</p>
           <p>category: {event.category}</p>
           <p>description: {event.description}</p>
+          <p>
+            number of attendants:{' '}
+            {attendantsCount?.count
+              ? attendantsCount.count
+              : 'No one yet. Be first!'}
+          </p>
           {session ? (
             <strong>{showStatus()}</strong>
           ) : (
