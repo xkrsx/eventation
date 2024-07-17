@@ -9,10 +9,7 @@ import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { getUserPublicByIdInsecure } from '../../../database/users';
-import {
-  checkStatus,
-  checkStatusInsecure,
-} from '../../../database/usersEventsStatus';
+import { checkStatus } from '../../../database/usersEventsStatus';
 import AttendanceStatusForm from '../../common/AttendanceStatusForm/AttendanceStatusForm';
 
 type Props = {
@@ -80,6 +77,7 @@ export default async function SingleEvent(props: Props) {
           session={session}
           event={event}
           isOrganising={false}
+          isAttending={attendance.isAttending}
           methodAPI={methodAPI}
         />
         // ''

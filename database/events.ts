@@ -109,9 +109,57 @@ export const getUsersEventsOrganising = cache(async (sessionToken: string) => {
         AND sessions.user_id = events.user_id
         AND expiry_timestamp > now()
       )
+    WHERE
+      (time_start >= now())
+      OR (time_end >= now())
   `;
   return events;
 });
+
+export const getUsersEventsAttending = cache(
+  async (sessionToken: string, userId: number) => {
+    const events = await sql<Event[]>`
+      SELECT
+        events.*
+      FROM
+        events
+        INNER JOIN sessions ON (
+          sessions.token = ${sessionToken}
+          AND expiry_timestamp > now()
+        )
+        INNER JOIN users_events ON (
+          events.id = users_events.event_id
+          AND users_events.user_id = ${userId}
+        )
+      WHERE
+        (time_start >= now())
+        OR (time_end >= now())
+    `;
+    return events;
+  },
+);
+export const getUsersEventsPast = cache(
+  async (sessionToken: string, userId: number) => {
+    const events = await sql<Event[]>`
+      SELECT
+        events.*
+      FROM
+        events
+        INNER JOIN sessions ON (
+          sessions.token = ${sessionToken}
+          AND expiry_timestamp > now()
+        )
+        INNER JOIN users_events ON (
+          events.id = users_events.event_id
+          AND users_events.user_id = ${userId}
+        )
+      WHERE
+        (time_start < now())
+        AND (time_end < now())
+    `;
+    return events;
+  },
+);
 
 export const updateEvent = cache(
   async (sessionToken: string, updatedEvent: Event) => {

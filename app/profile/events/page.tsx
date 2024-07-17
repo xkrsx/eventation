@@ -3,7 +3,11 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { getUsersEventsOrganising } from '../../../database/events';
+import {
+  getUsersEventsAttending,
+  getUsersEventsOrganising,
+  getUsersEventsPast,
+} from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import AttendingEvents from './Attending';
 import OrganisingEvents from './Organising';
@@ -22,16 +26,20 @@ export default async function UserEvents() {
     return redirect('/login?returnTo=/profile/events');
   }
 
-  // 4. if the sessionToken cookie is valid, allow access to events page
-
   const eventsOrganising = await getUsersEventsOrganising(session.token);
+  const eventsAttending = await getUsersEventsAttending(
+    session.token,
+    session.userId,
+  );
+  const eventsPast = await getUsersEventsPast(session.token, session.userId);
 
+  // 4. if the sessionToken cookie is valid, allow access to events page
   return (
     <div className="wrapper">
       <h1>User events</h1>
       <OrganisingEvents events={eventsOrganising} />
-      <AttendingEvents />
-      <PastEvents />
+      <AttendingEvents events={eventsAttending} />
+      <PastEvents events={eventsPast} />
     </div>
   );
 }

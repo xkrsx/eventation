@@ -15,6 +15,7 @@ type Props = {
 };
 
 export default function OrganisingEvents(props: Props) {
+  const [showForm, setShowForm] = useState(false);
   const [eventId, setEventId] = useState(0);
   const [editedEvent, setEditedEvent] = useState({
     userId: 0,
@@ -63,6 +64,7 @@ export default function OrganisingEvents(props: Props) {
         <p>
           <button
             onClick={() => {
+              setShowForm(!showForm);
               setEventId(event.id);
               setEditedEvent({
                 ...editedEvent,
@@ -124,118 +126,135 @@ export default function OrganisingEvents(props: Props) {
   return (
     <div className="organising">
       <h2>Organising</h2>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          // TODO FIX api route
-          const response = await fetch(`/api/events/${eventId}`, {
-            method: 'PUT',
-            body: JSON.stringify(editedEvent),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
 
-          setErrorMessage('');
+      {events.length >= 1 ? (
+        events
+      ) : (
+        <div>
+          <strong>There are currently no events you are organising.</strong>{' '}
+          <Link href="/events/add">Add new event</Link>
+        </div>
+      )}
 
-          if (!response.ok) {
-            let newErrorMessage = 'Error updating the event.';
+      {showForm ? (
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            // TODO FIX api route
+            const response = await fetch(`/api/events/${eventId}`, {
+              method: 'PUT',
+              body: JSON.stringify(editedEvent),
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
 
-            try {
-              const body = await response.json();
-              newErrorMessage = body.error;
-            } catch (error) {
-              console.log('err', error);
-              // Don't fail if response JSON body cannot
-              // be parsed
+            setErrorMessage('');
+
+            if (!response.ok) {
+              let newErrorMessage = 'Error updating the event.';
+
+              try {
+                const body = await response.json();
+                newErrorMessage = body.error;
+              } catch (error) {
+                console.log('err', error);
+                // Don't fail if response JSON body cannot
+                // be parsed
+              }
+
+              setErrorMessage(newErrorMessage);
+              return;
             }
 
-            setErrorMessage(newErrorMessage);
-            return;
-          }
-
-          router.refresh();
-        }}
-      >
-        <label>
-          Name
-          <input name="name" value={editedEvent.name} onChange={handleChange} />
-        </label>
-        <label>
-          Start time
-          <input
-            name="timeStart"
-            value={editedEvent.timeStart}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Category
-          <input
-            name="category"
-            value={editedEvent.category}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Location
-          <input
-            name="location"
-            value={editedEvent.location}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Latitude
-          <input
-            name="latitude"
-            value={editedEvent.latitude}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Longitude
-          <input
-            name="longitude"
-            value={editedEvent.longitude}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Price
-          <input
-            name="price"
-            value={editedEvent.price}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Description
-          <input
-            name="description"
-            value={editedEvent.description}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Links
-          <input
-            name="links"
-            value={editedEvent.links}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Images
-          <input
-            name="images"
-            value={editedEvent.images}
-            onChange={handleChange}
-          />
-        </label>
-        <button>Save Changes</button>
-      </form>
-      {events}
+            router.refresh();
+          }}
+        >
+          <label>
+            Name
+            <input
+              name="name"
+              value={editedEvent.name}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Start time
+            <input
+              name="timeStart"
+              value={editedEvent.timeStart}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Category
+            <input
+              name="category"
+              value={editedEvent.category}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Location
+            <input
+              name="location"
+              value={editedEvent.location}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Latitude
+            <input
+              name="latitude"
+              value={editedEvent.latitude}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Longitude
+            <input
+              name="longitude"
+              value={editedEvent.longitude}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Price
+            <input
+              name="price"
+              value={editedEvent.price}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Description
+            <input
+              name="description"
+              value={editedEvent.description}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Links
+            <input
+              name="links"
+              value={editedEvent.links}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Images
+            <input
+              name="images"
+              value={editedEvent.images}
+              onChange={handleChange}
+            />
+          </label>
+          <button>Save Changes</button>
+        </form>
+      ) : (
+        ''
+      )}
       <ErrorMessage>{errorMessage}</ErrorMessage>
     </div>
   );

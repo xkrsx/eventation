@@ -9,13 +9,14 @@ import ErrorMessage from '../../ErrorMessage';
 type Props = {
   session: Omit<Session, 'id'>;
   event: Event;
-  isOrganising: boolean;
+  isOrganising?: boolean;
+  isAttending?: string;
   methodAPI: string;
 };
 
 export default function AttendanceStatusForm(props: Props) {
   const [errors, setErrors] = useState<{ message: string }[]>([]);
-  const [attendanceStatus, setAttendanceStatus] = useState('');
+  const [attendanceStatus, setAttendanceStatus] = useState(props.isAttending);
 
   const router = useRouter();
 
@@ -49,10 +50,14 @@ export default function AttendanceStatusForm(props: Props) {
   return (
     <form>
       {/* TODO style attendance status */}
-      {attendanceStatus ? (
-        <strong>attending? {attendanceStatus}</strong>
+      {props.session !== undefined ? (
+        attendanceStatus ? (
+          <strong>attending? {attendanceStatus}</strong>
+        ) : (
+          <strong>you have not responded yet</strong>
+        )
       ) : (
-        <strong>you have not responded yet</strong>
+        ''
       )}
       <ul>
         <li>
