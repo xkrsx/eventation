@@ -82,6 +82,8 @@ export const updateStatus = cache(
       WHERE
         sessions.token = ${sessionToken}
         AND sessions.expiry_timestamp > now()
+        AND users_events.user_id = ${userId}
+        AND users_events.event_id = ${eventId}
       RETURNING
         users_events.*
     `;

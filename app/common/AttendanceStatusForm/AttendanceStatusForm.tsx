@@ -13,30 +13,20 @@ type Props = {
 };
 
 export default function AttendanceStatusForm(props: Props) {
-  const [attendanceStatus, setAttendanceStatus] = useState('');
   const [errors, setErrors] = useState<{ message: string }[]>([]);
 
   const router = useRouter();
 
   async function handleStatusChange(event) {
     event.preventDefault();
-    if (event.target.name === 'yes') {
-      setAttendanceStatus(event.target.name);
-    }
-    if (event.target.name === 'maybe') {
-      setAttendanceStatus('maybe');
-    }
-    if (event.target.name === 'no') {
-      setAttendanceStatus('no');
-    }
-    // TODO FIX attendance status changes after 2nd click
+
     const response = await fetch(`/api/users_events_status/${props.event.id}`, {
       method: props.methodAPI,
       body: JSON.stringify({
         userId: props.session.userId,
         eventId: props.event.id,
         isOrganising: props.isOrganising,
-        isAttending: attendanceStatus,
+        isAttending: event.target.name,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +35,6 @@ export default function AttendanceStatusForm(props: Props) {
     router.refresh();
 
     const data = await response.json();
-    console.log('data: ', data);
 
     if ('errors' in data) {
       setErrors(data.errors);
