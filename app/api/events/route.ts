@@ -40,8 +40,8 @@ export async function POST(
     (await createEvent(sessionCookie.value, {
       name: result.data.name,
       userId: result.data.userId,
-      timeStart: result.data.timeStart,
-      timeEnd: result.data.timeEnd,
+      timeStart: new Date(result.data.timeStart),
+      timeEnd: new Date(result.data.timeEnd),
       category: result.data.category,
       location: result.data.location,
       latitude: result.data.latitude,

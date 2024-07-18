@@ -38,8 +38,6 @@ export default function AddEventForm(props: Props) {
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    console.log('newEvent: ', newEvent);
-
     // TODO add session token to validate if it's really same user?
     const response = await fetch('/api/events/', {
       method: 'POST',
@@ -49,12 +47,15 @@ export default function AddEventForm(props: Props) {
       },
     });
     const data: EventResponseBodyPost = await response.json();
+    console.log('data: ', data);
 
     if ('errors' in data) {
       setErrorMessage(String(data.errors));
       return;
     }
-    router.push(`/events/${data.events.id}`);
+    if ('event' in data) {
+      router.push(`/events/${data.event.id}`);
+    }
   }
   // TODO type req object
   // function sendGeocoderRequest(value: string, geocoder: any) {
