@@ -127,29 +127,29 @@ export async function PUT(
   return NextResponse.json({ status: updatedAttendance });
 }
 
-type UsersEventsStatusResponseBodyDelete =
-  | {
-      status: UsersEventsStatus;
-    }
-  | {
-      error: string;
-    };
+// type UsersEventsStatusResponseBodyDelete =
+//   | {
+//       status: UsersEventsStatus;
+//     }
+//   | {
+//       error: string;
+//     };
 
-export async function DELETE(
-  request: Request,
-  { params }: EventParams,
-): Promise<NextResponse<UsersEventsStatusResponseBodyDelete>> {
-  // 1. Checking if the sessionToken cookie exists
-  const sessionCookie = cookies().get('sessionToken');
-  const event =
-    sessionCookie &&
-    (await deleteUsersEventOrganising(
-      sessionCookie.value,
-      Number(params.eventId),
-    ));
+// // export async function DELETE(
+// //   request: Request,
+// //   { params }: EventParams,
+// // ): Promise<NextResponse<UsersEventsStatusResponseBodyDelete>> {
+// //   // 1. Checking if the sessionToken cookie exists
+// //   const sessionCookie = cookies().get('sessionToken');
+// //   const event =
+// //     sessionCookie &&
+// //     (await deleteUsersEventOrganising(
+// //       sessionCookie.value,
+// //       Number(params.eventId),
+// //     ));
 
-  if (!event) {
-    return NextResponse.json({ error: 'Event not found' }, { status: 404 });
-  }
-  return NextResponse.json({ event: event });
-}
+// //   if (!event) {
+// //     return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+// //   }
+// //   return NextResponse.json({ event: event });
+// // }

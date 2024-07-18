@@ -1,21 +1,23 @@
 import { cache } from 'react';
 import { sql } from './connect';
 
-// TODO type | 'undefined' gives promise problem on queries
-// type | null gives a problem of incompatible types
 export type NewEvent = {
   name: string;
   userId: number;
-  timeStart: string;
-  timeEnd: string;
+  timeStart: Date;
+  timeEnd: Date;
   category: string;
   location: string | undefined;
   latitude: string | undefined;
   longitude: string | undefined;
-  price: string | undefined;
+  price: number;
   description: string | undefined;
   links: string | undefined;
   images: string | undefined;
+};
+
+export type UpdatedEvent = NewEvent & {
+  id: number;
 };
 
 export type Event = NewEvent & {
@@ -48,8 +50,8 @@ export const createEvent = cache(
           SELECT
             ${newEvent.name},
             ${newEvent.userId},
-            ${newEvent.timeStart},
-            ${newEvent.timeEnd},
+            ${new Date(newEvent.timeStart)},
+            ${new Date(newEvent.timeEnd)},
             ${newEvent.category},
             ${newEvent.location},
             ${newEvent.latitude},
@@ -65,22 +67,7 @@ export const createEvent = cache(
             AND sessions.expiry_timestamp > now()
         )
       RETURNING
-        events.id,
-        events.name,
-        events.user_id,
-        events.time_start,
-        events.time_end,
-        events.category,
-        events.location,
-        events.latitude,
-        events.longitude,
-        events.price,
-        events.description,
-        events.links,
-        events.images,
-        events.created_at,
-        events.public,
-        events.cancelled
+        events.*
     `;
     return event;
   },
@@ -162,8 +149,8 @@ export const getUsersEventsPast = cache(
 );
 
 export const updateEvent = cache(
-  async (sessionToken: string, updatedEvent: Event) => {
-    const [event] = await sql<Event[]>`
+  async (sessionToken: string, updatedEvent: UpdatedEvent) => {
+    const [event] = await sql<UpdatedEvent[]>`
       UPDATE events
       SET
         name = ${updatedEvent.name},
@@ -187,7 +174,21 @@ export const updateEvent = cache(
         AND sessions.expiry_timestamp > now()
         AND events.id = ${updatedEvent.id}
       RETURNING
-        events.*
+        events.id,
+        events.name,
+        events.user_id,
+        events.time_start,
+        events.time_end,
+        events.category,
+        events.location,
+        events.latitude,
+        events.longitude,
+        events.price,
+        events.description,
+        events.links,
+        events.images,
+        events.public,
+        events.cancelled
     `;
     return event;
   },

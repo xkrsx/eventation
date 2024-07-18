@@ -17,16 +17,17 @@ type Props = {
 export default function OrganisingEvents(props: Props) {
   const [showForm, setShowForm] = useState(false);
   const [eventId, setEventId] = useState(0);
+
   const [editedEvent, setEditedEvent] = useState({
     userId: 0,
     name: '',
-    timeStart: '',
-    timeEnd: '',
+    timeStart: new Date(),
+    timeEnd: new Date(),
     category: '',
     location: '',
     latitude: '',
     longitude: '',
-    price: '',
+    price: 0,
     description: '',
     links: '',
     images: '',
@@ -70,21 +71,18 @@ export default function OrganisingEvents(props: Props) {
                 ...editedEvent,
                 userId: event.userId,
                 name: event.name,
-                timeStart: event.timeStart,
-                timeEnd: event.timeStart,
+                timeStart: new Date(event.timeStart),
+                timeEnd: new Date(event.timeStart),
                 category: event.category,
                 location: event.location,
                 latitude: event.latitude,
                 longitude: event.longitude,
-                price: String(event.price),
+                price: event.price,
                 description: event.description,
                 links: event.links,
                 images: event.images,
                 cancelled: event.cancelled,
               });
-              // Default to an empty string to avoid
-              // errors with passing null to input
-              // values
             }}
           >
             Edit

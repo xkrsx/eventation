@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { createEvent, Event } from '../../../database/events';
-import { addStatus, updateStatus } from '../../../database/usersEventsStatus';
+import { addStatus } from '../../../database/usersEventsStatus';
 import { eventSchema } from '../../../migrations/00002-createTableEvents';
 
 export type EventResponseBodyPost =
@@ -46,7 +46,7 @@ export async function POST(
       location: result.data.location,
       latitude: result.data.latitude,
       longitude: result.data.longitude,
-      price: result.data.price,
+      price: Number(result.data.price),
       description: result.data.description,
       links: result.data.links,
       images: result.data.images,

@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Event } from '../../../database/events';
 import { Session } from '../../../migrations/00001-createTableSessions';
 import { UsersEventsStatusResponseBodyPut } from '../../api/users_events_status/[eventId]/route';
@@ -20,9 +20,8 @@ export default function AttendanceStatusForm(props: Props) {
 
   const router = useRouter();
 
-  async function handleStatusChange(event) {
+  async function handleStatusChange(event: any) {
     event.preventDefault();
-
     const response = await fetch(`/api/users_events_status/${props.event.id}`, {
       method: props.methodAPI,
       body: JSON.stringify({
@@ -40,7 +39,7 @@ export default function AttendanceStatusForm(props: Props) {
     const data: UsersEventsStatusResponseBodyPut = await response.json();
 
     if ('error' in data) {
-      setErrors(data.error);
+      setErrors([{ message: data.error }]);
       return;
     }
 
@@ -49,8 +48,7 @@ export default function AttendanceStatusForm(props: Props) {
 
   return (
     <form>
-      {/* TODO style attendance status */}
-      {props.session !== undefined ? (
+      {props.session !== undefined! ? (
         attendanceStatus ? (
           <strong>attending? {attendanceStatus}</strong>
         ) : (

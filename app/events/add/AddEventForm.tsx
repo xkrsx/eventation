@@ -22,13 +22,13 @@ export default function AddEventForm(props: Props) {
     timeStart: undefined,
     timeEnd: undefined,
     category: 'Activism / Politics',
-    location: '',
-    latitude: '',
-    longitude: '',
-    price: '',
-    description: '',
-    links: '',
-    images: '',
+    location: undefined,
+    latitude: undefined,
+    longitude: undefined,
+    price: 0,
+    description: undefined,
+    links: undefined,
+    images: undefined,
   });
   // const [userLocation, setUserLocation] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -37,6 +37,8 @@ export default function AddEventForm(props: Props) {
 
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    console.log('newEvent: ', newEvent);
 
     // TODO add session token to validate if it's really same user?
     const response = await fetch('/api/events/', {
@@ -49,10 +51,10 @@ export default function AddEventForm(props: Props) {
     const data: EventResponseBodyPost = await response.json();
 
     if ('errors' in data) {
-      setErrorMessage(data.errors);
+      setErrorMessage(String(data.errors));
       return;
     }
-    router.push(`/events/${data.event.id}`);
+    router.push(`/events/${data.events.id}`);
   }
   // TODO type req object
   // function sendGeocoderRequest(value: string, geocoder: any) {

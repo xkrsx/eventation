@@ -8,13 +8,18 @@ import {
 } from '@geoapify/react-geocoder-autocomplete';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
-import { ReactTags } from 'react-tag-autocomplete';
+import {
+  OnAdd,
+  OnDelete,
+  ReactTags,
+  TagSelected,
+} from 'react-tag-autocomplete';
 import { suggestions } from '../../../database/categories';
 import ErrorMessage from '../../ErrorMessage';
 import { RegisterResponseBodyPost } from '../api/register/route';
 
 export default function RegisterForm() {
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState<TagSelected[]>([]);
   const [newUser, setNewUser] = useState({
     username: '',
     password: '',
@@ -34,8 +39,8 @@ export default function RegisterForm() {
   // TODO FIX adding categories to the profile
   // TODO FIX newTag typing
   // TODO FIX async issue with adding one less than selected
-  const onAdd = useCallback(
-    (newTag: never) => {
+  const onAdd: OnAdd = useCallback(
+    (newTag) => {
       setSelected([...selected, newTag]);
       // newCategory = selected.map((category) => category.label);
       // setNewUser({
@@ -47,7 +52,7 @@ export default function RegisterForm() {
     [selected],
   );
 
-  const onDelete = useCallback(
+  const onDelete: OnDelete = useCallback(
     (index: number) => {
       setSelected(selected.filter((_, i) => i !== index));
     },

@@ -88,7 +88,7 @@ export default async function SingleEvent(props: Props) {
           session={session}
           event={event}
           isOrganising={false}
-          isAttending={attendance.isAttending}
+          isAttending={attendance!.isAttending}
           methodAPI={methodAPI}
         />
         // ''

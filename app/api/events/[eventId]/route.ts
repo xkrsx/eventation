@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import {
   deleteUsersEventOrganising,
   Event,
+  UpdatedEvent,
   updateEvent,
 } from '../../../../database/events';
 import { eventSchema } from '../../../../migrations/00002-createTableEvents';
@@ -15,7 +16,7 @@ type EventParams = {
 
 type EventResponseBodyPut =
   | {
-      event: Event;
+      event: UpdatedEvent;
     }
   | {
       error: string;
@@ -50,8 +51,8 @@ export async function PUT(
       id: Number(params.eventId),
       userId: result.data.userId,
       name: result.data.name,
-      timeStart: result.data.timeStart,
-      timeEnd: result.data.timeEnd,
+      timeStart: new Date(result.data.timeStart),
+      timeEnd: new Date(result.data.timeEnd),
       category: result.data.category,
       location: result.data.location,
       latitude: result.data.latitude,
@@ -60,8 +61,6 @@ export async function PUT(
       description: result.data.description,
       links: result.data.links,
       images: result.data.images,
-      public: result.data.public,
-      cancelled: result.data.cancelled,
     }));
 
   if (!updatedEvent) {
