@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('header test', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.getByText('MAIN STAGE')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'MAIN STAGE' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Main stage' })).toBeVisible();
   await expect(
     page.getByRole('link', { name: 'Add', exact: true }),
