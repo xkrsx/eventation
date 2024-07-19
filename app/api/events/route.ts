@@ -6,7 +6,7 @@ import { eventSchema } from '../../../migrations/00002-createTableEvents';
 
 export type EventResponseBodyPost =
   | {
-      event: Event;
+      event: Event[];
     }
   | {
       error: string;
@@ -43,14 +43,16 @@ export async function POST(
       timeStart: new Date(result.data.timeStart),
       timeEnd: new Date(result.data.timeEnd),
       category: result.data.category,
-      location: result.data.location,
-      latitude: result.data.latitude,
-      longitude: result.data.longitude,
+      location: String(result.data.location),
+      latitude: String(result.data.latitude),
+      longitude: String(result.data.longitude),
       price: Number(result.data.price),
-      description: result.data.description,
-      links: result.data.links,
-      images: result.data.images,
+      description: String(result.data.description),
+      links: String(result.data.links),
+      images: String(result.data.images),
     }));
+
+  console.log('newEvent: ', newEvent);
 
   if (newEvent) {
     await addStatus(

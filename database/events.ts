@@ -7,13 +7,13 @@ export type NewEvent = {
   timeStart: Date;
   timeEnd: Date;
   category: string;
-  location: string | undefined;
-  latitude: string | undefined;
-  longitude: string | undefined;
+  location: string;
+  latitude: string;
+  longitude: string;
   price: number;
-  description: string | undefined;
-  links: string | undefined;
-  images: string | undefined;
+  description: string;
+  links: string;
+  images: string;
 };
 
 export type UpdatedEvent = NewEvent & {
@@ -184,9 +184,7 @@ export const updateEvent = cache(
         events.price,
         events.description,
         events.links,
-        events.images,
-        events.public,
-        events.cancelled
+        events.images
     `;
     return event;
   },

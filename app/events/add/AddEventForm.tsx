@@ -19,16 +19,16 @@ export default function AddEventForm(props: Props) {
   const [newEvent, setNewEvent] = useState({
     name: '',
     userId: props.userId,
-    timeStart: undefined,
-    timeEnd: undefined,
+    timeStart: '',
+    timeEnd: '',
     category: 'Activism / Politics',
-    location: undefined,
-    latitude: undefined,
-    longitude: undefined,
+    location: '',
+    latitude: '',
+    longitude: '',
     price: 0,
-    description: undefined,
-    links: undefined,
-    images: undefined,
+    description: '',
+    links: '',
+    images: '',
   });
   // const [userLocation, setUserLocation] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
