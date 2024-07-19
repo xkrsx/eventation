@@ -54,7 +54,7 @@ export default function RegisterForm() {
 
   const onDelete: OnDelete = useCallback(
     (index: number) => {
-      setSelected(selected.filter((_, i) => i !== index));
+      setSelected(selected.filter((a, i) => i !== index));
     },
     [selected],
   );
@@ -89,7 +89,7 @@ export default function RegisterForm() {
   }
 
   // TODO type res object
-  function sendPlaceDetailsRequest(feature: any, geocoder: any) {
+  function sendPlaceDetailsRequest(feature: any, geocoder: object) {
     setNewUser({
       ...newUser,
       location: feature.properties.formatted,

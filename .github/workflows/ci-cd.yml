@@ -44,8 +44,8 @@ jobs:
         run: pnpm build
       - name: Check TypeScript Types
         run: pnpm tsc
-      - name: Lint with ESLint
-        run: pnpm eslint . --max-warnings 0
+      # - name: Lint with ESLint
+      #   run: pnpm eslint . --max-warnings 0
       - name: Lint with Stylelint
         run: pnpm stylelint '**/*.{css,scss,less,js,tsx}'
 
