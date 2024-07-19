@@ -7,7 +7,7 @@ import { UsersEventsStatusResponseBodyPut } from '../../api/users_events_status/
 import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
-  session: Omit<Session, 'id'>;
+  session: Omit<Session, 'id'> | undefined;
   event: Event;
   isOrganising?: boolean;
   isAttending?: string;
@@ -25,7 +25,7 @@ export default function AttendanceStatusForm(props: Props) {
     const response = await fetch(`/api/users_events_status/${props.event.id}`, {
       method: props.methodAPI,
       body: JSON.stringify({
-        userId: props.session.userId,
+        userId: props.session?.userId,
         eventId: props.event.id,
         isOrganising: props.isOrganising,
         isAttending: event.target.name,

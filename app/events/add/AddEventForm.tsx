@@ -47,7 +47,6 @@ export default function AddEventForm(props: Props) {
       },
     });
     const data: EventResponseBodyPost = await response.json();
-    console.log('data: ', data);
 
     if ('errors' in data) {
       setErrorMessage(String(data.errors));
@@ -85,15 +84,6 @@ export default function AddEventForm(props: Props) {
       [event.target.name]: value,
     });
   }
-
-  // Reset form states to default values so that the form is
-  // cleared after an add, edit or delete action
-  // function resetFormStates() {
-  //   setId(0);
-  //   setFirstName('');
-  //   setType('');
-  //   setAccessory('');
-  //   setBirthDate(new Date());
 
   const categories = categoriesObject;
 
@@ -147,18 +137,6 @@ export default function AddEventForm(props: Props) {
               onChange={handleChange}
             />
           </label>
-          {/* <input
-                  type="date"
-                  value={dayjs(birthDate).format('YYYY-MM-DD')}
-                  onChange={(event) =>
-                    setBirthDate(new Date(event.currentTarget.value))
-                  }
-                /> */}
-          {/* <label>
-            End time
-            <input type="time" />
-            <input type="date" />
-          </label> */}
           <label>
             Price €{' '}
             <input

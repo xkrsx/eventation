@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { categoriesObject } from '../../../database/categories';
 import { Event } from '../../../database/events';
 import ErrorMessage from '../../ErrorMessage';
 
@@ -17,12 +18,11 @@ type Props = {
 export default function OrganisingEvents(props: Props) {
   const [showForm, setShowForm] = useState(false);
   const [eventId, setEventId] = useState(0);
-
   const [editedEvent, setEditedEvent] = useState({
     userId: 0,
     name: '',
-    timeStart: new Date(),
-    timeEnd: new Date(),
+    timeStart: dayjs(new Date()).format('HH:mm, DD/MM/YYYY'),
+    timeEnd: dayjs(new Date()).format('HH:mm, DD/MM/YYYY'),
     category: '',
     location: '',
     latitude: '',
@@ -38,7 +38,10 @@ export default function OrganisingEvents(props: Props) {
 
   const router = useRouter();
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(
+    event: any,
+    // React.ChangeEvent<HTMLInputElement>
+  ) {
     const value = event.target.value;
 
     setErrorMessage('');
@@ -48,6 +51,8 @@ export default function OrganisingEvents(props: Props) {
       [event.target.name]: value,
     });
   }
+
+  const categories = categoriesObject;
 
   const events = props.events.map((event) => {
     return (
@@ -71,16 +76,16 @@ export default function OrganisingEvents(props: Props) {
                 ...editedEvent,
                 userId: event.userId,
                 name: event.name,
-                timeStart: new Date(event.timeStart),
-                timeEnd: new Date(event.timeStart),
+                timeStart: String(event.timeStart),
+                timeEnd: String(event.timeStart),
                 category: event.category,
-                location: event.location,
-                latitude: event.latitude,
-                longitude: event.longitude,
+                location: event.location!,
+                latitude: event.latitude!,
+                longitude: event.longitude!,
                 price: event.price,
-                description: event.description,
-                links: event.links,
-                images: event.images,
+                description: event.description!,
+                links: event.links!,
+                images: event.images!,
                 cancelled: event.cancelled,
               });
             }}
@@ -124,16 +129,6 @@ export default function OrganisingEvents(props: Props) {
   return (
     <div className="organising">
       <h2>Organising</h2>
-
-      {events.length >= 1 ? (
-        events
-      ) : (
-        <div>
-          <strong>There are currently no events you are organising.</strong>{' '}
-          <Link href="/events/add">Add new event</Link>
-        </div>
-      )}
-
       {showForm ? (
         <form
           onSubmit={async (e) => {
@@ -180,17 +175,37 @@ export default function OrganisingEvents(props: Props) {
             Start time
             <input
               name="timeStart"
-              value={editedEvent.timeStart}
+              value={dayjs(editedEvent.timeStart).format('HH:mm, DD/MM/YYYY')}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            End time
+            <input
+              name="timeEnd"
+              value={dayjs(editedEvent.timeEnd).format('HH:mm, DD/MM/YYYY')}
               onChange={handleChange}
             />
           </label>
           <label>
             Category
-            <input
+            {/* <input
               name="category"
               value={editedEvent.category}
               onChange={handleChange}
-            />
+            /> */}
+            <select name="category" onChange={handleChange}>
+              {categories.map((category) => {
+                return (
+                  <option
+                    key={`option-key-${category.name}`}
+                    value={category.name}
+                  >
+                    {category.name}
+                  </option>
+                );
+              })}
+            </select>
           </label>
           <label>
             Location
@@ -249,11 +264,21 @@ export default function OrganisingEvents(props: Props) {
             />
           </label>
           <button>Save Changes</button>
+          {/* TODO Cancel edit button */}
         </form>
       ) : (
         ''
       )}
       <ErrorMessage>{errorMessage}</ErrorMessage>
+
+      {events.length >= 1 ? (
+        events
+      ) : (
+        <div>
+          <strong>There are currently no events you are organising.</strong>{' '}
+          <Link href="/events/add">Add new event</Link>
+        </div>
+      )}
     </div>
   );
 }
