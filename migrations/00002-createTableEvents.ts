@@ -20,7 +20,19 @@ export const eventSchema = z.object({
       message: 'Event description must have at least 3 characters.',
     })
     .optional(),
-  links: z.string().optional(),
+  links: z
+    .string()
+    .optional()
+    .refine(
+      (value) =>
+        !value ||
+        /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/[\w.-]*)*\/?$/.test(
+          value,
+        ),
+      {
+        message: 'Link must be valid URL.',
+      },
+    ),
   images: z.string().optional(),
   public: z.boolean().optional(),
   cancelled: z.boolean().optional(),

@@ -30,7 +30,49 @@ export default async function SingleEvent(props: Props) {
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
   // // 3. If the sessionToken cookie is invalid or doesn't exist, redirect to login with returnTo
   if (!session) {
-    return;
+    const event = await getSingleEventInsecure(Number(props.params.eventId));
+    if (!event) {
+      redirect('/events/find');
+    }
+
+    const attendantsCount = await countAttendantsInsecure(event.id);
+
+    // TODO FIX when there's no organiser profile
+    const organiser = await getUserPublicByIdInsecure(event.userId);
+    if (!organiser) {
+      redirect(`/events/find`);
+    }
+
+    return (
+      <div>
+        <h1>{event.name}</h1>
+        <p>
+          Organiser:{' '}
+          <Link href={`/profile/${organiser.username}`}>
+            {organiser.username}
+          </Link>
+        </p>
+        <p>start: {dayjs(event.timeStart).format('dddd, HH:mm, DD/MM/YYYY')}</p>
+        <p>end: {dayjs(event.timeEnd).format('dddd, HH:mm, DD/MM/YYYY')}</p>
+        <p>price: {event.price}</p>
+        <p>location: {event.location}</p>
+        <p>category: {event.category}</p>
+        <p>description: {event.description}</p>
+        <p>
+          number of attendants:{' '}
+          {attendantsCount?.count
+            ? attendantsCount.count
+            : 'No one yet. Be first!'}
+        </p>
+        <strong>
+          <Link
+            href={`http://localhost:3000/login?returnTo=/events/${event.id}`}
+          >
+            Log in to attend this event.
+          </Link>
+        </strong>
+      </div>
+    );
   }
 
   const event = await getSingleEventInsecure(Number(props.params.eventId));
