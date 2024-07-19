@@ -89,7 +89,7 @@ export default function RegisterForm() {
   }
 
   // TODO type res object
-  function sendPlaceDetailsRequest(feature: any, geocoder: object) {
+  function sendPlaceDetailsRequest(feature: any, geocoder: any) {
     setNewUser({
       ...newUser,
       location: feature.properties.formatted,

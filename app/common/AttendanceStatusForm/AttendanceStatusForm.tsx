@@ -9,7 +9,7 @@ import ErrorMessage from '../../ErrorMessage';
 type Props = {
   session: Omit<Session, 'id'> | undefined;
   event: Event;
-  isOrganising?: boolean;
+  isOrganising: boolean;
   isAttending?: string;
   methodAPI: string;
 };
@@ -21,7 +21,7 @@ export default function AttendanceStatusForm(props: Props) {
   const router = useRouter();
 
   async function handleStatusChange(event: any) {
-    // event.preventDefault();
+    event.preventDefault();
     const response = await fetch(`/api/users_events_status/${props.event.id}`, {
       method: props.methodAPI,
       body: JSON.stringify({

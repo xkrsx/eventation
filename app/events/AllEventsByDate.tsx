@@ -37,7 +37,7 @@ export default async function AllEventsByDate() {
               <AttendanceStatusForm
                 event={event}
                 session={session}
-                isOrganising={false}
+                isOrganising={attendanceStatus.isOrganising}
                 isAttending={attendanceStatus.isAttending}
                 methodAPI="PUT"
               />
@@ -49,6 +49,7 @@ export default async function AllEventsByDate() {
               event={event}
               session={session}
               methodAPI="POST"
+              isOrganising={false}
             />
           );
         }
