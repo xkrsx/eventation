@@ -31,7 +31,7 @@ export type JoinedEvent = Event & {};
 
 export const createEvent = cache(
   async (sessionToken: string, newEvent: NewEvent) => {
-    const event = await sql<Event[]>`
+    const [event] = await sql<Event[]>`
       INSERT INTO
         events (
           name,

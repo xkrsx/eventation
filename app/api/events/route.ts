@@ -6,7 +6,7 @@ import { eventSchema } from '../../../migrations/00002-createTableEvents';
 
 export type EventResponseBodyPost =
   | {
-      event: Event[];
+      event: Event;
     }
   | {
       error: string;
