@@ -92,7 +92,7 @@ export const updateStatus = cache(
 );
 
 export const countAttendantsInsecure = cache(async (eventId: number) => {
-  const [attendantsCount] = await sql`
+  const [attendantsCount] = await sql<{ count: string }[]>`
     SELECT
       count(*)
     FROM

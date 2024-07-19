@@ -29,47 +29,49 @@ export type Event = NewEvent & {
 
 export type JoinedEvent = Event & {};
 
-export const createEvent = cache((sessionToken: string, newEvent: NewEvent) => {
-  const event = sql<Event[]>`
-    INSERT INTO
-      events (
-        name,
-        user_id,
-        time_start,
-        time_end,
-        category,
-        location,
-        latitude,
-        longitude,
-        price,
-        description,
-        links,
-        images
-      ) (
-        SELECT
-          ${newEvent.name},
-          ${newEvent.userId},
-          ${new Date(newEvent.timeStart)},
-          ${new Date(newEvent.timeEnd)},
-          ${newEvent.category},
-          ${String(newEvent.location)},
-          ${String(newEvent.latitude)},
-          ${String(newEvent.longitude)},
-          ${Number(newEvent.price)},
-          ${String(newEvent.description)},
-          ${String(newEvent.links)},
-          ${String(newEvent.images)}
-        FROM
-          sessions
-        WHERE
-          token = ${sessionToken}
-          AND sessions.expiry_timestamp > now()
-      )
-    RETURNING
-      events.*
-  `;
-  return event;
-});
+export const createEvent = cache(
+  async (sessionToken: string, newEvent: NewEvent) => {
+    const event = await sql<Event[]>`
+      INSERT INTO
+        events (
+          name,
+          user_id,
+          time_start,
+          time_end,
+          category,
+          location,
+          latitude,
+          longitude,
+          price,
+          description,
+          links,
+          images
+        ) (
+          SELECT
+            ${newEvent.name},
+            ${newEvent.userId},
+            ${new Date(newEvent.timeStart)},
+            ${new Date(newEvent.timeEnd)},
+            ${newEvent.category},
+            ${String(newEvent.location)},
+            ${String(newEvent.latitude)},
+            ${String(newEvent.longitude)},
+            ${Number(newEvent.price)},
+            ${String(newEvent.description)},
+            ${String(newEvent.links)},
+            ${String(newEvent.images)}
+          FROM
+            sessions
+          WHERE
+            token = ${sessionToken}
+            AND sessions.expiry_timestamp > now()
+        )
+      RETURNING
+        events.*
+    `;
+    return event;
+  },
+);
 
 export const getSingleEventInsecure = cache(async (id: number) => {
   const [event] = await sql<Event[]>`

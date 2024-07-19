@@ -8,7 +8,7 @@ export type User = {
   location: string | null;
   latitude: string | null;
   longitude: string | null;
-  categories: string[] | null;
+  categories: string | null;
   email: string;
   createdAt: Date;
 };
