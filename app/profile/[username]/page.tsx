@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -58,7 +59,7 @@ export default async function UserProfile(props: Props) {
       <div className="profile">
         <h1>User: {profile.username}</h1>
         <h2>Location: {profile.location}</h2>
-        <h3>Account since: {String(profile.createdAt)}</h3>
+        <h3>Account since: {dayjs(profile.createdAt).format('MM/YYYY')}</h3>
         {session.userId === profile.id && (
           <Link href="/profile/edit">Edit your profile</Link>
         )}

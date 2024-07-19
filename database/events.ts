@@ -7,13 +7,17 @@ export type NewEvent = {
   timeStart: Date;
   timeEnd: Date;
   category: string;
-  location: string | null;
-  latitude: string | null;
-  longitude: string | null;
-  price: number | null;
-  description: string | null;
-  links: string | null;
-  images: string | null;
+  location: string;
+  latitude: string;
+  longitude: string;
+  price: number;
+  description: string;
+  links: string;
+  images: string;
+};
+
+export type UpdatedEvent = NewEvent & {
+  id: number;
 };
 
 export type Event = NewEvent & {
@@ -22,6 +26,8 @@ export type Event = NewEvent & {
   public: boolean;
   cancelled: boolean;
 };
+
+export type JoinedEvent = Event & {};
 
 export const createEvent = cache(
   async (sessionToken: string, newEvent: NewEvent) => {
@@ -44,22 +50,127 @@ export const createEvent = cache(
           SELECT
             ${newEvent.name},
             ${newEvent.userId},
-            ${newEvent.timeStart},
-            ${newEvent.timeEnd},
+            ${new Date(newEvent.timeStart)},
+            ${new Date(newEvent.timeEnd)},
             ${newEvent.category},
-            ${newEvent.location},
-            ${newEvent.latitude},
-            ${newEvent.longitude},
-            ${newEvent.price},
-            ${newEvent.description},
-            ${newEvent.links},
-            ${newEvent.images}
+            ${String(newEvent.location)},
+            ${String(newEvent.latitude)},
+            ${String(newEvent.longitude)},
+            ${Number(newEvent.price)},
+            ${String(newEvent.description)},
+            ${String(newEvent.links)},
+            ${String(newEvent.images)}
           FROM
             sessions
           WHERE
             token = ${sessionToken}
             AND sessions.expiry_timestamp > now()
         )
+      RETURNING
+        events.*
+    `;
+    return event;
+  },
+);
+
+export const getSingleEventInsecure = cache(async (id: number) => {
+  const [event] = await sql<Event[]>`
+    SELECT
+      events.*
+    FROM
+      events
+    WHERE
+      events.id = ${id}
+  `;
+  return event;
+});
+
+export const getUsersEventsOrganising = cache(async (sessionToken: string) => {
+  const events = await sql<Event[]>`
+    SELECT
+      events.*
+    FROM
+      events
+      INNER JOIN sessions ON (
+        sessions.token = ${sessionToken}
+        AND sessions.user_id = events.user_id
+        AND expiry_timestamp > now()
+      )
+    WHERE
+      (time_start >= now())
+      OR (time_end >= now())
+  `;
+  return events;
+});
+
+export const getUsersEventsAttending = cache(
+  async (sessionToken: string, userId: number) => {
+    const events = await sql<Event[]>`
+      SELECT
+        events.*
+      FROM
+        events
+        INNER JOIN sessions ON (
+          sessions.token = ${sessionToken}
+          AND expiry_timestamp > now()
+        )
+        INNER JOIN users_events ON (
+          events.id = users_events.event_id
+          AND users_events.user_id = ${userId}
+        )
+      WHERE
+        (time_start >= now())
+        OR (time_end >= now())
+    `;
+    return events;
+  },
+);
+export const getUsersEventsPast = cache(
+  async (sessionToken: string, userId: number) => {
+    const events = await sql<Event[]>`
+      SELECT
+        events.*
+      FROM
+        events
+        INNER JOIN sessions ON (
+          sessions.token = ${sessionToken}
+          AND expiry_timestamp > now()
+        )
+        INNER JOIN users_events ON (
+          events.id = users_events.event_id
+          AND users_events.user_id = ${userId}
+        )
+      WHERE
+        (time_start < now())
+        AND (time_end < now())
+    `;
+    return events;
+  },
+);
+
+export const updateEvent = cache(
+  async (sessionToken: string, updatedEvent: UpdatedEvent) => {
+    const [event] = await sql<UpdatedEvent[]>`
+      UPDATE events
+      SET
+        name = ${updatedEvent.name},
+        user_id = ${updatedEvent.userId},
+        time_start = ${updatedEvent.timeStart},
+        time_end = ${updatedEvent.timeEnd},
+        category = ${updatedEvent.category},
+        location = ${String(updatedEvent.location)},
+        latitude = ${String(updatedEvent.latitude)},
+        longitude = ${String(updatedEvent.longitude)},
+        price = ${Number(updatedEvent.price)},
+        description = ${String(updatedEvent.description)},
+        links = ${String(updatedEvent.links)},
+        images = ${String(updatedEvent.images)}
+      FROM
+        sessions
+      WHERE
+        sessions.token = ${sessionToken}
+        AND sessions.expiry_timestamp > now()
+        AND events.id = ${updatedEvent.id}
       RETURNING
         events.id,
         events.name,
@@ -73,36 +184,49 @@ export const createEvent = cache(
         events.price,
         events.description,
         events.links,
-        events.images,
-        events.created_at,
-        events.public,
-        events.cancelled
+        events.images
     `;
     return event;
   },
 );
 
-export const getUsersEvents = cache(async (sessionToken: string) => {
-  const events = await sql<Event[]>`
-    SELECT
-      events.*
-    FROM
-      events
-      INNER JOIN sessions ON (
+export const deleteUsersEventOrganising = cache(
+  async (sessionToken: string, id: number) => {
+    const [event] = await sql<Event[]>`
+      DELETE FROM events USING sessions
+      WHERE
         sessions.token = ${sessionToken}
+        AND sessions.expiry_timestamp > now()
         AND sessions.user_id = events.user_id
         AND expiry_timestamp > now()
-      )
-  `;
-  return events;
-});
+        AND events.id = ${id}
+      RETURNING
+        events.*
+    `;
+    return event;
+  },
+);
 
-export const getAllEventsInsecure = cache(async () => {
+export const getAllEventsSortDateInsecure = cache(async () => {
   const events = await sql<Event[]>`
     SELECT
       *
     FROM
       events
+    ORDER BY
+      events.time_start
+  `;
+  return events;
+});
+
+export const getAllEventsSortPriceInsecure = cache(async () => {
+  const events = await sql<Event[]>`
+    SELECT
+      *
+    FROM
+      events
+    ORDER BY
+      events.price
   `;
   return events;
 });

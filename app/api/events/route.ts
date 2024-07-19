@@ -1,17 +1,10 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { createEvent, Event } from '../../../database/events';
+import { addStatus } from '../../../database/usersEventsStatus';
 import { eventSchema } from '../../../migrations/00002-createTableEvents';
 
-export type EventsResponseBodyGet =
-  | {
-      events: Event[];
-    }
-  | {
-      error: string;
-    };
-
-export type EventsResponseBodyPost =
+export type EventResponseBodyPost =
   | {
       event: Event;
     }
@@ -21,7 +14,7 @@ export type EventsResponseBodyPost =
 
 export async function POST(
   request: Request,
-): Promise<NextResponse<EventsResponseBodyPost>> {
+): Promise<NextResponse<EventResponseBodyPost>> {
   const requestBody = await request.json();
 
   // Validation schema for request body
@@ -47,22 +40,32 @@ export async function POST(
     (await createEvent(sessionCookie.value, {
       name: result.data.name,
       userId: result.data.userId,
-      timeStart: result.data.timeStart,
-      timeEnd: result.data.timeEnd,
+      timeStart: new Date(result.data.timeStart),
+      timeEnd: new Date(result.data.timeEnd),
       category: result.data.category,
-      location: result.data.location,
-      latitude: result.data.latitude,
-      longitude: result.data.longitude,
-      price: result.data.price,
-      description: result.data.description,
-      links: result.data.links,
-      images: result.data.images,
+      location: String(result.data.location),
+      latitude: String(result.data.latitude),
+      longitude: String(result.data.longitude),
+      price: Number(result.data.price),
+      description: String(result.data.description),
+      links: String(result.data.links),
+      images: String(result.data.images),
     }));
 
-  if (!newEvent) {
+  console.log('newEvent: ', newEvent);
+
+  if (newEvent) {
+    await addStatus(
+      sessionCookie.value,
+      result.data.userId,
+      newEvent.id,
+      true,
+      'yes',
+    );
+  } else {
     return NextResponse.json(
       {
-        error: 'Event not created or access denied creating animals',
+        error: 'Event not created or access denied creating it.',
       },
       { status: 500 },
     );

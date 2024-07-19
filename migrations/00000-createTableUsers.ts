@@ -30,7 +30,7 @@ export const userRegistrationSchema = z
     location: z.string(),
     latitude: z.string(),
     longitude: z.string(),
-    categories: z.array(z.string()),
+    categories: z.string(),
     email: z
       .string()
       .min(3, { message: 'E-mail must have at least 3 characters.' })
@@ -64,10 +64,10 @@ export async function up(sql: Sql) {
       username varchar(30) NOT NULL UNIQUE,
       full_name varchar(100) NOT NULL,
       password_hash varchar(80) NOT NULL,
-      location varchar(50),
-      latitude varchar(50),
-      longitude varchar(50),
-      categories text,
+      location varchar(50) NULL,
+      latitude varchar(50) NULL,
+      longitude varchar(50) NULL,
+      categories text NULL,
       email varchar(80) NOT NULL UNIQUE,
       created_at timestamp DEFAULT now() NOT NULL
     )

@@ -8,7 +8,7 @@
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import { categoriesObject } from '../../../database/categories';
-import { EventsResponseBodyPost } from '../../api/events/route';
+import { EventResponseBodyPost } from '../../api/events/route';
 import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
@@ -19,13 +19,13 @@ export default function AddEventForm(props: Props) {
   const [newEvent, setNewEvent] = useState({
     name: '',
     userId: props.userId,
-    timeStart: undefined,
-    timeEnd: undefined,
+    timeStart: '',
+    timeEnd: '',
     category: 'Activism / Politics',
     location: '',
     latitude: '',
     longitude: '',
-    price: '',
+    price: 0,
     description: '',
     links: '',
     images: '',
@@ -46,16 +46,15 @@ export default function AddEventForm(props: Props) {
         'Content-Type': 'application/json',
       },
     });
-    const data: EventsResponseBodyPost = await response.json();
+    const data: EventResponseBodyPost = await response.json();
 
     if ('errors' in data) {
-      // setErrorMessage(data.errors);
+      setErrorMessage(String(data.errors));
       return;
     }
-    // TODO redirect to new event page
-    // router.push(`/events/${data.}`);
-
-    router.refresh();
+    if ('event' in data) {
+      router.push(`/events/${data.event.id}`);
+    }
   }
   // TODO type req object
   // function sendGeocoderRequest(value: string, geocoder: any) {
@@ -85,15 +84,6 @@ export default function AddEventForm(props: Props) {
       [event.target.name]: value,
     });
   }
-
-  // Reset form states to default values so that the form is
-  // cleared after an add, edit or delete action
-  // function resetFormStates() {
-  //   setId(0);
-  //   setFirstName('');
-  //   setType('');
-  //   setAccessory('');
-  //   setBirthDate(new Date());
 
   const categories = categoriesObject;
 
@@ -147,18 +137,6 @@ export default function AddEventForm(props: Props) {
               onChange={handleChange}
             />
           </label>
-          {/* <input
-                  type="date"
-                  value={dayjs(birthDate).format('YYYY-MM-DD')}
-                  onChange={(event) =>
-                    setBirthDate(new Date(event.currentTarget.value))
-                  }
-                /> */}
-          {/* <label>
-            End time
-            <input type="time" />
-            <input type="date" />
-          </label> */}
           <label>
             Price €{' '}
             <input

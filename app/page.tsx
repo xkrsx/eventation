@@ -1,10 +1,10 @@
-import AllEvents from './events/AllEvents';
+import AllEventsByDate from './events/AllEventsByDate';
 
 export default function Home() {
   return (
     <div className="wrapper">
-      <h1>MAIN PAGE</h1>
-      <AllEvents />
+      <h1>MAIN STAGE</h1>
+      <AllEventsByDate />
     </div>
   );
 }
