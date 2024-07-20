@@ -19,27 +19,25 @@ type Props = {
 };
 
 export default async function SingleEvent(props: Props) {
-  // // Task: Protect the dashboard page and redirect to login if the user is not logged in
-
   // // 1. Checking if the sessionToken cookie exists
   const sessionCookie = cookies().get('sessionToken');
+
   // // 2. Check if the sessionToken cookie is still valid
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
-  // // 3. If the sessionToken cookie is invalid or doesn't exist, redirect to login with returnTo
+
+  // // 3. Get event info
+  const event = await getSingleEventInsecure(Number(props.params.eventId));
+  if (!event) {
+    redirect('/events/find');
+  }
+  const organiser = await getUserPublicByIdInsecure(event.userId);
+  if (!organiser) {
+    redirect(`/events/find`);
+  }
+  const attendantsCount = await countAttendantsInsecure(event.id);
+
+  // // 4. If the sessionToken cookie is invalid or doesn't exist, show link to log in
   if (!session) {
-    const event = await getSingleEventInsecure(Number(props.params.eventId));
-    if (!event) {
-      redirect('/events/find');
-    }
-
-    const attendantsCount = await countAttendantsInsecure(event.id);
-
-    // TODO FIX when there's no organiser profile
-    const organiser = await getUserPublicByIdInsecure(event.userId);
-    if (!organiser) {
-      redirect(`/events/find`);
-    }
-
     return (
       <div>
         <h1>{event.name}</h1>
@@ -63,26 +61,14 @@ export default async function SingleEvent(props: Props) {
         </p>
         <strong>
           <Link href={`/login?returnTo=/events/${event.id}`}>
-            Log in to attend this event.
+            Log in to attend this event or chat with others.
           </Link>
         </strong>
       </div>
     );
   }
 
-  const event = await getSingleEventInsecure(Number(props.params.eventId));
-  if (!event) {
-    redirect('/events/find');
-  }
-
-  const attendantsCount = await countAttendantsInsecure(event.id);
-
-  // TODO FIX when there's no organiser profile
-  const organiser = await getUserPublicByIdInsecure(event.userId);
-  if (!organiser) {
-    redirect(`/events/find`);
-  }
-
+  // // 5. If the sessionToken cookie is valid, show attendance status and options
   return (
     <div>
       <h1>{event.name}</h1>
@@ -100,6 +86,9 @@ export default async function SingleEvent(props: Props) {
       <p>description: {event.description}</p>
       <p>
         link: <a href={event.links}>{event.links}</a>
+      </p>
+      <p>
+        chat: <Link href={`/events/${event.id}/chat`}>event lounge</Link>
       </p>
       <p>
         number of attendants:{' '}

@@ -14,6 +14,7 @@
     "@geoapify/geocoder-autocomplete": "^2.0.1",
     "@geoapify/react-geocoder-autocomplete": "^2.0.0",
     "@upleveled/ley": "^0.8.6",
+    "ably": "^2.3.0",
     "bcrypt": "^5.1.1",
     "dayjs": "^1.11.11",
     "dotenv-safe": "^9.1.0",
