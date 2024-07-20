@@ -22,6 +22,7 @@ export default async function EventChat(props: Props) {
   // // 2. Check if the sessionToken cookie is still valid
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
 
+  // TODO add authorization to chat only for users attending this event
   // // 3. If the sessionToken cookie is invalid or doesn't exist, show link to log in
   if (!session) {
     return (
