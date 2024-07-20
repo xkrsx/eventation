@@ -52,8 +52,6 @@ export async function POST(
       images: String(result.data.images),
     }));
 
-  console.log('newEvent: ', newEvent);
-
   if (newEvent) {
     await addStatus(
       sessionCookie.value,

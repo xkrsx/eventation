@@ -75,7 +75,7 @@ export async function PUT(
   return NextResponse.json({ event: updatedEvent });
 }
 
-type EventResponseBodyDelete =
+export type EventResponseBodyDelete =
   | {
       event: Event;
     }

@@ -118,6 +118,9 @@ export default async function SingleEvent(props: Props) {
       <p>category: {event.category}</p>
       <p>description: {event.description}</p>
       <p>
+        link: <a href={event.links}>{event.links}</a>
+      </p>
+      <p>
         number of attendants:{' '}
         {attendantsCount?.count
           ? attendantsCount.count

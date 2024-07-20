@@ -7,6 +7,7 @@
 // import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
+import validator from 'validator';
 import { categoriesObject } from '../../../database/categories';
 import { EventResponseBodyPost } from '../../api/events/route';
 import ErrorMessage from '../../ErrorMessage';
@@ -32,10 +33,20 @@ export default function AddEventForm(props: Props) {
   });
   // const [userLocation, setUserLocation] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const router = useRouter();
 
+  // const validate = (value) => {
+  //   if (validator.isURL(value)) {
+  //     setErrorMessage('Is Valid URL');
+  //   } else {
+  //     setErrorMessage('Is Not Valid URL');
+  //   }
+  // };
+
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
+    checkForm();
     event.preventDefault();
 
     // TODO add session token to validate if it's really same user?
@@ -72,13 +83,48 @@ export default function AddEventForm(props: Props) {
   //   return geocoder.sendPlaceDetailsRequest(feature);
   // }
 
+  function checkForm() {
+    if (newEvent.name.length < 3) {
+      setErrorMessage('Event name must have at least 3 characters.');
+      // setIsDisabled(true);
+    }
+    if (newEvent.name.length >= 255) {
+      setErrorMessage('Event name must have maximum 255 characters.');
+      // setIsDisabled(true);
+    }
+    if (
+      newEvent.timeEnd <= newEvent.timeStart &&
+      (newEvent.timeStart || newEvent.timeEnd === '')
+    ) {
+      setErrorMessage('Starting date/time must be earlier than ending.');
+      // setIsDisabled(true);
+    }
+
+    if (newEvent.description.length < 3) {
+      setErrorMessage('Event description must have at least 3 characters.');
+      // setIsDisabled(true);
+    }
+    if (!validator.isURL(newEvent.links)) {
+      setErrorMessage('Link must valid URL.');
+      // setIsDisabled(true);
+    }
+    if (
+      newEvent.name.length >= 3 &&
+      newEvent.name.length <= 255 &&
+      newEvent.timeEnd >= newEvent.timeStart &&
+      (newEvent.timeStart || newEvent.timeEnd !== '') &&
+      validator.isURL(newEvent.links)
+    ) {
+      setIsDisabled(false);
+    }
+  }
+
   function handleChange(
     event: React.ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
   ) {
     const value = event.target.value;
 
     setErrorMessage('');
-
     setNewEvent({
       ...newEvent,
       [event.target.name]: value,
@@ -113,8 +159,6 @@ export default function AddEventForm(props: Props) {
               onChange={handleChange}
             />
           </label>
-          {/* TODO handle time/date saving */}
-          {/* https://www.npmjs.com/package/react-datetime-picker */}
           <label>
             Start time
             <input
@@ -211,19 +255,20 @@ export default function AddEventForm(props: Props) {
             Description
             <input
               name="description"
+              required
               value={newEvent.description}
               onChange={handleChange}
             />
           </label>
           <label>
-            Links
+            Link
             <input
               name="links"
               value={newEvent.links}
               onChange={handleChange}
             />
           </label>
-          <button>Add event</button>
+          <button disabled={isDisabled}>Add event</button>
         </form>
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </div>

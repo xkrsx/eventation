@@ -1,42 +1,39 @@
 import { Sql } from 'postgres';
 import { z } from 'zod';
 
-export const eventSchema = z.object({
-  name: z
-    .string()
-    .min(3, { message: 'Event name must have at least 3 characters.' })
-    .max(255, { message: 'Event name must have maximum 255 characters.' }),
-  userId: z.number(),
-  timeStart: z.string(),
-  timeEnd: z.string(),
-  category: z.string(),
-  location: z.string().optional(),
-  latitude: z.string().optional(),
-  longitude: z.string().optional(),
-  price: z.string().optional(),
-  description: z
-    .string()
-    .min(3, {
+export const eventSchema = z
+  .object({
+    name: z
+      .string()
+      .min(2, { message: 'Event name must have at least 3 characters.' })
+      .max(255, { message: 'Event name must have maximum 255 characters.' }),
+    userId: z.number(),
+    timeStart: z.string(),
+    timeEnd: z.string(),
+    // timeStart: z.date(),
+    // timeEnd: z.date(),
+    category: z.string(),
+    location: z.string().optional(),
+    latitude: z.string().optional(),
+    longitude: z.string().optional(),
+    price: z.number().optional(),
+    description: z.string().min(3, {
       message: 'Event description must have at least 3 characters.',
-    })
-    .optional(),
-  links: z
-    .string()
-    .optional()
-    .refine(
-      (value) =>
-        !value ||
-        /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/[\w.-]*)*\/?$/.test(
-          value,
-        ),
-      {
+    }),
+    links: z
+      .string()
+      .regex(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/[\w.-]*)*\/?$/, {
         message: 'Link must be valid URL.',
-      },
-    ),
-  images: z.string().optional(),
-  public: z.boolean().optional(),
-  cancelled: z.boolean().optional(),
-});
+      })
+      .optional(),
+    images: z.string().optional(),
+    public: z.boolean().optional(),
+    cancelled: z.boolean().optional(),
+  })
+  .refine((data) => data.timeStart <= data.timeEnd, {
+    path: ['timeEnd'],
+    message: 'Start time/date must be earlier than ending.',
+  });
 // TODO add optional short name to generate link with, instead of id
 export async function up(sql: Sql) {
   await sql`

@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { categoriesObject } from '../../../database/categories';
 import { Event } from '../../../database/events';
+import { UsersEventsStatusResponseBodyPut } from '../../api/users_events_status/[eventId]/route';
 import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
@@ -21,8 +22,8 @@ export default function OrganisingEvents(props: Props) {
   const [editedEvent, setEditedEvent] = useState({
     userId: 0,
     name: '',
-    timeStart: dayjs(new Date()).format('HH:mm, DD/MM/YYYY'),
-    timeEnd: dayjs(new Date()).format('HH:mm, DD/MM/YYYY'),
+    timeStart: new Date(),
+    timeEnd: new Date(),
     category: '',
     location: '',
     latitude: '',
@@ -39,13 +40,13 @@ export default function OrganisingEvents(props: Props) {
   const router = useRouter();
 
   function handleChange(
-    event: any,
-    // React.ChangeEvent<HTMLInputElement>
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>,
   ) {
     const value = event.target.value;
 
     setErrorMessage('');
-
     setEditedEvent({
       ...editedEvent,
       [event.target.name]: value,
@@ -76,16 +77,17 @@ export default function OrganisingEvents(props: Props) {
                 ...editedEvent,
                 userId: event.userId,
                 name: event.name,
-                timeStart: String(event.timeStart),
-                timeEnd: String(event.timeStart),
+                // value="2017-06-01T08:30" />
+                timeStart: new Date('2017-06-01T08:30'),
+                timeEnd: new Date(event.timeStart),
                 category: event.category,
-                location: event.location!,
-                latitude: event.latitude!,
-                longitude: event.longitude!,
+                location: event.location,
+                latitude: event.latitude,
+                longitude: event.longitude,
                 price: event.price,
-                description: event.description!,
-                links: event.links!,
-                images: event.images!,
+                description: event.description,
+                links: event.links,
+                images: event.images,
                 cancelled: event.cancelled,
               });
             }}
@@ -101,7 +103,7 @@ export default function OrganisingEvents(props: Props) {
               setErrorMessage('');
 
               if (!response.ok) {
-                let newErrorMessage = 'Error deleting the event';
+                let newErrorMessage = 'Error deleting the event.';
 
                 try {
                   const body = await response.json();
@@ -133,14 +135,15 @@ export default function OrganisingEvents(props: Props) {
         <form
           onSubmit={async (e) => {
             e.preventDefault();
-            // TODO FIX api route
-            const response = await fetch(`/api/events/${eventId}`, {
+            const response = await fetch(`/api/events/${eventId}1`, {
               method: 'PUT',
               body: JSON.stringify(editedEvent),
               headers: {
                 'Content-Type': 'application/json',
               },
             });
+            const data: UsersEventsStatusResponseBodyPut =
+              await response.json();
 
             setErrorMessage('');
 
@@ -149,6 +152,7 @@ export default function OrganisingEvents(props: Props) {
 
               try {
                 const body = await response.json();
+
                 newErrorMessage = body.error;
               } catch (error) {
                 console.log('err', error);
@@ -174,16 +178,18 @@ export default function OrganisingEvents(props: Props) {
           <label>
             Start time
             <input
+              type="datetime-local"
               name="timeStart"
-              value={dayjs(editedEvent.timeStart).format('HH:mm, DD/MM/YYYY')}
+              // value={editedEvent.timeStart}
               onChange={handleChange}
             />
           </label>
           <label>
             End time
             <input
+              type="datetime-local"
               name="timeEnd"
-              value={dayjs(editedEvent.timeEnd).format('HH:mm, DD/MM/YYYY')}
+              // value={editedEvent.timeEnd}
               onChange={handleChange}
             />
           </label>
@@ -263,8 +269,9 @@ export default function OrganisingEvents(props: Props) {
               onChange={handleChange}
             />
           </label>
-          <button>Save Changes</button>
+          <button>Save changes</button>
           {/* TODO Cancel edit button */}
+          {/* <button></button> */}
         </form>
       ) : (
         ''
