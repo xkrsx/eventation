@@ -2,6 +2,8 @@
 
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getSingleEventInsecure } from '../../../../database/events';
 import { getValidSession } from '../../../../database/sessions';
 import Chat from './Chat';
 
@@ -22,6 +24,11 @@ export default async function EventChat(props: Props) {
   // // 2. Check if the sessionToken cookie is still valid
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
 
+  const event = await getSingleEventInsecure(Number(props.params.eventId));
+  if (!event) {
+    redirect('/events/find');
+  }
+
   // TODO add authorization to chat only for users attending this event
   // // 3. If the sessionToken cookie is invalid or doesn't exist, show link to log in
   if (!session) {
@@ -36,7 +43,7 @@ export default async function EventChat(props: Props) {
   // // 4. If the sessionToken cookie is valid, show chat
   return (
     <div>
-      <h1>Event Chat</h1>
+      <h1>{event.name} Chat</h1>
       <Chat />
     </div>
   );
