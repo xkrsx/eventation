@@ -1,10 +1,9 @@
-// TODO events as three different tabs: organising / attending / past
-// shows only events that belong to logged user
 'use client';
 
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { Event } from '../../../database/events';
+import AttendanceStatusCheck from '../../common/AttendanceStatus/AttendanceStatusCheck';
 
 type Props = {
   events: Event[];
@@ -23,6 +22,7 @@ export default function AttendingEvents(props: Props) {
         <p>location: {event.location}</p>
         <p>category: {event.category}</p>
         <p>description: {event.description}</p>
+        <AttendanceStatusCheck event={event} />
         <Link href={`/events/${event.id}`}>See more...</Link>
       </div>
     );

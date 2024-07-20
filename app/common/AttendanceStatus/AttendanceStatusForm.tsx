@@ -9,18 +9,22 @@ import ErrorMessage from '../../ErrorMessage';
 type Props = {
   session: Omit<Session, 'id'> | undefined;
   event: Event;
-  isOrganising: boolean;
   isAttending?: string;
+  isOrganising: boolean;
   methodAPI: string;
 };
 
 export default function AttendanceStatusForm(props: Props) {
-  const [errors, setErrors] = useState<{ message: string }[]>([]);
   const [attendanceStatus, setAttendanceStatus] = useState(props.isAttending);
+  const [errors, setErrors] = useState<{ message: string }[]>([]);
 
   const router = useRouter();
 
-  async function handleStatusChange(event: any) {
+  async function handleStatusChange(
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLButtonElement>,
+  ) {
     event.preventDefault();
     const response = await fetch(`/api/users_events_status/${props.event.id}`, {
       method: props.methodAPI,
@@ -28,7 +32,7 @@ export default function AttendanceStatusForm(props: Props) {
         userId: props.session?.userId,
         eventId: props.event.id,
         isOrganising: props.isOrganising,
-        isAttending: event.target.name,
+        isAttending: event.currentTarget.name,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -48,7 +52,7 @@ export default function AttendanceStatusForm(props: Props) {
 
   return (
     <form>
-      {props.session !== undefined! ? (
+      {props.session !== undefined ? (
         attendanceStatus ? (
           <strong>attending? {attendanceStatus}</strong>
         ) : (

@@ -5,7 +5,8 @@
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { Event } from '../../../database/events';
-import AttendanceStatusForm from '../../common/AttendanceStatusForm/AttendanceStatusForm';
+import { Session } from '../../../migrations/00001-createTableSessions';
+import AttendanceStatusCheck from '../../common/AttendanceStatus/AttendanceStatusCheck';
 
 type Props = {
   events: Event[];
@@ -24,7 +25,7 @@ export default function PastEvents(props: Props) {
         <p>location: {event.location}</p>
         <p>category: {event.category}</p>
         <p>description: {event.description}</p>
-        {/* <AttendanceStatusForm session={} event={} isOrganising={} methodAPI='PUT'/> */}
+        <AttendanceStatusCheck event={event} />
         <Link href={`/events/${event.id}`}>See more...</Link>
       </div>
     );

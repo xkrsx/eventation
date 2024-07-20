@@ -1,8 +1,5 @@
 'use client';
 
-// TODO events as three different tabs: organising / attending / past
-// shows only events that belong to logged user
-
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

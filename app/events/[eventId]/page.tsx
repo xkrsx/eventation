@@ -9,11 +9,8 @@ import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { getUserPublicByIdInsecure } from '../../../database/users';
-import {
-  checkStatus,
-  countAttendantsInsecure,
-} from '../../../database/usersEventsStatus';
-import AttendanceStatusForm from '../../common/AttendanceStatusForm/AttendanceStatusForm';
+import { countAttendantsInsecure } from '../../../database/usersEventsStatus';
+import AttendanceStatusCheck from '../../common/AttendanceStatus/AttendanceStatusCheck';
 
 type Props = {
   params: {
@@ -65,9 +62,7 @@ export default async function SingleEvent(props: Props) {
             : 'No one yet. Be first!'}
         </p>
         <strong>
-          <Link
-            href={`http://localhost:3000/login?returnTo=/events/${event.id}`}
-          >
+          <Link href={`/login?returnTo=/events/${event.id}`}>
             Log in to attend this event.
           </Link>
         </strong>
@@ -86,20 +81,6 @@ export default async function SingleEvent(props: Props) {
   const organiser = await getUserPublicByIdInsecure(event.userId);
   if (!organiser) {
     redirect(`/events/find`);
-  }
-
-  let methodAPI = 'PUT';
-
-  const attendance = await checkStatus(
-    session.token,
-    Number(session.userId),
-    Number(props.params.eventId),
-  );
-
-  if (!attendance) {
-    methodAPI = 'POST';
-  } else if (!!attendance.isAttending) {
-    methodAPI = 'PUT';
   }
 
   return (
@@ -126,18 +107,7 @@ export default async function SingleEvent(props: Props) {
           ? attendantsCount.count
           : 'No one yet. Be first!'}
       </p>
-      {session.userId === organiser.id ? (
-        <button>edit</button>
-      ) : (
-        <AttendanceStatusForm
-          session={session}
-          event={event}
-          isOrganising={false}
-          isAttending={attendance!.isAttending}
-          methodAPI={methodAPI}
-        />
-        // ''
-      )}
+      <AttendanceStatusCheck event={event} />
     </div>
   );
 }
