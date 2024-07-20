@@ -37,8 +37,6 @@ export default function RegisterForm() {
   const SELECTED_LENGTH = 3;
 
   // TODO FIX adding categories to the profile
-  // TODO FIX newTag typing
-  // TODO FIX async issue with adding one less than selected
   const onAdd: OnAdd = useCallback(
     (newTag) => {
       setSelected([...selected, newTag]);

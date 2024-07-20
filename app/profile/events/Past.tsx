@@ -5,7 +5,6 @@
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { Event } from '../../../database/events';
-import { Session } from '../../../migrations/00001-createTableSessions';
 import AttendanceStatusCheck from '../../common/AttendanceStatus/AttendanceStatusCheck';
 
 type Props = {

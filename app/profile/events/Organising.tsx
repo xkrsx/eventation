@@ -138,8 +138,6 @@ export default function OrganisingEvents(props: Props) {
                 'Content-Type': 'application/json',
               },
             });
-            const data: UsersEventsStatusResponseBodyPut =
-              await response.json();
 
             setErrorMessage('');
 
