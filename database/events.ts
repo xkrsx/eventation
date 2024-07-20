@@ -186,6 +186,7 @@ export const updateEvent = cache(
         events.links,
         events.images
     `;
+
     return event;
   },
 );

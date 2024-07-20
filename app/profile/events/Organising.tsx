@@ -77,9 +77,8 @@ export default function OrganisingEvents(props: Props) {
                 ...editedEvent,
                 userId: event.userId,
                 name: event.name,
-                // value="2017-06-01T08:30" />
-                timeStart: new Date('2017-06-01T08:30'),
-                timeEnd: new Date(event.timeStart),
+                timeStart: new Date(event.timeStart),
+                timeEnd: new Date(event.timeEnd),
                 category: event.category,
                 location: event.location,
                 latitude: event.latitude,
@@ -92,7 +91,7 @@ export default function OrganisingEvents(props: Props) {
               });
             }}
           >
-            Edit
+            {showForm ? 'Cancel event' : 'Edit event'}
           </button>
           <button
             onClick={async () => {
@@ -135,7 +134,7 @@ export default function OrganisingEvents(props: Props) {
         <form
           onSubmit={async (e) => {
             e.preventDefault();
-            const response = await fetch(`/api/events/${eventId}1`, {
+            const response = await fetch(`/api/events/${eventId}`, {
               method: 'PUT',
               body: JSON.stringify(editedEvent),
               headers: {
@@ -184,6 +183,10 @@ export default function OrganisingEvents(props: Props) {
               onChange={handleChange}
             />
           </label>
+          <p>
+            Original start time:{' '}
+            {dayjs(editedEvent.timeStart).format('dddd, HH:mm, DD/MM/YYYY')}
+          </p>
           <label>
             End time
             <input
@@ -193,13 +196,12 @@ export default function OrganisingEvents(props: Props) {
               onChange={handleChange}
             />
           </label>
+          <p>
+            Original end time:{' '}
+            {dayjs(editedEvent.timeEnd).format('dddd, HH:mm, DD/MM/YYYY')}
+          </p>
           <label>
             Category
-            {/* <input
-              name="category"
-              value={editedEvent.category}
-              onChange={handleChange}
-            /> */}
             <select name="category" onChange={handleChange}>
               {categories.map((category) => {
                 return (
@@ -218,22 +220,6 @@ export default function OrganisingEvents(props: Props) {
             <input
               name="location"
               value={editedEvent.location}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            Latitude
-            <input
-              name="latitude"
-              value={editedEvent.latitude}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            Longitude
-            <input
-              name="longitude"
-              value={editedEvent.longitude}
               onChange={handleChange}
             />
           </label>
@@ -261,15 +247,14 @@ export default function OrganisingEvents(props: Props) {
               onChange={handleChange}
             />
           </label>
-          <label>
-            Images
-            <input
-              name="images"
-              value={editedEvent.images}
-              onChange={handleChange}
-            />
-          </label>
           <button>Save changes</button>
+          <button
+            onClick={() => {
+              setShowForm(!showForm);
+            }}
+          >
+            Cancel edit
+          </button>
           {/* TODO Cancel edit button */}
           {/* <button></button> */}
         </form>
