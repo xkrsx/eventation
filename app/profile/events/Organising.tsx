@@ -156,8 +156,8 @@ export default function OrganisingEvents(props: Props) {
               setErrorMessage(newErrorMessage);
               return;
             }
-
             router.refresh();
+            setShowForm(false);
           }}
         >
           <label>
