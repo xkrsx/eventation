@@ -47,6 +47,9 @@ importers:
       sass:
         specifier: ^1.77.7
         version: 1.77.7
+      secure-json-parse:
+        specifier: ^2.7.0
+        version: 2.7.0
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
@@ -3317,6 +3320,9 @@ packages:
 
   scheduler@0.25.0-rc.0:
     resolution: {integrity: sha512-B3aSqMfoRkucM94MztZD1CyNyf68W9A3dL/TT453G6uNcxMBqGQ+rhFKyxNnWH/mfRHlGBr0tF0F472JCETH4g==}
+
+  secure-json-parse@2.7.0:
+    resolution: {integrity: sha512-6aU+Rwsezw7VR8/nyvKTx8QpWH9FrcYiXXlqC4z5d5XQBDRqtbfsRjnwGyqbi3gddNtWHuEk9OANUotL26qKUw==}
 
   semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
@@ -7686,6 +7692,8 @@ snapshots:
       xmlchars: 2.2.0
 
   scheduler@0.25.0-rc.0: {}
+
+  secure-json-parse@2.7.0: {}
 
   semver@5.7.2: {}
 
