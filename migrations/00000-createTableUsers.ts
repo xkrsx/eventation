@@ -1,6 +1,18 @@
 import { Sql } from 'postgres';
 import { z } from 'zod';
 
+export type User = {
+  id: number;
+  username: string;
+  fullName: string;
+  location: string | null;
+  latitude: string | null;
+  longitude: string | null;
+  categories: string | null;
+  email: string;
+  createdAt: Date;
+};
+
 export const userRegistrationSchema = z
   .object({
     username: z

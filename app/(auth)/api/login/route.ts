@@ -3,11 +3,11 @@ import bcrypt from 'bcrypt';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { createSessionInsecure } from '../../../../database/sessions';
+import { getUserWithPasswordHashInsecure } from '../../../../database/users';
 import {
-  getUserWithPasswordHashInsecure,
   User,
-} from '../../../../database/users';
-import { userLoginSchema } from '../../../../migrations/00000-createTableUsers';
+  userLoginSchema,
+} from '../../../../migrations/00000-createTableUsers';
 import { secureCookieOptions } from '../../../../util/cookies';
 
 export type LoginResponseBodyPost =

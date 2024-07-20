@@ -1,17 +1,6 @@
 import { cache } from 'react';
+import { User } from '../migrations/00000-createTableUsers';
 import { sql } from './connect';
-
-export type User = {
-  id: number;
-  username: string;
-  fullName: string;
-  location: string | null;
-  latitude: string | null;
-  longitude: string | null;
-  categories: string | null;
-  email: string;
-  createdAt: Date;
-};
 
 export type UserWithPasswordHash = User & {
   passwordHash: string;

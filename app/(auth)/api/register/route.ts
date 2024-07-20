@@ -7,9 +7,11 @@ import {
   createUserInsecure,
   getUserByEmailInsecure,
   getUserByUsernameInsecure,
-  User,
 } from '../../../../database/users';
-import { userRegistrationSchema } from '../../../../migrations/00000-createTableUsers';
+import {
+  User,
+  userRegistrationSchema,
+} from '../../../../migrations/00000-createTableUsers';
 import { secureCookieOptions } from '../../../../util/cookies';
 
 export type RegisterResponseBodyPost =

@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { categoriesObject } from '../../../database/categories';
 import { Event } from '../../../database/events';
-import { UsersEventsStatusResponseBodyPut } from '../../api/users_events_status/[eventId]/route';
 import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
