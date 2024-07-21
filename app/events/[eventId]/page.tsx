@@ -9,7 +9,10 @@ import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { getUserPublicByIdInsecure } from '../../../database/users';
-import { countAttendantsInsecure } from '../../../database/usersEventsStatus';
+import {
+  checkStatus,
+  countAttendantsInsecure,
+} from '../../../database/usersEventsStatus';
 import AttendanceStatusCheck from '../../common/AttendanceStatus/AttendanceStatusCheck';
 
 type Props = {
@@ -68,7 +71,14 @@ export default async function SingleEvent(props: Props) {
     );
   }
 
-  // // 5. If the sessionToken cookie is valid, show attendance status and options
+  // // 5. If the sessionToken cookie is valid, check attendance status, show buttons and chat if attending
+
+  const attendanceSessionCheck = await checkStatus(
+    session.token,
+    session.userId,
+    Number(props.params.eventId),
+  );
+
   return (
     <div>
       <h1>{event.name}</h1>
@@ -87,9 +97,7 @@ export default async function SingleEvent(props: Props) {
       <p>
         link: <a href={event.links}>{event.links}</a>
       </p>
-      <p>
-        chat: <Link href={`/events/${event.id}/chat`}>event lounge</Link>
-      </p>
+
       <p>
         number of attendants:{' '}
         {attendantsCount?.count
@@ -97,6 +105,13 @@ export default async function SingleEvent(props: Props) {
           : 'No one yet. Be first!'}
       </p>
       <AttendanceStatusCheck event={event} />
+      {attendanceSessionCheck ? (
+        <p>
+          chat: <Link href={`/events/${event.id}/chat`}>event lounge</Link>
+        </p>
+      ) : (
+        ''
+      )}
     </div>
   );
 }

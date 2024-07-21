@@ -12,17 +12,17 @@ type Props = {
 };
 
 export default async function AttendanceStatusCheck(props: Props) {
-  // 1. Check if sessionToken in cookies exists
+  // // 1. Check if sessionToken in cookies exists
   const sessionCookie = cookies().get('sessionToken');
 
-  // 2. Check if the sessionToken from cookie is still valid in DB
+  // // 2. Check if the sessionToken from cookie is still valid in DB
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
 
-  // 3. Check if user is already attending
-  const attendanceSessionCheck =
-    session &&
-    (await checkStatus(session.token, session.userId, props.event.id));
-
+  // // 2.5. if no event found, show error message
+  if (!props.event.id) {
+    return <strong>Sorry, error checking your attendance status.</strong>;
+  }
+  // //. 2.5 if user not logged in, show link to login
   if (!session) {
     return (
       <strong>
@@ -30,7 +30,14 @@ export default async function AttendanceStatusCheck(props: Props) {
       </strong>
     );
   }
+  // // 3. Check if user is already attending
+  const attendanceSessionCheck = await checkStatus(
+    session.token,
+    session.userId,
+    props.event.id,
+  );
 
+  // // 3. if user is not attending, show buttons and set methodAPI to post
   if (!attendanceSessionCheck) {
     return (
       <AttendanceStatusForm
@@ -43,6 +50,8 @@ export default async function AttendanceStatusCheck(props: Props) {
     );
   }
 
+  // // 4. if user is organising, show message
+
   if (attendanceSessionCheck.isOrganising) {
     return (
       <div>
@@ -50,6 +59,8 @@ export default async function AttendanceStatusCheck(props: Props) {
       </div>
     );
   }
+
+  // // 5. if user is attending, show buttons and set method to PUT
   if (attendanceSessionCheck.isAttending) {
     return (
       <div>
