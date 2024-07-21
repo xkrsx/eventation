@@ -43,7 +43,7 @@ export default async function EventChat(props: Props) {
     );
   }
   // // 4. If the sessionToken cookie is valid, show chat
-  const params = await getOpenChatAllMessages(
+  const messages = await getOpenChatAllMessages(
     session.token,
     Number(props.params.eventId),
   );
@@ -52,7 +52,7 @@ export default async function EventChat(props: Props) {
     <div>
       <h1>{event.name} Chat</h1>
       <Chat
-        params={params}
+        messages={messages}
         userId={session.userId}
         eventId={Number(props.params.eventId)}
       />

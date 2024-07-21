@@ -7,14 +7,15 @@ import { pusherClient, toPusherKey } from '../../../../util/pusher';
 import Reactions from '../../../common/Chat/Reactions';
 
 type Props = {
-  params: OpenChatMessageWithUsernameAndReaction[];
+  messages: OpenChatMessageWithUsernameAndReaction[];
   userId: number;
   eventId: number;
 };
 
-export default function Chat({ params, userId, eventId }: Props) {
-  const [messages, setMessages] =
-    useState<OpenChatMessageWithUsernameAndReaction[]>(params);
+export default function Chat(props: Props) {
+  const [messages, setMessages] = useState<
+    OpenChatMessageWithUsernameAndReaction[]
+  >(props.messages);
 
   // Scroll down to the new message
   const scrollDownRef = useRef<HTMLDivElement | null>(null);
@@ -27,89 +28,83 @@ export default function Chat({ params, userId, eventId }: Props) {
 
   // Use Pusher for real-time functionality:
   useEffect(() => {
-    pusherClient.subscribe(toPusherKey(`event:${eventId}`));
+    pusherClient.subscribe(toPusherKey(`event:${props.eventId}`));
 
     const messageHandler = (
       message: OpenChatMessageWithUsernameAndReaction,
     ) => {
-      setMessages([...messages, message]);
+      setMessages((prev) => [...prev, message]);
     };
 
     pusherClient.bind('incoming-message', messageHandler);
 
     return () => {
-      pusherClient.unsubscribe(toPusherKey(`event:${eventId}`));
+      pusherClient.unsubscribe(toPusherKey(`event:${props.eventId}`));
       pusherClient.unbind('incoming-message', messageHandler);
     };
-  }, [eventId]);
+  }, [props.eventId]);
 
   return (
     <div>
-      <div>
-        <div>
-          {messages.map((message, index: number) => {
-            const isCurrentUser = message.userId === userId;
-            const hasNextMessageFromSameUser =
-              messages[index - 1]?.userId === messages[index]?.userId; // Check if there is a same message from the same user
+      {messages.map((message, index: number) => {
+        const isCurrentUser = message.userId === props.userId;
+        const hasNextMessageFromSameUser =
+          messages[index - 1]?.userId === messages[index]?.userId; // Check if there is a same message from the same user
 
-            function sendingTime() {
-              if (dayjs(new Date()).diff(message.timestamp, 'minute') < 2) {
-                return 'just a moment ago';
-              }
-              if (dayjs(new Date()).diff(message.timestamp, 'minute') < 59) {
-                return `${dayjs(new Date()).diff(message.timestamp, 'minute')} minutes ago`;
-              }
-              if (dayjs(new Date()).diff(message.timestamp, 'minute') > 59) {
-                return `over an hour ago`;
-              }
-              if (dayjs(new Date()).diff(message.timestamp, 'minute') > 119) {
-                return dayjs(message.timestamp).format('HH:mm');
-              }
-            }
+        function sendingTime() {
+          if (dayjs(new Date()).diff(message.timestamp, 'minute') < 2) {
+            return 'just a moment ago';
+          }
+          if (dayjs(new Date()).diff(message.timestamp, 'minute') < 59) {
+            return `${dayjs(new Date()).diff(message.timestamp, 'minute')} minutes ago`;
+          }
+          if (dayjs(new Date()).diff(message.timestamp, 'minute') > 59) {
+            return `over an hour ago`;
+          }
+          if (dayjs(new Date()).diff(message.timestamp, 'minute') > 119) {
+            return dayjs(message.timestamp).format('HH:mm');
+          }
+        }
 
-            return (
-              <div key={`id-${message.id}`}>
-                <div
-                  style={{
-                    border: '1px solid black',
-                    borderRadius: '10px',
-                    padding: '3px',
-                    textAlign: isCurrentUser ? 'right' : 'left',
-                    backgroundColor: isCurrentUser ? 'lightBlue' : 'white',
-                  }}
-                >
-                  <span
-                    style={
-                      {
-                        // (!hasNextMessageFromSameUser && isCurrentUser) ? '' : '',
-                        // (!hasNextMessageFromSameUser && !isCurrentUser) ? '' : ''
-                      }
-                    }
-                  >
-                    {message.content}
-                    {' | '}
-                    {sendingTime()}
-                    <p className="text-xs text-gray-400">
-                      {message.userId === userId
-                        ? 'You'
-                        : message.username
-                          ? message.username.charAt(0).toUpperCase() +
-                            message.username.slice(1)
-                          : ''}
-                    </p>
-                    <Reactions
-                      messageId={message.id}
-                      userId={message.userId}
-                      currentReaction={message.emoji}
-                    />
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-          <div ref={scrollDownRef} />
-        </div>
-      </div>
+        return (
+          <div
+            key={`id-${message.id}`}
+            style={{
+              border: '1px solid black',
+              borderRadius: '10px',
+              padding: '3px',
+              textAlign: isCurrentUser ? 'right' : 'left',
+              backgroundColor: isCurrentUser ? 'lightBlue' : 'white',
+              margin: '10px',
+              marginRight: isCurrentUser ? '10px' : 'auto',
+              marginLeft: isCurrentUser ? 'auto' : '10px',
+              width: '50vw',
+            }}
+          >
+            {/* <span
+              style={
+                {
+                  // (!hasNextMessageFromSameUser && isCurrentUser) ? '' : '',
+                  // (!hasNextMessageFromSameUser && !isCurrentUser) ? '' : ''
+                }
+              }
+            > */}
+            <p>{message.content}</p>
+            <p>{sendingTime()}</p>
+            <span>
+              <strong>
+                {message.userId === props.userId ? 'You' : message.username}
+              </strong>
+            </span>
+            <Reactions
+              messageId={message.id}
+              userId={message.userId}
+              currentReaction={message.emoji}
+            />
+            {/* </span> */}
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -24,6 +24,7 @@ export default function ChatInput({ eventId }: Props) {
   const handleSubmit = async (
     event:
       | React.FormEvent<HTMLFormElement>
+      | React.KeyboardEvent<HTMLInputElement>
       | React.KeyboardEvent<HTMLTextAreaElement>,
   ) => {
     event.preventDefault();
@@ -63,33 +64,19 @@ export default function ChatInput({ eventId }: Props) {
     <div>
       <form onSubmit={handleSubmit}>
         <div>
-          <div>
-            <input
-              style={{ width: '20vw', height: '5vh' }}
-              onKeyDown={async (
-                event: React.KeyboardEvent<HTMLInputElement>,
-              ) => {
-                if (event.key === 'Enter') {
-                  await handleSubmit(event);
-                }
-              }}
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              placeholder="Type in your message"
-            />
+          <input
+            style={{ width: '20vw', height: '5vh' }}
+            onKeyDown={async (event) => {
+              if (event.key === 'Enter') {
+                await handleSubmit(event);
+              }
+            }}
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            placeholder="Type in your message"
+          />
 
-            <div className="py-2" aria-hidden="true">
-              <div className="py-px">
-                <div className="h-9" />
-              </div>
-            </div>
-
-            <div className="absolute right-0 bottom-0 flex justify-between py-2 pl-3 pr-2">
-              <div className="flex-shrink-0">
-                <button disabled={!input && true}>Send</button>
-              </div>
-            </div>
-          </div>
+          <button disabled={!input && true}>Send</button>
         </div>
       </form>
 
