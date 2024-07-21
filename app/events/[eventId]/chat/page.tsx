@@ -2,8 +2,9 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../../database/events';
-import { getOpenChatAllMessages } from '../../../../database/openChats';
+import { getOpenChatRecentMessages } from '../../../../database/openChats';
 import { getValidSession } from '../../../../database/sessions';
+import { getUserPublicById } from '../../../../database/users';
 import ChatInput from './ChatInput';
 import OpenChat from './OpenChat';
 
@@ -41,18 +42,17 @@ export default async function EventChat(props: Props) {
     );
   }
   // // 4. If the sessionToken cookie is valid, show chat
-  const messages = await getOpenChatAllMessages(
+  const messages = await getOpenChatRecentMessages(
     session.token,
     Number(props.params.eventId),
   );
-  console.log('messages: ', messages.length);
 
   return (
     <div>
       <h1>{event.name} Chat</h1>
       <OpenChat
         messages={messages}
-        userId={session.userId}
+        currentUserId={session.userId}
         eventId={Number(props.params.eventId)}
       />
       <ChatInput eventId={Number(props.params.eventId)} />

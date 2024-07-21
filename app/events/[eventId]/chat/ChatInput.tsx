@@ -17,7 +17,7 @@ interface ApiResponse {
   eventId: string;
 }
 
-export default function ChatInput({ eventId }: Props) {
+export default function ChatInput(props: Props) {
   const [input, setInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -33,7 +33,7 @@ export default function ChatInput({ eventId }: Props) {
       method: 'POST',
       body: JSON.stringify({
         content: input,
-        eventId: eventId,
+        eventId: props.eventId,
       }),
       headers: {
         'Content-Type': 'application/json',

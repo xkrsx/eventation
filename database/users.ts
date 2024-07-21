@@ -30,7 +30,8 @@ export const getUser = cache(async (sessionToken: string) => {
   return user;
 });
 
-export const getUserPublic = cache(
+// public profile by username for logged users
+export const getUserPublicByUsername = cache(
   async (sessionToken: string, username: string) => {
     const [user] = await sql<User[]>`
       SELECT
@@ -51,6 +52,32 @@ export const getUserPublic = cache(
         )
       WHERE
         users.username = ${username}
+    `;
+    return user;
+  },
+);
+// public profile by ID for logged users
+export const getUserPublicById = cache(
+  async (sessionToken: string, userId: number) => {
+    const [user] = await sql<User[]>`
+      SELECT
+        users.id,
+        users.username,
+        users.full_name,
+        users.location,
+        users.latitude,
+        users.longitude,
+        users.categories,
+        users.email,
+        users.created_at
+      FROM
+        users
+        INNER JOIN sessions ON (
+          sessions.token = ${sessionToken}
+          AND expiry_timestamp > now()
+        )
+      WHERE
+        users.id = ${userId}
     `;
     return user;
   },

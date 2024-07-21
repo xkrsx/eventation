@@ -2,26 +2,22 @@
 
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
-import { OpenChatMessageWithUsernameAndReaction } from '../../../../migrations/00004-createTableOpenChats';
+import { OpenChatMessage } from '../../../../migrations/00004-createTableOpenChats';
 import { pusherClient, toPusherKey } from '../../../../util/pusher';
-import Reactions from '../../../common/Chat/Reactions';
+import ChatUsername from '../../../common/Chat/ChatUsername';
 
 type Props = {
-  messages: OpenChatMessageWithUsernameAndReaction[];
-  userId: number;
+  messages: OpenChatMessage[];
+  currentUserId: number;
   eventId: number;
 };
 
 export default function OpenChat(props: Props) {
-  const [messages, setMessages] = useState<
-    OpenChatMessageWithUsernameAndReaction[]
-  >(props.messages);
-
-  console.log('messages: ', messages);
+  const [messages, setMessages] = useState<OpenChatMessage[]>(props.messages);
 
   // Scroll down to the new message
   const scrollDownRef = useRef<HTMLDivElement | null>(null);
-  // Scroll to the bottom when messages change
+  // Get usernames and scroll to the bottom when messages change
   useEffect(() => {
     if (scrollDownRef.current) {
       scrollDownRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -32,9 +28,7 @@ export default function OpenChat(props: Props) {
   useEffect(() => {
     pusherClient.subscribe(toPusherKey(`event:${props.eventId}`));
 
-    const messageHandler = (
-      message: OpenChatMessageWithUsernameAndReaction,
-    ) => {
+    const messageHandler = (message: OpenChatMessage) => {
       setMessages((prev) => [...prev, message]);
     };
 
@@ -53,7 +47,7 @@ export default function OpenChat(props: Props) {
           message,
           // index: number
         ) => {
-          const isCurrentUser = message.userId === props.userId;
+          const isCurrentUser = message.userId === props.currentUserId;
           // const hasNextMessageFromSameUser =
           //   messages[index - 1]?.userId === messages[index]?.userId; // Check if there is a same message from the same user
 
@@ -98,16 +92,23 @@ export default function OpenChat(props: Props) {
               <p>{message.content}</p>
               <p>{sendingTime()}</p>
               <span>
-                <strong>
-                  {message.userId === props.userId ? 'You' : message.username}
-                </strong>
+                {isCurrentUser ? (
+                  <strong>You</strong>
+                ) : (
+                  <ChatUsername chatUserId={message.userId} />
+                )}
+                {/* <ChatUsername
+                  chatUserId={message.userId}
+                  isCurrentUser={isCurrentUser}
+                /> */}
               </span>
-              <Reactions
+              {/* <Reactions
                 messageId={message.id}
                 userId={message.userId}
-                currentReaction={message.emoji}
-              />
+                // currentReaction={}
+              /> */}
               {/* </span> */}
+              <div ref={scrollDownRef} />
             </div>
           );
         },

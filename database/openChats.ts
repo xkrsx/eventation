@@ -1,13 +1,10 @@
 import { cache } from 'react';
-import {
-  OpenChatMessage,
-  OpenChatMessageWithUsernameAndReaction,
-} from '../migrations/00004-createTableOpenChats';
+import { OpenChatMessage } from '../migrations/00004-createTableOpenChats';
 import { sql } from './connect';
 
-export const getOpenChatAllMessages = cache(
+export const getOpenChatRecentMessages = cache(
   async (sessionToken: string, eventId: number) => {
-    const messages = await sql<OpenChatMessageWithUsernameAndReaction[]>`
+    const messages = await sql<OpenChatMessage[]>`
       SELECT
         open_chats.*
       FROM
@@ -18,6 +15,7 @@ export const getOpenChatAllMessages = cache(
         )
       WHERE
         open_chats.event_id = ${eventId}
+        AND open_chats.timestamp >= now() - '1 hour'::interval
       ORDER BY
         open_chats.timestamp
     `;
@@ -25,35 +23,13 @@ export const getOpenChatAllMessages = cache(
   },
 );
 
-// export const getOpenChatSingleMessage = cache(
-//   async (sessionToken: string, messageId: number) => {
-//     const [message] = await sql<OpenChatMessage[]>`
-//       SELECT
-//         open_chats.*
-//       FROM
-//         open_chats
-//         INNER JOIN sessions ON (
-//           sessions.token = ${sessionToken}
-//           AND sessions.user_id = open_chats.user_id
-//           AND expiry_timestamp > now()
-//         )
-//       WHERE
-//         open_chats.id = ${messageId}
-//       ORDER BY
-//         open_chats.timestamp
-//     `;
-//     return message;
-//   },
-// );
-
 export const createOpenChatMessage = cache(
   async (sessionToken: string, eventId: number, content: string) => {
-    const [message] = await sql<OpenChatMessageWithUsernameAndReaction[]>`
+    const [message] = await sql<OpenChatMessage[]>`
       WITH
         user_info AS (
           SELECT
-            sessions.user_id,
-            users.username
+            sessions.user_id
           FROM
             sessions
             INNER JOIN users ON (sessions.user_id = users.id)
@@ -70,14 +46,7 @@ export const createOpenChatMessage = cache(
       FROM
         user_info
       RETURNING
-        open_chats.*,
-        (
-          SELECT
-            username
-          FROM
-            user_info
-        ) AS username,
-        NULL AS emoji
+        open_chats.*
     `;
     return message;
   },

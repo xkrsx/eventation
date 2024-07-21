@@ -13,15 +13,6 @@ export type OpenChatMessage = {
   timestamp: Date;
 };
 
-export type OpenChatMessageWithUsername = OpenChatMessage & {
-  username: string;
-};
-
-export type OpenChatMessageWithUsernameAndReaction =
-  OpenChatMessageWithUsername & {
-    emoji: string | null;
-  };
-
 export async function up(sql: Sql) {
   await sql`
     CREATE TABLE open_chats (

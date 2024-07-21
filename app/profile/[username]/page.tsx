@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getValidSession } from '../../../database/sessions';
 import {
-  getUserPublic,
+  getUserPublicByUsername,
   getUserPublicByUsernameInsecure,
 } from '../../../database/users';
 
@@ -48,7 +48,10 @@ export default async function UserProfile(props: Props) {
 
   // 4. if the sessionToken cookie is valid, allow access to profile page
 
-  const profile = await getUserPublic(session.token, props.params.username);
+  const profile = await getUserPublicByUsername(
+    session.token,
+    props.params.username,
+  );
 
   if (!profile) {
     redirect('/');

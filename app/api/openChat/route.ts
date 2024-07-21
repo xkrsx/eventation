@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import {
   createOpenChatMessage,
-  getOpenChatAllMessages,
+  getOpenChatRecentMessages,
 } from '../../../database/openChats';
 import {
   OpenChatMessage,
@@ -76,8 +76,6 @@ export async function POST(
       eventId: newMessage.eventId,
       content: newMessage.content,
       timestamp: newMessage.timestamp,
-      username: newMessage.username,
-      emoji: newMessage.emoji,
     },
   );
 
@@ -89,8 +87,6 @@ export async function POST(
       eventId: newMessage.eventId,
       content: newMessage.content,
       timestamp: newMessage.timestamp,
-      username: newMessage.username,
-      emoji: newMessage.emoji,
     },
   });
 }
@@ -118,7 +114,7 @@ export async function GET(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const messages = await getOpenChatAllMessages(
+  const messages = await getOpenChatRecentMessages(
     sessionCookie.value,
     Number(params.eventId),
   );
