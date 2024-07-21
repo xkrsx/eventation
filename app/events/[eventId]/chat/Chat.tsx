@@ -52,64 +52,54 @@ export default function Chat({ params, userId, eventId }: Props) {
             const hasNextMessageFromSameUser =
               messages[index - 1]?.userId === messages[index]?.userId; // Check if there is a same message from the same user
 
-            function calculateTimeElapsed() {
-              const messageTime = message.timestamp;
-              if (
-                Number(dayjs(new Date()).format('ss')) -
-                  Number(dayjs(messageTime).format('ss')) <
-                10
-              ) {
-                return 'just now';
-              } else {
-                const currentTime = new Date();
-
-                const milliDiff = currentTime.getTime() - messageTime.getTime();
-                if (Math.floor(milliDiff / 1000 / 60) < 2) {
-                  return 'a moment';
-                }
-                if (Math.floor(milliDiff / 1000 / 60) > 59) {
-                  return `${Math.floor(milliDiff / 1000 / 60 / 60)} hours`;
-                }
-                return `${Math.floor(milliDiff / 1000 / 60)} minutes`;
+            function sendingTime() {
+              if (dayjs(new Date()).diff(message.timestamp, 'minute') < 2) {
+                return 'just a moment ago';
+              }
+              if (dayjs(new Date()).diff(message.timestamp, 'minute') < 59) {
+                return `${dayjs(new Date()).diff(message.timestamp, 'minute')} minutes ago`;
+              }
+              if (dayjs(new Date()).diff(message.timestamp, 'minute') > 59) {
+                return `${dayjs(new Date()).diff(message.timestamp, 'hour')} hour(s) ago`;
               }
             }
 
             return (
-              <div
-                key={`${message.id}-${Number(message.timestamp)}`}
-                className="chat-message"
-              >
+              <div key={`id-${message.id}`}>
                 <div
-                  className={`flex items-end ${isCurrentUser ? 'justify-end' : ''}`}
+                  style={{
+                    border: '1px solid black',
+                    borderRadius: '10px',
+                    padding: '3px',
+                    textAlign: isCurrentUser ? 'right' : 'left',
+                    backgroundColor: isCurrentUser ? 'lightBlue' : 'white',
+                  }}
                 >
-                  <div
-                    className={`flex flex-col p-2 rounded space-y-2 text-base max-w-fit mx-2 grow ${isCurrentUser ? 'order-1 items-end' : 'order-2 items-start'}`}
+                  <span
+                    style={
+                      {
+                        // (!hasNextMessageFromSameUser && isCurrentUser) ? '' : '',
+                        // (!hasNextMessageFromSameUser && !isCurrentUser) ? '' : ''
+                      }
+                    }
                   >
-                    <span
-                      className={`px-4 py-2 rounded-lg inline-block
-                      ${isCurrentUser ? 'bg-red-900 text-white' : 'bg-zinc-800 text-white'}
-                      ${!hasNextMessageFromSameUser && isCurrentUser ? 'rounded-br-none' : ''}
-                      ${!hasNextMessageFromSameUser && !isCurrentUser ? 'rounded-bl-none' : ''}`}
-                    >
-                      {message.content}{' '}
-                      <span className="ml-2 text-xs text-gray-400">
-                        {calculateTimeElapsed()}
-                      </span>
-                      <p className="text-xs text-gray-400">
-                        {message.userId === userId
-                          ? 'You'
-                          : message.username
-                            ? message.username.charAt(0).toUpperCase() +
-                              message.username.slice(1)
-                            : ''}
-                      </p>
-                      <Reactions
-                        messageId={message.id}
-                        userId={message.userId}
-                        currentReaction={message.emoji}
-                      />
-                    </span>
-                  </div>
+                    {message.content}
+                    {' | '}
+                    {sendingTime()}
+                    <p className="text-xs text-gray-400">
+                      {message.userId === userId
+                        ? 'You'
+                        : message.username
+                          ? message.username.charAt(0).toUpperCase() +
+                            message.username.slice(1)
+                          : ''}
+                    </p>
+                    <Reactions
+                      messageId={message.id}
+                      userId={message.userId}
+                      currentReaction={message.emoji}
+                    />
+                  </span>
                 </div>
               </div>
             );
