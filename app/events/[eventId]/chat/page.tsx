@@ -4,8 +4,10 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../../database/events';
+import { getOpenChatAllMessages } from '../../../../database/openChats';
 import { getValidSession } from '../../../../database/sessions';
 import Chat from './Chat';
+import ChatInput from './ChatInput';
 
 // COOL NAMES (hopefully)
 // open: event lounge
@@ -41,10 +43,20 @@ export default async function EventChat(props: Props) {
     );
   }
   // // 4. If the sessionToken cookie is valid, show chat
+  const params = await getOpenChatAllMessages(
+    session.token,
+    Number(props.params.eventId),
+  );
+
   return (
     <div>
       <h1>{event.name} Chat</h1>
-      <Chat />
+      <Chat
+        params={params}
+        userId={session.userId}
+        eventId={Number(props.params.eventId)}
+      />
+      <ChatInput eventId={Number(props.params.eventId)} />
     </div>
   );
 }
