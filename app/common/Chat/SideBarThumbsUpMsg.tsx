@@ -20,10 +20,8 @@ export default function SideBarThumbsUpMsg({ params, eventId }: Props) {
     const messageHandler = (
       message: OpenChatMessageWithUsernameAndReaction,
     ) => {
-      console.log('Received message:', message);
       if (message.emoji === '👍') {
         setMessages((prev) => [...prev, message]);
-        console.log('Added message:', message);
       }
     };
 

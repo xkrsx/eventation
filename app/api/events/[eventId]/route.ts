@@ -14,7 +14,7 @@ type EventParams = {
   };
 };
 
-type EventResponseBodyPut =
+export type EventResponseBodyPut =
   | {
       event: UpdatedEvent;
     }

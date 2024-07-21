@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Event } from '../../../database/events';
 import { Session } from '../../../migrations/00001-createTableSessions';
-import { UsersEventsStatusResponseBodyPut } from '../../api/users_events_status/[eventId]/route';
+import { UsersEventsStatusResponseBodyPut } from '../../api/usersEventsStatus/[eventId]/route';
 import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
@@ -26,7 +26,7 @@ export default function AttendanceStatusForm(props: Props) {
       | React.MouseEvent<HTMLButtonElement>,
   ) {
     event.preventDefault();
-    const response = await fetch(`/api/users_events_status/${props.event.id}`, {
+    const response = await fetch(`/api/usersEventsStatus/${props.event.id}`, {
       method: props.methodAPI,
       body: JSON.stringify({
         userId: props.session?.userId,

@@ -4,12 +4,13 @@
 //   GeoapifyContext,
 //   GeoapifyGeocoderAutocomplete,
 // } from '@geoapify/react-geocoder-autocomplete';
-// import dayjs from 'dayjs';
+
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import validator from 'validator';
 import { categoriesObject } from '../../../database/categories';
 import { EventResponseBodyPost } from '../../api/events/route';
+import ImageUpload from '../../common/ImageUpload/ImageUpload';
 import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
@@ -36,14 +37,6 @@ export default function AddEventForm(props: Props) {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const router = useRouter();
-
-  // const validate = (value) => {
-  //   if (validator.isURL(value)) {
-  //     setErrorMessage('Is Valid URL');
-  //   } else {
-  //     setErrorMessage('Is Not Valid URL');
-  //   }
-  // };
 
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
     checkForm();
@@ -268,6 +261,7 @@ export default function AddEventForm(props: Props) {
               onChange={handleChange}
             />
           </label>
+          <ImageUpload />
           <button disabled={isDisabled}>Add event</button>
         </form>
         <ErrorMessage>{errorMessage}</ErrorMessage>
