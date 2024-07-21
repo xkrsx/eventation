@@ -14,7 +14,6 @@ export const getOpenChatAllMessages = cache(
         open_chats
         INNER JOIN sessions ON (
           sessions.token = ${sessionToken}
-          AND sessions.user_id = open_chats.user_id
           AND expiry_timestamp > now()
         )
       WHERE
@@ -26,26 +25,26 @@ export const getOpenChatAllMessages = cache(
   },
 );
 
-export const getOpenChatSingleMessage = cache(
-  async (sessionToken: string, messageId: number) => {
-    const [message] = await sql<OpenChatMessage[]>`
-      SELECT
-        open_chats.*
-      FROM
-        open_chats
-        INNER JOIN sessions ON (
-          sessions.token = ${sessionToken}
-          AND sessions.user_id = open_chats.user_id
-          AND expiry_timestamp > now()
-        )
-      WHERE
-        open_chats.id = ${messageId}
-      ORDER BY
-        open_chats.timestamp
-    `;
-    return message;
-  },
-);
+// export const getOpenChatSingleMessage = cache(
+//   async (sessionToken: string, messageId: number) => {
+//     const [message] = await sql<OpenChatMessage[]>`
+//       SELECT
+//         open_chats.*
+//       FROM
+//         open_chats
+//         INNER JOIN sessions ON (
+//           sessions.token = ${sessionToken}
+//           AND sessions.user_id = open_chats.user_id
+//           AND expiry_timestamp > now()
+//         )
+//       WHERE
+//         open_chats.id = ${messageId}
+//       ORDER BY
+//         open_chats.timestamp
+//     `;
+//     return message;
+//   },
+// );
 
 export const createOpenChatMessage = cache(
   async (sessionToken: string, eventId: number, content: string) => {

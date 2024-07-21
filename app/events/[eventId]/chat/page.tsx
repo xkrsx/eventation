@@ -1,13 +1,11 @@
-// TODO chat window of each event with tabs: open/orga
-
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../../database/events';
 import { getOpenChatAllMessages } from '../../../../database/openChats';
 import { getValidSession } from '../../../../database/sessions';
-import Chat from './Chat';
 import ChatInput from './ChatInput';
+import OpenChat from './OpenChat';
 
 // COOL NAMES (hopefully)
 // open: event lounge
@@ -47,11 +45,12 @@ export default async function EventChat(props: Props) {
     session.token,
     Number(props.params.eventId),
   );
+  console.log('messages: ', messages.length);
 
   return (
     <div>
       <h1>{event.name} Chat</h1>
-      <Chat
+      <OpenChat
         messages={messages}
         userId={session.userId}
         eventId={Number(props.params.eventId)}
