@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { NextResponse } from 'next/server';
 import { Event } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { checkStatus } from '../../../database/usersEventsStatus';
@@ -18,10 +19,10 @@ export default async function AttendanceStatusCheck(props: Props) {
   // // 2. Check if the sessionToken from cookie is still valid in DB
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
 
-  // // 2.5. if no event found, show error message
-  if (!props.event.id) {
-    return <strong>Sorry, error checking your attendance status.</strong>;
-  }
+  // // // 2.5. if no event found, show error message
+  // if (!props.event.id) {
+  //   return <strong>Sorry, error checking status of your attendance.</strong>;
+  // }
   // //. 2.5 if user not logged in, show link to login
   if (!session) {
     return (
