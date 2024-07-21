@@ -2,7 +2,6 @@
 
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { NextResponse } from 'next/server';
 import { Event } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { checkStatus } from '../../../database/usersEventsStatus';
