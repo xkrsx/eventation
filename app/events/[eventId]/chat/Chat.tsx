@@ -32,7 +32,7 @@ export default function Chat({ params, userId, eventId }: Props) {
     const messageHandler = (
       message: OpenChatMessageWithUsernameAndReaction,
     ) => {
-      setMessages((prev) => [...prev, message]);
+      setMessages([...messages, message]);
     };
 
     pusherClient.bind('incoming-message', messageHandler);
@@ -45,8 +45,8 @@ export default function Chat({ params, userId, eventId }: Props) {
 
   return (
     <div>
-      <div className="flex flex-1 flex-col-reverse overflow-y-auto">
-        <div id="messages" className="flex flex-col space-y-1 p-3">
+      <div>
+        <div>
           {messages.map((message, index: number) => {
             const isCurrentUser = message.userId === userId;
             const hasNextMessageFromSameUser =
@@ -60,7 +60,10 @@ export default function Chat({ params, userId, eventId }: Props) {
                 return `${dayjs(new Date()).diff(message.timestamp, 'minute')} minutes ago`;
               }
               if (dayjs(new Date()).diff(message.timestamp, 'minute') > 59) {
-                return `${dayjs(new Date()).diff(message.timestamp, 'hour')} hour(s) ago`;
+                return `over an hour ago`;
+              }
+              if (dayjs(new Date()).diff(message.timestamp, 'minute') > 119) {
+                return dayjs(message.timestamp).format('HH:mm');
               }
             }
 

@@ -1,7 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import TextareaAutosize from 'react-textarea-autosize';
+import { useState } from 'react';
 
 type Props = {
   eventId: number;
@@ -21,12 +20,6 @@ interface ApiResponse {
 export default function ChatInput({ eventId }: Props) {
   const [input, setInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
-  // textareaRef is used to focus the textarea below
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-  // messageTextIsEmpty is used to disable the send button when the textarea is empty
-  const messageTextIsEmpty = input.trim().length === 0;
 
   const handleSubmit = async (
     event:
@@ -67,29 +60,25 @@ export default function ChatInput({ eventId }: Props) {
   };
 
   return (
-    <div className="border-t border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
-      {/* display chatinput */}
+    <div>
       <form onSubmit={handleSubmit}>
         <div>
           <div>
             <input
-              // ref={textareaRef}
-              onKeyDown={async (event) => {
-                if (event.key === 'Enter' && !event.shiftKey) {
+              style={{ width: '20vw', height: '5vh' }}
+              onKeyDown={async (
+                event: React.KeyboardEvent<HTMLInputElement>,
+              ) => {
+                if (event.key === 'Enter') {
                   await handleSubmit(event);
                 }
               }}
-              rows={1}
               value={input}
               onChange={(event) => setInput(event.target.value)}
               placeholder="Type in your message"
             />
 
-            <div
-              onClick={() => textareaRef.current?.focus()}
-              className="py-2"
-              aria-hidden="true"
-            >
+            <div className="py-2" aria-hidden="true">
               <div className="py-px">
                 <div className="h-9" />
               </div>
@@ -97,14 +86,14 @@ export default function ChatInput({ eventId }: Props) {
 
             <div className="absolute right-0 bottom-0 flex justify-between py-2 pl-3 pr-2">
               <div className="flex-shrink-0">
-                <button disabled={messageTextIsEmpty}>Send</button>
+                <button disabled={!input && true}>Send</button>
               </div>
             </div>
           </div>
         </div>
       </form>
 
-      <div className="text-red-500 mt-2">{errorMessage}</div>
+      <div>{errorMessage}</div>
     </div>
   );
 }
