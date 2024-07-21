@@ -10,9 +10,7 @@ import {
 import React, { useState } from 'react';
 
 // Connect to Ably using the AblyProvider component and your API key
-const client = new Ably.Realtime({
-  key: 'ZiA7SA.TieCmg:1Y1zzp-3463zR4nQz80z7w6mnGTfgz7Taz1D-RuejLU',
-});
+const client = new Ably.Realtime({ authUrl: '/api/chat' });
 
 export default function Chat() {
   return (

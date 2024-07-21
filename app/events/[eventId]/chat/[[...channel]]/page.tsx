@@ -1,0 +1,53 @@
+// TODO chat window of each event with tabs: open/orga
+
+import { cookies } from 'next/headers';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getSingleEventInsecure } from '../../../../../database/events';
+import { getValidSession } from '../../../../../database/sessions';
+import Chats from './Chats';
+
+// COOL NAMES (hopefully)
+// open: event lounge
+// orga: info stream
+
+type Props = {
+  params: {
+    eventId: string;
+    channel: string;
+  };
+};
+
+export default async function EventChats(props: Props) {
+  // // 1. Checking if the sessionToken cookie exists
+  const sessionCookie = cookies().get('sessionToken');
+
+  // // 2. Check if the sessionToken cookie is still valid
+  const session = sessionCookie && (await getValidSession(sessionCookie.value));
+
+  const event = await getSingleEventInsecure(Number(props.params.eventId));
+  if (!event) {
+    redirect('/events/find');
+  }
+
+  // TODO add authorization to chat only for users attending this event
+  // // 3. If the sessionToken cookie is invalid or doesn't exist, show link to log in
+  if (!session) {
+    return (
+      <div>
+        <Link
+          href={`/login?returnTo=/events/${props.params.eventId}/chat/${props.params.channel}`}
+        >
+          Log in to chat with others.
+        </Link>
+      </div>
+    );
+  }
+  // // 4. If the sessionToken cookie is valid, show chat
+  return (
+    <div>
+      <h1>{event.name} Chat</h1>
+      <Chats params={props.params} />
+    </div>
+  );
+}
