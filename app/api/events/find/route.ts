@@ -18,6 +18,7 @@ export async function POST(
   const result = eventSchema.safeParse(body.event);
 
   const singleEvent = await findSingleEventInsecure();
+  console.log(singleEvent);
 
   if (!result.success) {
     return NextResponse.json(

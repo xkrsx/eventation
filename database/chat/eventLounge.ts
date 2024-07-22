@@ -2,7 +2,7 @@ import { cache } from 'react';
 import { EventLoungeMessage } from '../../migrations/00004-createTableEventLounge';
 import { sql } from '../connect';
 
-export const getEvenLoungeRecentMessages = cache(
+export const getEvenLoungeLastHourMessages = cache(
   async (sessionToken: string, eventId: number) => {
     const messages = await sql<EventLoungeMessage[]>`
       SELECT
@@ -16,6 +16,27 @@ export const getEvenLoungeRecentMessages = cache(
       WHERE
         event_lounge.event_id = ${eventId}
         AND event_lounge.timestamp >= now() - '1 hour'::interval
+      ORDER BY
+        event_lounge.timestamp
+    `;
+    return messages;
+  },
+);
+
+export const getEvenLoungeLastDayMessages = cache(
+  async (sessionToken: string, eventId: number) => {
+    const messages = await sql<EventLoungeMessage[]>`
+      SELECT
+        event_lounge.*
+      FROM
+        event_lounge
+        INNER JOIN sessions ON (
+          sessions.token = ${sessionToken}
+          AND expiry_timestamp > now()
+        )
+      WHERE
+        event_lounge.event_id = ${eventId}
+        AND event_lounge.timestamp >= now() - '24 hour'::interval
       ORDER BY
         event_lounge.timestamp
     `;

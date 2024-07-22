@@ -1,13 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  createEvenLoungeMessage,
-  getEvenLoungeRecentMessages,
-} from '../../../database/chat/eventLounge';
-import {
-  EventLoungeMessage,
-  eventLoungeMessageSchema,
-} from '../../../migrations/00004-createTableEventLounge';
+import { createEvenLoungeMessage } from '../../../database/chat/eventLounge';
+import { eventLoungeMessageSchema } from '../../../migrations/00004-createTableEventLounge';
 import { pusherServer, toPusherKey } from '../../../util/pusher';
 
 export type EventLoungeMessagesResponseBodyPost =
@@ -82,33 +76,4 @@ export async function POST(
       timestamp: newMessage.timestamp,
     },
   });
-}
-
-export type EventLoungeMessagesResponseBodyGet =
-  | {
-      messages: EventLoungeMessage[];
-    }
-  | {
-      error: string;
-    };
-
-export type Props = {
-  params: { eventId: string };
-};
-
-export async function GET(
-  request: NextRequest,
-  { params }: Props,
-): Promise<NextResponse<EventLoungeMessagesResponseBodyGet>> {
-  const sessionCookie = request.cookies.get('sessionToken');
-  if (!sessionCookie) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const messages = await getEvenLoungeRecentMessages(
-    sessionCookie.value,
-    Number(params.eventId),
-  );
-
-  return NextResponse.json({ messages });
 }
