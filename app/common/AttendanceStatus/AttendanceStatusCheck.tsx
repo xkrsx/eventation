@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { NextResponse } from 'next/server';
 import { Event } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { checkStatus } from '../../../database/usersEventsStatus';
@@ -24,10 +25,11 @@ export default async function AttendanceStatusCheck(props: Props) {
   }
   // //. 2.5 if user not logged in, show link to login
   if (!session) {
-    return (
-      <strong>
-        <Link href="/login?returnTo=/">Log in to attend the event.</Link>
-      </strong>
+    return NextResponse.json(
+      {
+        error: 'Not authorized access.',
+      },
+      { status: 403 },
     );
   }
   // // 3. Check if user is already attending

@@ -1,8 +1,16 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+import {
+  createEvenLoungeMessage,
+  getEvenLoungeRecentMessages,
+} from '../../../database/chat/eventLounge';
+import {
+  EventLoungeMessage,
+  eventLoungeMessageSchema,
+} from '../../../migrations/00004-createTableEventLounge';
 import { pusherServer, toPusherKey } from '../../../util/pusher';
 
-export type OpenChatMessagesResponseBodyPost =
+export type EventLoungeMessagesResponseBodyPost =
   | {
       message: { content: string };
     }
@@ -17,16 +25,11 @@ interface RequestBody {
 
 export async function POST(
   request: NextRequest,
-): Promise<NextResponse<OpenChatMessagesResponseBodyPost>> {
-  // Task: Create a new message for the current logged in user
-
-  // Get the message data from the request
+): Promise<NextResponse<EventLoungeMessagesResponseBodyPost>> {
   const body: RequestBody = await request.json();
 
-  // Validate messages data with zod
-  const result = openchatMessageSchema.safeParse(body);
+  const result = eventLoungeMessageSchema.safeParse(body);
 
-  // If client sends request body with incorrect data, return a response with a 400 status code to the client
   if (!result.success) {
     return NextResponse.json(
       {
@@ -36,19 +39,17 @@ export async function POST(
     );
   }
 
-  // Checking if the sessionToken cookie exists or get the token from the cookie
   const sessionTokenCookie = cookies().get('sessionToken');
 
-  // Create a message
+  // // new message to db
   const newMessage =
     sessionTokenCookie &&
-    (await createOpenChatMessage(
+    (await createEvenLoungeMessage(
       sessionTokenCookie.value,
       Number(body.eventId),
       result.data.content,
     ));
 
-  // If the message creation fails, return an error
   if (!newMessage) {
     return NextResponse.json(
       {
@@ -58,9 +59,9 @@ export async function POST(
     );
   }
 
-  // notify all connected chat room clients
+  // // new message to pusher
   await pusherServer.trigger(
-    toPusherKey(`event:${Number(body.eventId)}`),
+    toPusherKey(`eventLounge:${Number(body.eventId)}`),
     'incoming-message',
     {
       id: newMessage.id,
@@ -71,7 +72,7 @@ export async function POST(
     },
   );
 
-  // Return the text content of the message
+  // // get new message as response
   return NextResponse.json({
     message: {
       id: newMessage.id,
@@ -83,9 +84,9 @@ export async function POST(
   });
 }
 
-export type OpenChatMessagesResponseBodyGet =
+export type EventLoungeMessagesResponseBodyGet =
   | {
-      messages: OpenChatMessage[];
+      messages: EventLoungeMessage[];
     }
   | {
       error: string;
@@ -98,15 +99,13 @@ export type Props = {
 export async function GET(
   request: NextRequest,
   { params }: Props,
-): Promise<NextResponse<OpenChatMessagesResponseBodyGet>> {
-  // Task: Get messages to display it on the eventId page
-
+): Promise<NextResponse<EventLoungeMessagesResponseBodyGet>> {
   const sessionCookie = request.cookies.get('sessionToken');
   if (!sessionCookie) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const messages = await getOpenChatRecentMessages(
+  const messages = await getEvenLoungeRecentMessages(
     sessionCookie.value,
     Number(params.eventId),
   );
