@@ -104,7 +104,6 @@ export default async function SingleEvent(props: Props) {
           ? attendantsCount.count
           : 'No one yet. Be first!'}
       </p>
-      {/* TODO FIX */}
 
       {attendanceSessionCheck ? (
         <p>

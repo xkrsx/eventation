@@ -5,8 +5,6 @@ import Link from 'next/link';
 import { Event, getAllEventsSortDateInsecure } from '../../database/events';
 import { getUserPublicByIdInsecure } from '../../database/users';
 import { countAttendantsInsecure } from '../../database/usersEventsStatus';
-import AttendanceStatusCheck from '../common/AttendanceStatus/AttendanceStatusCheck';
-import AttendanceStatusForm from '../common/AttendanceStatus/AttendanceStatusForm';
 
 export default async function AllEventsByDate() {
   // // 1. Check if sessionToken in cookies exists

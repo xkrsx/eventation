@@ -9,7 +9,6 @@ import {
   getUsersEventsPast,
 } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
-import AttendingEvents from './Attending';
 import OrganisingEvents from './Organising';
 import PastEvents from './Past';
 
@@ -26,20 +25,21 @@ export default async function UserEvents() {
     return redirect('/login?returnTo=/profile/events');
   }
 
+  // 4. if the sessionToken cookie is valid, allow access to events page
+
   const eventsOrganising = await getUsersEventsOrganising(session.token);
-  const eventsAttending = await getUsersEventsAttending(
-    session.token,
-    session.userId,
-  );
+  // const eventsAttending = await getUsersEventsAttending(
+  //   session.token,
+  //   session.userId,
+  // );
   const eventsPast = await getUsersEventsPast(session.token, session.userId);
 
-  // 4. if the sessionToken cookie is valid, allow access to events page
   return (
     <div className="wrapper">
       <h1>User events</h1>
       <OrganisingEvents events={eventsOrganising} />
-      <AttendingEvents events={eventsAttending} />
-      <PastEvents events={eventsPast} />
+      {/* <AttendingEvents events={eventsAttending} session={session} /> */}
+      <PastEvents events={eventsPast} session={session} />
     </div>
   );
 }

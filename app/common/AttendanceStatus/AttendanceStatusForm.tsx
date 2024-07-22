@@ -9,8 +9,8 @@ import ErrorMessage from '../../ErrorMessage';
 type Props = {
   session: Omit<Session, 'id'> | undefined;
   event: Event;
-  isAttending?: string;
-  isOrganising: boolean;
+  isAttending: string | undefined;
+  isOrganising: boolean | undefined;
   methodAPI: string;
 };
 

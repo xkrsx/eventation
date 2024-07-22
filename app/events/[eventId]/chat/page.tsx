@@ -6,7 +6,11 @@ import { getEventLoungeLastHourMessages } from '../../../../database/chat/eventL
 import { getInfoStreamLastHourMessages } from '../../../../database/chat/infoStream';
 import { getSingleEventInsecure } from '../../../../database/events';
 import { getValidSession } from '../../../../database/sessions';
-import { countAttendantsInsecure } from '../../../../database/usersEventsStatus';
+import {
+  checkStatus,
+  countAttendantsInsecure,
+} from '../../../../database/usersEventsStatus';
+import AttendanceStatusForm from '../../../common/AttendanceStatus/AttendanceStatusForm';
 import EventLounge from './EventLounge';
 import InfoStream from './InfoStream';
 
@@ -43,6 +47,25 @@ export default async function EventChat(props: Props) {
       </div>
     );
   }
+  // // 3. check if user is attending the event
+  const attendanceSessionCheck = await checkStatus(
+    session.token,
+    session.userId,
+    Number(event.id),
+  );
+
+  if (!attendanceSessionCheck) {
+    return (
+      <AttendanceStatusForm
+        event={event}
+        session={session}
+        isAttending={attendanceSessionCheck}
+        isOrganising={false}
+        methodAPI="POST"
+      />
+    );
+  }
+
   // 4. If the sessionToken cookie is valid, show chat
   const eventLoungeMessages = await getEventLoungeLastHourMessages(
     session.token,

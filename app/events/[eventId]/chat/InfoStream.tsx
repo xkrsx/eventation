@@ -11,7 +11,7 @@ type Props = {
   messages: InfoStreamMessage[];
   currentUserId: number;
   eventId: number;
-  isOrganiser: boolean;
+  isOrganiser: boolean | undefined;
 };
 
 export default function InfoStream(props: Props) {

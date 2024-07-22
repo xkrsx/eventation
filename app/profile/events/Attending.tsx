@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import { Event } from '../../../database/events';
 import AttendanceStatusCheck from '../../common/AttendanceStatus/AttendanceStatusCheck';
+import AttendanceStatusForm from '../../common/AttendanceStatus/AttendanceStatusForm';
 
 type Props = {
   events: Event[];

@@ -101,7 +101,7 @@ export default function OrganisingEvents(props: Props) {
                 let newErrorMessage = 'Error deleting the event.';
 
                 try {
-                  const body = await response.json();
+                  const body: { error: string } = await response.json();
                   newErrorMessage = body.error;
                 } catch {
                   // Don't fail if response JSON body
@@ -144,7 +144,7 @@ export default function OrganisingEvents(props: Props) {
               let newErrorMessage = 'Error updating the event.';
 
               try {
-                const body = await response.json();
+                const body: { error: string } = await response.json();
 
                 newErrorMessage = body.error;
               } catch (error) {
