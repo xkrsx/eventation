@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getEvenLoungeAllMessages } from '../../../../database/chat/eventLounge';
+import { getEventLoungeAllMessages } from '../../../../database/chat/eventLounge';
 import { EventLoungeMessage } from '../../../../migrations/00004-createTableEventLounge';
 
 export type EventLoungeMessagesResponseBodyGet =
@@ -23,7 +23,7 @@ export async function GET(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const messages = await getEvenLoungeAllMessages(
+  const messages = await getEventLoungeAllMessages(
     sessionCookie.value,
     Number(params.eventId),
   );

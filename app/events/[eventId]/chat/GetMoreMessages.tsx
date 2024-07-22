@@ -1,30 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import ErrorMessage from '../../ErrorMessage';
+import ErrorMessage from '../../../ErrorMessage';
 
 type Props = {
   eventId: number;
 };
 
 export default function GetMoreMessages(props: Props) {
-  const [input, setInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (
-    event:
-      | React.FormEvent<HTMLFormElement>
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.KeyboardEvent<HTMLTextAreaElement>,
-  ) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const response = await fetch('/api/eventLounge', {
-      method: 'POST',
-      body: JSON.stringify({
-        content: input,
-        eventId: props.eventId,
-      }),
+    const response = await fetch(`/api/eventLounge/${time}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },

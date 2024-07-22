@@ -2,7 +2,7 @@ import { cache } from 'react';
 import { EventLoungeMessage } from '../../migrations/00004-createTableEventLounge';
 import { sql } from '../connect';
 
-export const getEvenLoungeLastHourMessages = cache(
+export const getEventLoungeLastHourMessages = cache(
   async (sessionToken: string, eventId: number) => {
     const messages = await sql<EventLoungeMessage[]>`
       SELECT
@@ -23,7 +23,7 @@ export const getEvenLoungeLastHourMessages = cache(
   },
 );
 
-export const getEvenLoungeLastDayMessages = cache(
+export const getEventLoungeLastDayMessages = cache(
   async (sessionToken: string, eventId: number) => {
     const messages = await sql<EventLoungeMessage[]>`
       SELECT
@@ -44,7 +44,7 @@ export const getEvenLoungeLastDayMessages = cache(
   },
 );
 
-export const getEvenLoungeAllMessages = cache(
+export const getEventLoungeAllMessages = cache(
   async (sessionToken: string, eventId: number) => {
     const messages = await sql<EventLoungeMessage[]>`
       SELECT
@@ -64,7 +64,7 @@ export const getEvenLoungeAllMessages = cache(
   },
 );
 
-export const createEvenLoungeMessage = cache(
+export const createEventLoungeMessage = cache(
   async (sessionToken: string, eventId: number, content: string) => {
     const [message] = await sql<EventLoungeMessage[]>`
       WITH
@@ -93,16 +93,18 @@ export const createEvenLoungeMessage = cache(
   },
 );
 
-export const deleteMessage = cache(async (sessionToken: string, id: number) => {
-  const [message] = await sql<EventLoungeMessage[]>`
-    DELETE FROM event_lounge USING sessions
-    WHERE
-      sessions.token = ${sessionToken}
-      AND sessions.expiry_timestamp > now()
-      AND event_lounge.id = ${id}
-    RETURNING
-      event_lounge.*
-  `;
+export const deleteEventLoungeMessage = cache(
+  async (sessionToken: string, id: number) => {
+    const [message] = await sql<EventLoungeMessage[]>`
+      DELETE FROM event_lounge USING sessions
+      WHERE
+        sessions.token = ${sessionToken}
+        AND sessions.expiry_timestamp > now()
+        AND event_lounge.id = ${id}
+      RETURNING
+        event_lounge.*
+    `;
 
-  return message;
-});
+    return message;
+  },
+);

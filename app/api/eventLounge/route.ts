@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { createEvenLoungeMessage } from '../../../database/chat/eventLounge';
+import { createEventLoungeMessage } from '../../../database/chat/eventLounge';
 import { eventLoungeMessageSchema } from '../../../migrations/00004-createTableEventLounge';
 import { pusherServer, toPusherKey } from '../../../util/pusher';
 
@@ -38,7 +38,7 @@ export async function POST(
   // // new message to db
   const newMessage =
     sessionTokenCookie &&
-    (await createEvenLoungeMessage(
+    (await createEventLoungeMessage(
       sessionTokenCookie.value,
       Number(body.eventId),
       result.data.content,

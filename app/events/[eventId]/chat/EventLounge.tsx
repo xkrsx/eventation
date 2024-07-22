@@ -8,6 +8,7 @@ import ChatInput from '../../../common/Chat/ChatInput';
 import ChatUsername from '../../../common/Chat/ChatUsername';
 
 type Props = {
+  messages: EventLoungeMessage[];
   currentUserId: number;
   eventId: number;
 };

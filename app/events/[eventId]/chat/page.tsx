@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { getEventLoungeLastHourMessages } from '../../../../database/chat/eventLounge';
 import { getSingleEventInsecure } from '../../../../database/events';
 import { getValidSession } from '../../../../database/sessions';
 import EventLounge from './EventLounge';
@@ -36,16 +37,17 @@ export default async function EventChat(props: Props) {
       </div>
     );
   }
-  // // 4. If the sessionToken cookie is valid, show chat
-  // const eventLoungeMessages = await getEvenLoungeLastHourMessages(
-  //   session.token,
-  //   Number(props.params.eventId),
-  // );
+  // 4. If the sessionToken cookie is valid, show chat
+  const eventLoungeMessages = await getEventLoungeLastHourMessages(
+    session.token,
+    Number(props.params.eventId),
+  );
 
   return (
     <div>
       <h1>{event.name} Chat</h1>
       <EventLounge
+        messages={eventLoungeMessages}
         currentUserId={session.userId}
         eventId={Number(props.params.eventId)}
       />
