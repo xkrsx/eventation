@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 import { getEvenLoungeRecentMessages } from '../../../../database/chat/eventLounge';
 import { getSingleEventInsecure } from '../../../../database/events';
 import { getValidSession } from '../../../../database/sessions';
-import ChatInput from './ChatInput';
 import EventLounge from './EventLounge';
 
 // import InfoStream from './InfoStream';

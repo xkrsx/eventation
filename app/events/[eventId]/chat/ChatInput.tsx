@@ -18,7 +18,7 @@ export default function ChatInput(props: Props) {
   ) => {
     event.preventDefault();
 
-    const response = await fetch('/api/openChat', {
+    const response = await fetch('/api/eventLounge', {
       method: 'POST',
       body: JSON.stringify({
         content: input,
@@ -35,7 +35,7 @@ export default function ChatInput(props: Props) {
       let newErrorMessage = 'Error creating message';
 
       try {
-        const body = await response.json();
+        const body: { error: string } = await response.json();
         newErrorMessage = body.error;
       } catch {}
 
@@ -43,10 +43,10 @@ export default function ChatInput(props: Props) {
       return;
     }
 
-    const data = await response.json();
+    // const data = await response.json();
 
-    setInput('');
-    return data;
+    return setInput('');
+    // return data;
   };
 
   return (
