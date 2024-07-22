@@ -7,16 +7,16 @@ type Props = {
   eventId: number;
 };
 
-interface BodyResponse {
+type NewMessageBodyResponse = {
   content: string;
   eventId: string;
   error: string;
-}
+};
 
-interface ApiResponse {
+type NewMessageApiResponse = {
   content: string;
   eventId: string;
-}
+};
 
 export default function ChatInput(props: Props) {
   const [input, setInput] = useState('');
@@ -47,7 +47,7 @@ export default function ChatInput(props: Props) {
       let newErrorMessage = 'Error creating message';
 
       try {
-        const body: BodyResponse = await response.json();
+        const body: NewMessageBodyResponse = await response.json();
         newErrorMessage = body.error;
       } catch {}
 
@@ -55,7 +55,7 @@ export default function ChatInput(props: Props) {
       return;
     }
 
-    const data: ApiResponse = await response.json();
+    const data: NewMessageApiResponse = await response.json();
 
     setInput('');
     return data;
