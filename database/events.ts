@@ -27,7 +27,20 @@ export type Event = NewEvent & {
   cancelled: boolean;
 };
 
-export type JoinedEvent = Event & {};
+// // TODO can you interpolate
+// export const findSingleEventInsecure = cache(
+//   async (formQuery: string, userQuery: string) => {
+//     const [event] = await sql<Event[]>`
+//       SELECT
+//         events.*
+//       FROM
+//         events
+//       WHERE
+//         events.${formQuery} = ${userQuery}
+//     `;
+//     return event;
+//   },
+// );
 
 export const createEvent = cache(
   async (sessionToken: string, newEvent: NewEvent) => {
@@ -186,6 +199,7 @@ export const updateEvent = cache(
         events.links,
         events.images
     `;
+
     return event;
   },
 );

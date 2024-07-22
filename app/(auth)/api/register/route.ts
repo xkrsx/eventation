@@ -7,9 +7,11 @@ import {
   createUserInsecure,
   getUserByEmailInsecure,
   getUserByUsernameInsecure,
-  User,
 } from '../../../../database/users';
-import { userRegistrationSchema } from '../../../../migrations/00000-createTableUsers';
+import {
+  User,
+  userRegistrationSchema,
+} from '../../../../migrations/00000-createTableUsers';
 import { secureCookieOptions } from '../../../../util/cookies';
 
 export type RegisterResponseBodyPost =
@@ -22,7 +24,7 @@ export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<RegisterResponseBodyPost>> {
   // 1. Get the user data from the request
-  const body = await request.json();
+  const body: { newUser: User } = await request.json();
 
   // 2. Validate the user data with zod
   const result = userRegistrationSchema.safeParse(body.newUser);

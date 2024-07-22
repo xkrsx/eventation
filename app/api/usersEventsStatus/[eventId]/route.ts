@@ -1,23 +1,11 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import {
-  deleteUsersEventOrganising,
-  Event,
-  updateEvent,
-} from '../../../../database/events';
-import {
   addStatus,
   updateStatus,
   UsersEventsStatus,
 } from '../../../../database/usersEventsStatus';
-import { eventSchema } from '../../../../migrations/00002-createTableEvents';
 import { usersEventsStatusSchema } from '../../../../migrations/00003-createTableUsersEvents';
-
-type EventParams = {
-  params: {
-    eventId: string;
-  };
-};
 
 export type UsersEventsStatusResponseBodyPost =
   | {
@@ -82,7 +70,6 @@ export type UsersEventsStatusResponseBodyPut =
 
 export async function PUT(
   request: Request,
-  { params }: EventParams,
 ): Promise<NextResponse<UsersEventsStatusResponseBodyPut>> {
   const requestBody = await request.json();
 

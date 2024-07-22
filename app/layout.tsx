@@ -1,6 +1,7 @@
 import './globals.scss';
 import type { Metadata } from 'next';
 import Header from './common/Header/Header';
+import CookieBanner from './CookieBanner';
 
 export const metadata: Metadata = {
   title: 'Eventation',
@@ -17,6 +18,7 @@ export default function RootLayout({
       <body>
         <Header />
         {children}
+        <CookieBanner />
       </body>
     </html>
   );

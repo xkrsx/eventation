@@ -3,11 +3,11 @@ import bcrypt from 'bcrypt';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { createSessionInsecure } from '../../../../database/sessions';
+import { getUserWithPasswordHashInsecure } from '../../../../database/users';
 import {
-  getUserWithPasswordHashInsecure,
   User,
-} from '../../../../database/users';
-import { userLoginSchema } from '../../../../migrations/00000-createTableUsers';
+  userLoginSchema,
+} from '../../../../migrations/00000-createTableUsers';
 import { secureCookieOptions } from '../../../../util/cookies';
 
 export type LoginResponseBodyPost =
@@ -20,7 +20,8 @@ export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<LoginResponseBodyPost>> {
   // 1. Get the user data from the request
-  const body = await request.json();
+  const body: { user: { username: string; password: string } } =
+    await request.json();
 
   // 2. Validate the user data with zod
   const result = userLoginSchema.safeParse(body.user);
