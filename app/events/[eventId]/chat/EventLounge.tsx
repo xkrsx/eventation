@@ -2,23 +2,25 @@
 
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
-import { OpenChatMessage } from '../../../../migrations/00004-createTableEventLoungeChats';
+import { EventLoungeMessage } from '../../../../migrations/00004-createTableEventLounge';
 import { pusherClient, toPusherKey } from '../../../../util/pusher';
 import ChatUsername from '../../../common/Chat/ChatUsername';
 import ChatInput from './ChatInput';
 
 type Props = {
-  messages: OpenChatMessage[];
+  messages: EventLoungeMessage[];
   currentUserId: number;
   eventId: number;
 };
 
 export default function EventLounge(props: Props) {
-  const [messages, setMessages] = useState<OpenChatMessage[]>(props.messages);
+  const [messages, setMessages] = useState<EventLoungeMessage[]>(
+    props.messages,
+  );
 
-  // Scroll down to the new message
+  // Scroll down to the newest message
   const scrollDownRef = useRef<HTMLDivElement | null>(null);
-  // Get usernames and scroll to the bottom when messages change
+
   useEffect(() => {
     if (scrollDownRef.current) {
       scrollDownRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -29,7 +31,7 @@ export default function EventLounge(props: Props) {
   useEffect(() => {
     pusherClient.subscribe(toPusherKey(`eventLounge:${props.eventId}`));
 
-    const messageHandler = (message: OpenChatMessage) => {
+    const messageHandler = (message: EventLoungeMessage) => {
       setMessages((prev) => [...prev, message]);
     };
 
@@ -99,10 +101,7 @@ export default function EventLounge(props: Props) {
                   ) : (
                     <ChatUsername chatUserId={message.userId} />
                   )}
-                  {/* <ChatUsername
-                  chatUserId={message.userId}
-                  isCurrentUser={isCurrentUser}
-                /> */}
+                  <ChatUsername chatUserId={message.userId} />
                 </span>
                 {/* <Reactions
                 messageId={message.id}

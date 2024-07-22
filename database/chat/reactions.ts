@@ -1,5 +1,4 @@
 import { cache } from 'react';
-import { OpenChatReaction } from '../migrations/old/00005-createTableOpenChatReactions';
 import { sql } from '../connect';
 
 export const getOpenChatAllReactions = cache(

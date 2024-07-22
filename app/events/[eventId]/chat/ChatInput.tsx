@@ -6,17 +6,6 @@ type Props = {
   eventId: number;
 };
 
-interface BodyResponse {
-  content: string;
-  eventId: string;
-  error: string;
-}
-
-interface ApiResponse {
-  content: string;
-  eventId: string;
-}
-
 export default function ChatInput(props: Props) {
   const [input, setInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -46,7 +35,7 @@ export default function ChatInput(props: Props) {
       let newErrorMessage = 'Error creating message';
 
       try {
-        const body: BodyResponse = await response.json();
+        const body = await response.json();
         newErrorMessage = body.error;
       } catch {}
 
@@ -54,7 +43,7 @@ export default function ChatInput(props: Props) {
       return;
     }
 
-    const data: ApiResponse = await response.json();
+    const data = await response.json();
 
     setInput('');
     return data;
@@ -73,7 +62,7 @@ export default function ChatInput(props: Props) {
             }}
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            placeholder="Type in your message"
+            placeholder="your message..."
           />
 
           <button disabled={!input && true}>Send</button>
