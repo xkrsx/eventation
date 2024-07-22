@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   createOpenChatMessage,
   getOpenChatRecentMessages,
-} from '../../../database/openChats';
+} from '../../../database/chat/eventLounge';
 import {
   OpenChatMessage,
   openchatMessageSchema,
-} from '../../../migrations/00004-createTableOpenChats';
+} from '../../../migrations/00004-createTableEventLoungeChats';
 import { pusherServer, toPusherKey } from '../../../util/pusher';
 
 export type OpenChatMessagesResponseBodyPost =

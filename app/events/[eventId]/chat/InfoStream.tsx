@@ -2,7 +2,7 @@
 
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
-import { OpenChatMessage } from '../../../../migrations/00004-createTableOpenChats';
+import { OpenChatMessage } from '../../../../migrations/00004-createTableEventLoungeChats';
 import { pusherClient, toPusherKey } from '../../../../util/pusher';
 import ChatUsername from '../../../common/Chat/ChatUsername';
 
@@ -12,19 +12,18 @@ type Props = {
   eventId: number;
 };
 
-export default function OpenChat(props: Props) {
+export default function InfoStream(props: Props) {
   const [messages, setMessages] = useState<OpenChatMessage[]>(props.messages);
 
-  // Scroll down to the new message
+  // Scroll down to newest message
   const scrollDownRef = useRef<HTMLDivElement | null>(null);
-  // Get usernames and scroll to the bottom when messages change
   useEffect(() => {
     if (scrollDownRef.current) {
       scrollDownRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
 
-  // Use Pusher for real-time functionality:
+  // pusher message subscription
   useEffect(() => {
     pusherClient.subscribe(toPusherKey(`event:${props.eventId}`));
 
