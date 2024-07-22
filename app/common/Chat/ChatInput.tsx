@@ -1,10 +1,22 @@
 'use client';
 
 import { useState } from 'react';
+import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
   eventId: number;
 };
+
+interface BodyResponse {
+  content: string;
+  eventId: string;
+  error: string;
+}
+
+interface ApiResponse {
+  content: string;
+  eventId: string;
+}
 
 export default function ChatInput(props: Props) {
   const [input, setInput] = useState('');
@@ -35,7 +47,7 @@ export default function ChatInput(props: Props) {
       let newErrorMessage = 'Error creating message';
 
       try {
-        const body: { error: string } = await response.json();
+        const body: BodyResponse = await response.json();
         newErrorMessage = body.error;
       } catch {}
 
@@ -43,10 +55,10 @@ export default function ChatInput(props: Props) {
       return;
     }
 
-    // const data = await response.json();
+    const data: ApiResponse = await response.json();
 
-    return setInput('');
-    // return data;
+    setInput('');
+    return data;
   };
 
   return (
@@ -55,11 +67,6 @@ export default function ChatInput(props: Props) {
         <div>
           <input
             style={{ width: '20vw', height: '5vh' }}
-            onKeyDown={async (event) => {
-              if (event.key === 'Enter') {
-                await handleSubmit(event);
-              }
-            }}
             value={input}
             onChange={(event) => setInput(event.target.value)}
             placeholder="your message..."
@@ -69,7 +76,7 @@ export default function ChatInput(props: Props) {
         </div>
       </form>
 
-      <div>{errorMessage}</div>
+      <ErrorMessage>{errorMessage}</ErrorMessage>
     </div>
   );
 }

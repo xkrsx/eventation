@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
 import { EventLoungeMessage } from '../../../../migrations/00004-createTableEventLounge';
 import { pusherClient, toPusherKey } from '../../../../util/pusher';
+import ChatInput from '../../../common/Chat/ChatInput';
 import ChatUsername from '../../../common/Chat/ChatUsername';
-import ChatInput from './ChatInput';
 
 type Props = {
   messages: EventLoungeMessage[];
@@ -18,7 +18,6 @@ export default function EventLounge(props: Props) {
     props.messages,
   );
 
-  // Scroll down to the newest message
   const scrollDownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -27,7 +26,6 @@ export default function EventLounge(props: Props) {
     }
   }, [messages]);
 
-  // Use Pusher for real-time functionality:
   useEffect(() => {
     pusherClient.subscribe(toPusherKey(`eventLounge:${props.eventId}`));
 
@@ -101,14 +99,7 @@ export default function EventLounge(props: Props) {
                   ) : (
                     <ChatUsername chatUserId={message.userId} />
                   )}
-                  <ChatUsername chatUserId={message.userId} />
                 </span>
-                {/* <Reactions
-                messageId={message.id}
-                userId={message.userId}
-                // currentReaction={}
-              /> */}
-                {/* </span> */}
                 <div ref={scrollDownRef} />
               </div>
             );
