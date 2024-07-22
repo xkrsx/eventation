@@ -3,10 +3,12 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getEventLoungeLastHourMessages } from '../../../../database/chat/eventLounge';
+import { getInfoStreamLastHourMessages } from '../../../../database/chat/infoStream';
 import { getSingleEventInsecure } from '../../../../database/events';
 import { getValidSession } from '../../../../database/sessions';
 import { countAttendantsInsecure } from '../../../../database/usersEventsStatus';
 import EventLounge from './EventLounge';
+import InfoStream from './InfoStream';
 
 // import InfoStream from './InfoStream';
 
@@ -46,6 +48,16 @@ export default async function EventChat(props: Props) {
     session.token,
     Number(event.id),
   );
+  const infoStreamMessages = await getInfoStreamLastHourMessages(
+    session.token,
+    Number(event.id),
+  );
+  function checkIfOrganiser() {
+    if (session && event) {
+      return session.userId === event.userId;
+    }
+  }
+  const isOrganiser = checkIfOrganiser();
   const attendantsCount = await countAttendantsInsecure(event.id);
 
   return (
@@ -65,7 +77,12 @@ export default async function EventChat(props: Props) {
         currentUserId={session.userId}
         eventId={Number(event.id)}
       />
-      {/* <InfoStream messages={[]} currentUserId={0} eventId={0} /> */}
+      <InfoStream
+        messages={infoStreamMessages}
+        currentUserId={session.userId}
+        eventId={Number(event.id)}
+        isOrganiser={isOrganiser}
+      />
     </div>
   );
 }
