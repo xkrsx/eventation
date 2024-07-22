@@ -12,7 +12,7 @@ type Props = {
   eventId: number;
 };
 
-export default function OpenChat(props: Props) {
+export default function EventLounge(props: Props) {
   const [messages, setMessages] = useState<OpenChatMessage[]>(props.messages);
 
   // Scroll down to the new message

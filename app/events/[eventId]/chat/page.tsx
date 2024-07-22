@@ -4,13 +4,8 @@ import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../../database/events';
 import { getOpenChatRecentMessages } from '../../../../database/openChats';
 import { getValidSession } from '../../../../database/sessions';
-import { getUserPublicById } from '../../../../database/users';
 import ChatInput from './ChatInput';
-import OpenChat from './OpenChat';
-
-// COOL NAMES (hopefully)
-// open: event lounge
-// orga: info stream
+import EventLounge from './EventLounge';
 
 type Props = {
   params: {
@@ -50,7 +45,7 @@ export default async function EventChat(props: Props) {
   return (
     <div>
       <h1>{event.name} Chat</h1>
-      <OpenChat
+      <EventLounge
         messages={messages}
         currentUserId={session.userId}
         eventId={Number(props.params.eventId)}
