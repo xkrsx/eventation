@@ -1,11 +1,12 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { getOpenChatRecentMessages } from '../../../../database/chat/eventLounge';
 import { getSingleEventInsecure } from '../../../../database/events';
-import { getOpenChatRecentMessages } from '../../../../database/openChats';
 import { getValidSession } from '../../../../database/sessions';
 import ChatInput from './ChatInput';
 import EventLounge from './EventLounge';
+import InfoStream from './InfoStream';
 
 type Props = {
   params: {
@@ -37,7 +38,7 @@ export default async function EventChat(props: Props) {
     );
   }
   // // 4. If the sessionToken cookie is valid, show chat
-  const messages = await getOpenChatRecentMessages(
+  const eventLoungeMessages = await getOpenChatRecentMessages(
     session.token,
     Number(props.params.eventId),
   );
@@ -46,11 +47,11 @@ export default async function EventChat(props: Props) {
     <div>
       <h1>{event.name} Chat</h1>
       <EventLounge
-        messages={messages}
+        messages={eventLoungeMessages}
         currentUserId={session.userId}
         eventId={Number(props.params.eventId)}
       />
-      <ChatInput eventId={Number(props.params.eventId)} />
+      <InfoStream messages={[]} currentUserId={0} eventId={0} />
     </div>
   );
 }
