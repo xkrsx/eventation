@@ -1,21 +1,23 @@
 'use client';
 
 import { useState } from 'react';
+import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
   eventId: number;
+  apiRoute: string;
 };
 
-interface BodyResponse {
+type NewMessageBodyResponse = {
   content: string;
   eventId: string;
   error: string;
-}
+};
 
-interface ApiResponse {
+type NewMessageApiResponse = {
   content: string;
   eventId: string;
-}
+};
 
 export default function ChatInput(props: Props) {
   const [input, setInput] = useState('');
@@ -29,7 +31,7 @@ export default function ChatInput(props: Props) {
   ) => {
     event.preventDefault();
 
-    const response = await fetch('/api/openChat', {
+    const response = await fetch(`/api/${props.apiRoute}`, {
       method: 'POST',
       body: JSON.stringify({
         content: input,
@@ -46,7 +48,7 @@ export default function ChatInput(props: Props) {
       let newErrorMessage = 'Error creating message';
 
       try {
-        const body: BodyResponse = await response.json();
+        const body: NewMessageBodyResponse = await response.json();
         newErrorMessage = body.error;
       } catch {}
 
@@ -54,7 +56,7 @@ export default function ChatInput(props: Props) {
       return;
     }
 
-    const data: ApiResponse = await response.json();
+    const data: NewMessageApiResponse = await response.json();
 
     setInput('');
     return data;
@@ -66,21 +68,16 @@ export default function ChatInput(props: Props) {
         <div>
           <input
             style={{ width: '20vw', height: '5vh' }}
-            onKeyDown={async (event) => {
-              if (event.key === 'Enter') {
-                await handleSubmit(event);
-              }
-            }}
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            placeholder="Type in your message"
+            placeholder="your message..."
           />
 
           <button disabled={!input && true}>Send</button>
         </div>
       </form>
 
-      <div>{errorMessage}</div>
+      <ErrorMessage>{errorMessage}</ErrorMessage>
     </div>
   );
 }

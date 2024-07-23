@@ -1,14 +1,13 @@
-// TODO events as three different tabs: organising / attending / past
-// shows only events that belong to logged user
-'use client';
-
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { Event } from '../../../database/events';
-import AttendanceStatusCheck from '../../common/AttendanceStatus/AttendanceStatusCheck';
+import { checkStatus } from '../../../database/usersEventsStatus';
+import { Session } from '../../../migrations/00001-createTableSessions';
+import AttendanceStatusForm from '../../common/AttendanceStatus/AttendanceStatusForm';
 
 type Props = {
   events: Event[];
+  session: Omit<Session, 'id'>;
 };
 
 export default function PastEvents(props: Props) {
@@ -16,7 +15,14 @@ export default function PastEvents(props: Props) {
     <div className="attending">
       <h2>Past</h2>
       {props.events.length >= 1 ? (
-        props.events.map((event) => {
+        props.events.map(async (event) => {
+          const attendanceSessionCheck = await checkStatus(
+            props.session.token,
+            props.session.userId,
+            Number(event.id),
+          );
+
+          const isOrganiser = props.session.userId === event.userId;
           return (
             <div
               key={`event-${event.id}`}
@@ -36,7 +42,20 @@ export default function PastEvents(props: Props) {
               <p>location: {event.location}</p>
               <p>category: {event.category}</p>
               <p>description: {event.description}</p>
-              <AttendanceStatusCheck event={event} />
+
+              <p>
+                chat:{' '}
+                <Link href={`/events/${event.id}/chat`}>event lounge</Link>
+              </p>
+
+              <AttendanceStatusForm
+                event={event}
+                session={props.session}
+                isAttending={attendanceSessionCheck?.isAttending}
+                isOrganising={isOrganiser}
+                methodAPI="PUT"
+              />
+
               <Link href={`/events/${event.id}`}>See more...</Link>
             </div>
           );

@@ -27,20 +27,31 @@ export type Event = NewEvent & {
   cancelled: boolean;
 };
 
-// // TODO can you interpolate
-// export const findSingleEventInsecure = cache(
-//   async (formQuery: string, userQuery: string) => {
-//     const [event] = await sql<Event[]>`
-//       SELECT
-//         events.*
-//       FROM
-//         events
-//       WHERE
-//         events.${formQuery} = ${userQuery}
-//     `;
-//     return event;
-//   },
-// );
+export const findSingleEventInsecure = cache(
+  async (
+    formField1: string,
+    userQuery1: string,
+    formField2: string,
+    userQuery2: string,
+    formField3: string,
+    userQuery3: string,
+    formField4: string,
+    userQuery4: string,
+  ) => {
+    const [event] = await sql<Event[]>`
+      SELECT
+        *
+      FROM
+        events
+      WHERE
+        ${formField1} = ${userQuery1}
+        AND ${formField2} = ${userQuery2}
+        OR ${formField3} = ${userQuery3}
+        OR ${formField4} = ${userQuery4}
+    `;
+    return event;
+  },
+);
 
 export const createEvent = cache(
   async (sessionToken: string, newEvent: NewEvent) => {

@@ -1,6 +1,3 @@
-// TODO events as three different tabs: organising / attending / past
-// shows only events that belong to logged user when they're logged in
-
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import {
@@ -26,6 +23,7 @@ export default async function UserEvents() {
     return redirect('/login?returnTo=/profile/events');
   }
 
+  // 4. if the sessionToken cookie is valid, allow access to events page
   const eventsOrganising = await getUsersEventsOrganising(session.token);
   const eventsAttending = await getUsersEventsAttending(
     session.token,
@@ -33,13 +31,12 @@ export default async function UserEvents() {
   );
   const eventsPast = await getUsersEventsPast(session.token, session.userId);
 
-  // 4. if the sessionToken cookie is valid, allow access to events page
   return (
     <div className="wrapper">
       <h1>User events</h1>
       <OrganisingEvents events={eventsOrganising} />
-      <AttendingEvents events={eventsAttending} />
-      <PastEvents events={eventsPast} />
+      <AttendingEvents events={eventsAttending} session={session} />
+      <PastEvents events={eventsPast} session={session} />
     </div>
   );
 }

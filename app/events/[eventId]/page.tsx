@@ -13,7 +13,7 @@ import {
   checkStatus,
   countAttendantsInsecure,
 } from '../../../database/usersEventsStatus';
-import AttendanceStatusCheck from '../../common/AttendanceStatus/AttendanceStatusCheck';
+import AttendanceStatusForm from '../../common/AttendanceStatus/AttendanceStatusForm';
 
 type Props = {
   params: {
@@ -104,13 +104,18 @@ export default async function SingleEvent(props: Props) {
           ? attendantsCount.count
           : 'No one yet. Be first!'}
       </p>
-      <AttendanceStatusCheck event={event} />
+
       {attendanceSessionCheck ? (
         <p>
           chat: <Link href={`/events/${event.id}/chat`}>event lounge</Link>
         </p>
       ) : (
-        ''
+        <AttendanceStatusForm
+          event={event}
+          session={session}
+          isOrganising={false}
+          methodAPI="POST"
+        />
       )}
     </div>
   );

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Event, getAllEventsSortDateInsecure } from '../../database/events';
 import { getUserPublicByIdInsecure } from '../../database/users';
 import { countAttendantsInsecure } from '../../database/usersEventsStatus';
-import AttendanceStatusCheck from '../common/AttendanceStatus/AttendanceStatusCheck';
 
 export default async function AllEventsByDate() {
   // // 1. Check if sessionToken in cookies exists
@@ -45,7 +44,7 @@ export default async function AllEventsByDate() {
               ? attendantsCount.count
               : 'No one yet. Be first!'}
           </p>
-          <AttendanceStatusCheck event={event} />
+          {/* <AttendanceStatusForm event={event} session={undefined} isOrganising={false} methodAPI={''} /> */}
           <p>
             <Link href={`/events/${event.id}`}>See more...</Link>
           </p>
