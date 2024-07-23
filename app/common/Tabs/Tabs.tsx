@@ -60,7 +60,9 @@ export default function BasicTabs(props: Props) {
       <CustomTabPanel value={value} index={0}>
         {props.children[0]}
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1} />
+      <CustomTabPanel value={value} index={1}>
+        {props.children[1]}
+      </CustomTabPanel>
     </Box>
   );
 }

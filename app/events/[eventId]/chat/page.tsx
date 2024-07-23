@@ -1,6 +1,3 @@
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import dayjs from 'dayjs';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
@@ -105,7 +102,12 @@ export default async function EventChat(props: Props) {
           ? `Number of attendants: ${attendantsCount?.count}`
           : `You and ${Number(attendantsCount?.count) - 1} other users are attending`}
       </p>
-
+      {/* <EventLounge
+        key="eventLounge"
+        messages={eventLoungeMessages}
+        currentUserId={session.userId}
+        eventId={Number(event.id)}
+      /> */}
       {/* TODO FIX tabs */}
       <BasicTabs
         children={[
