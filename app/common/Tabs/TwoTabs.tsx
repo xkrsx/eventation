@@ -35,10 +35,11 @@ function a11yProps(index: number) {
 }
 
 type Props = {
-  children: any;
+  tabOne: { comp: React.ReactNode; name: string };
+  tabTwo: { comp: React.ReactNode; name: string };
 };
 
-export default function BasicTabs(props: Props) {
+export default function TwoTabs(props: Props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -48,20 +49,16 @@ export default function BasicTabs(props: Props) {
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="EventLounge" {...a11yProps(0)} />
-          <Tab label="InfoStream" {...a11yProps(1)} />
+        <Tabs value={value} onChange={handleChange}>
+          <Tab label={props.tabOne.name} {...a11yProps(0)} />
+          <Tab label={props.tabTwo.name} {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        {props.children[0]}
+        {props.tabOne.comp}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        {props.children[1]}
+        {props.tabTwo.comp}
       </CustomTabPanel>
     </Box>
   );

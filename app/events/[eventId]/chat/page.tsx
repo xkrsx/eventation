@@ -12,17 +12,9 @@ import {
   countAttendantsInsecure,
 } from '../../../../database/usersEventsStatus';
 import AttendanceStatusForm from '../../../common/AttendanceStatus/AttendanceStatusForm';
-import BasicTabs from '../../../common/Tabs/Tabs';
+import TwoTabs from '../../../common/Tabs/TwoTabs';
 import EventLounge from './EventLounge';
 import InfoStream from './InfoStream';
-
-// import InfoStream from './InfoStream';
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
 
 type Props = {
   params: {
@@ -102,29 +94,31 @@ export default async function EventChat(props: Props) {
           ? `Number of attendants: ${attendantsCount?.count}`
           : `You and ${Number(attendantsCount?.count) - 1} other users are attending`}
       </p>
-      {/* <EventLounge
-        key="eventLounge"
-        messages={eventLoungeMessages}
-        currentUserId={session.userId}
-        eventId={Number(event.id)}
-      /> */}
-      {/* TODO FIX tabs */}
-      <BasicTabs
-        children={[
-          <EventLounge
-            key="eventLounge"
-            messages={eventLoungeMessages}
-            currentUserId={session.userId}
-            eventId={Number(event.id)}
-          />,
-          <InfoStream
-            key="infoStream"
-            messages={infoStreamMessages}
-            currentUserId={session.userId}
-            eventId={Number(event.id)}
-            isOrganiser={isOrganiser}
-          />,
-        ]}
+
+      <TwoTabs
+        tabOne={{
+          comp: (
+            <EventLounge
+              key="eventLounge"
+              messages={eventLoungeMessages}
+              currentUserId={session.userId}
+              eventId={Number(event.id)}
+            />
+          ),
+          name: 'EventLounge',
+        }}
+        tabTwo={{
+          comp: (
+            <InfoStream
+              key="infoStream"
+              messages={infoStreamMessages}
+              currentUserId={session.userId}
+              eventId={Number(event.id)}
+              isOrganiser={isOrganiser}
+            />
+          ),
+          name: 'InfoStream',
+        }}
       />
     </div>
   );
