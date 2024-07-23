@@ -20,6 +20,7 @@ type Props = {
       | 'url'
     )[];
   };
+  addUrlOnUpload: (url: string) => void;
   alt: string;
 };
 interface UploadedImageData {
@@ -32,17 +33,18 @@ interface UploadedImageData {
 export default function ImageUpload(props: Props) {
   const [resource, setResource] = useState();
   const [isUploaded, setIsUploaded] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
-  const [resultPicture, setResultPicture] = useState<UploadedImageData | null>(
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
+  const [resultImage, setResultImage] = useState<UploadedImageData | null>(
     null,
   );
+
   return (
     <div>
       <CldUploadWidget
         options={props.options}
         signatureEndpoint="/api/imageUpload"
         onSuccess={(res) => {
-          setResultPicture(res.info as UploadedImageData);
+          setResultImage(res.info as UploadedImageData);
           setIsUploaded(true);
           try {
             if (typeof res.info === 'string') {
@@ -52,7 +54,8 @@ export default function ImageUpload(props: Props) {
               throw new Error('Unexpected undefined in res.info');
             }
             const secureUrl = res.info.secure_url;
-            setImageUrl(secureUrl);
+            setImagePreviewUrl(secureUrl);
+            props.addUrlOnUpload(secureUrl);
           } catch (error) {
             console.error('Error:', error);
           }
@@ -73,9 +76,9 @@ export default function ImageUpload(props: Props) {
 
       {isUploaded && (
         <CldImage
-          width={resultPicture?.width}
-          height={resultPicture?.height}
-          src={imageUrl}
+          width={resultImage?.width}
+          height={resultImage?.height}
+          src={imagePreviewUrl}
           sizes="100vw"
           alt={props.alt}
         />

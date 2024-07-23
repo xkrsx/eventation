@@ -4,6 +4,7 @@
 
 import dayjs from 'dayjs';
 import { cookies } from 'next/headers';
+import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../database/events';
@@ -82,6 +83,19 @@ export default async function SingleEvent(props: Props) {
   return (
     <div>
       <h1>{event.name}</h1>
+      {/* // eslint-disable-next-line react/jsx-no-undef */}
+      <Image
+        src={event.images}
+        alt={`${event.name} poster`}
+        height="100"
+        width="100"
+      />
+      {/* <img
+          src={event.images}
+          alt={`${event.name} poster`}
+          height="100px"
+          width="100px"
+        /> */}
       <p>
         Organiser:{' '}
         <Link href={`/profile/${organiser.username}`}>

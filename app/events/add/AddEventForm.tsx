@@ -35,8 +35,13 @@ export default function AddEventForm(props: Props) {
   // const [userLocation, setUserLocation] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
+  console.log('newEvent.images: ', newEvent.images);
 
   const router = useRouter();
+
+  function addImageUrl(url: string) {
+    setNewEvent({ ...newEvent, images: url });
+  }
 
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
     checkForm();
@@ -267,8 +272,8 @@ export default function AddEventForm(props: Props) {
               sources: ['local', 'url'],
             }}
             alt={newEvent.name}
+            addUrlOnUpload={addImageUrl}
           />
-
 
           <button disabled={isDisabled}>Add event</button>
         </form>
