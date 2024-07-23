@@ -96,7 +96,7 @@ export default function InfoStream(props: Props) {
         )}
       </div>
       {props.isOrganiser && (
-        <ChatInput eventId={Number(props.eventId)} apiRoute="InfoStream" />
+        <ChatInput eventId={Number(props.eventId)} apiRoute="infoStream" />
       )}
     </div>
   );
