@@ -65,7 +65,7 @@ export default function LoginForm(props: Props) {
           }}
         >
           <label>
-            username
+            username{' '}
             <input
               required
               name="username"
@@ -75,7 +75,7 @@ export default function LoginForm(props: Props) {
           </label>
 
           <label>
-            password (one X, one x, one #, one @)
+            password{' '}
             <input
               required
               type="password"

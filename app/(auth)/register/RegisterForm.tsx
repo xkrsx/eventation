@@ -166,52 +166,22 @@ export default function RegisterForm() {
                   checked={userLocation}
                   onChange={() => setUserLocation(!userLocation)}
                 />{' '}
-                I want to add my default location for events (city or country)
+                I want to add my default location (city)
               </label>
             </div>
             {userLocation ? (
               <div>
-                <label>
-                  <input
-                    type="radio"
-                    value="City"
-                    name="type"
-                    disabled={!userLocation}
+                <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
+                  <GeoapifyGeocoderAutocomplete
+                    placeholder="City"
+                    type="city"
+                    limit={3}
+                    allowNonVerifiedHouseNumber={true}
+                    sendGeocoderRequestFunc={sendGeocoderRequest}
+                    addDetails={true}
+                    sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
                   />
-                  City
-                  <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
-                    <GeoapifyGeocoderAutocomplete
-                      placeholder="City"
-                      type="city"
-                      limit={3}
-                      allowNonVerifiedHouseNumber={true}
-                      sendGeocoderRequestFunc={sendGeocoderRequest}
-                      addDetails={true}
-                      sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
-                    />
-                  </GeoapifyContext>
-                </label>
-
-                <label>
-                  <input
-                    type="radio"
-                    value="Country"
-                    name="type"
-                    disabled={!userLocation}
-                  />
-                  Country
-                  <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
-                    <GeoapifyGeocoderAutocomplete
-                      placeholder="Country"
-                      type="country"
-                      limit={3}
-                      allowNonVerifiedHouseNumber={true}
-                      sendGeocoderRequestFunc={sendGeocoderRequest}
-                      addDetails={true}
-                      sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
-                    />
-                  </GeoapifyContext>
-                </label>
+                </GeoapifyContext>
               </div>
             ) : null}
           </div>

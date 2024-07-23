@@ -1,4 +1,4 @@
-import LoginForm from '../(auth)/login/LoginForm';
+import Login from '../(auth)/login/Login';
 import RegisterForm from '../(auth)/register/RegisterForm';
 import TwoTabs from '../common/Tabs/TwoTabs';
 
@@ -8,7 +8,13 @@ export default function Auth() {
       <h1>Log in/Register</h1>
       <TwoTabs
         tabOne={{
-          comp: <LoginForm />,
+          comp: (
+            <Login
+              searchParams={{
+                returnTo: undefined,
+              }}
+            />
+          ),
           name: 'Log in',
         }}
         tabTwo={{
