@@ -42,7 +42,7 @@ export default function ImageUpload(props: Props) {
         options={props.options}
         signatureEndpoint="/api/imageUpload"
         onSuccess={(res) => {
-          setImageUrl(res.info as UploadedImageData);
+          setResultPicture(res.info as UploadedImageData);
           setIsUploaded(true);
           try {
             if (typeof res.info === 'string') {

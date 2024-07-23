@@ -6,6 +6,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const body = (await request.json()) as {
     paramsToSign: Record<string, string>;
   };
+
+  console.log('body: ', body);
   const { paramsToSign } = body;
 
   const signature = cloudinary.utils.api_sign_request(

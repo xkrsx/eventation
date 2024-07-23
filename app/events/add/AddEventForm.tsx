@@ -268,6 +268,8 @@ export default function AddEventForm(props: Props) {
             }}
             alt={newEvent.name}
           />
+
+
           <button disabled={isDisabled}>Add event</button>
         </form>
         <ErrorMessage>{errorMessage}</ErrorMessage>
