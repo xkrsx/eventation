@@ -11,9 +11,7 @@ import {
   countAttendantsInsecure,
 } from '../../../../database/usersEventsStatus';
 import AttendanceStatusForm from '../../../common/AttendanceStatus/AttendanceStatusForm';
-import ChatInput from '../../../common/Chat/ChatInput';
 import EventLounge from './EventLounge';
-import InfoStream from './InfoStream';
 
 // import InfoStream from './InfoStream';
 
