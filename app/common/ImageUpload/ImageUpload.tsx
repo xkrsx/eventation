@@ -4,7 +4,22 @@ import { useState } from 'react';
 
 type Props = {
   buttonText: string;
-  options: { sources: string[] };
+  options: {
+    sources: (
+      | 'camera'
+      | 'dropbox'
+      | 'facebook'
+      | 'gettyimages'
+      | 'google_drive'
+      | 'image_search'
+      | 'instagram'
+      | 'istock'
+      | 'local'
+      | 'shutterstock'
+      | 'unsplash'
+      | 'url'
+    )[];
+  };
   alt: string;
 };
 interface UploadedImageData {
