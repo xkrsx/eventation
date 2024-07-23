@@ -1,9 +1,11 @@
+import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import dayjs from 'dayjs';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import * as React from 'react';
 import { getEventLoungeLastHourMessages } from '../../../../database/chat/eventLounge';
 import { getInfoStreamLastHourMessages } from '../../../../database/chat/infoStream';
 import { getSingleEventInsecure } from '../../../../database/events';
@@ -13,9 +15,17 @@ import {
   countAttendantsInsecure,
 } from '../../../../database/usersEventsStatus';
 import AttendanceStatusForm from '../../../common/AttendanceStatus/AttendanceStatusForm';
+import BasicTabs from '../../../common/Tabs/Tabs';
 import EventLounge from './EventLounge';
+import InfoStream from './InfoStream';
 
 // import InfoStream from './InfoStream';
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
 
 type Props = {
   params: {
@@ -96,18 +106,24 @@ export default async function EventChat(props: Props) {
           : `You and ${Number(attendantsCount?.count) - 1} other users are attending`}
       </p>
 
-      <EventLounge
-        messages={eventLoungeMessages}
-        currentUserId={session.userId}
-        eventId={Number(event.id)}
+      {/* TODO FIX tabs */}
+      <BasicTabs
+        children={[
+          <EventLounge
+            key="eventLounge"
+            messages={eventLoungeMessages}
+            currentUserId={session.userId}
+            eventId={Number(event.id)}
+          />,
+          <InfoStream
+            key="infoStream"
+            messages={infoStreamMessages}
+            currentUserId={session.userId}
+            eventId={Number(event.id)}
+            isOrganiser={isOrganiser}
+          />,
+        ]}
       />
-
-      {/* <InfoStream
-        messages={infoStreamMessages}
-        currentUserId={session.userId}
-        eventId={Number(event.id)}
-        isOrganiser={isOrganiser}
-      /> */}
     </div>
   );
 }

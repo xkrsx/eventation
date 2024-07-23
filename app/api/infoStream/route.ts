@@ -1,10 +1,10 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { createEventLoungeMessage } from '../../../database/chat/eventLounge';
+import { createInfoStreamMessage } from '../../../database/chat/infoStream';
 import { eventLoungeMessageSchema } from '../../../migrations/00004-createTableEventLounge';
 import { pusherServer, toPusherKey } from '../../../util/pusher';
 
-export type EventLoungeMessagesResponseBodyPost =
+export type InfoStreamMessagesResponseBodyPost =
   | {
       message: { content: string };
     }
@@ -19,7 +19,7 @@ interface RequestBody {
 
 export async function POST(
   request: NextRequest,
-): Promise<NextResponse<EventLoungeMessagesResponseBodyPost>> {
+): Promise<NextResponse<InfoStreamMessagesResponseBodyPost>> {
   const body: RequestBody = await request.json();
 
   const result = eventLoungeMessageSchema.safeParse(body);
@@ -38,7 +38,7 @@ export async function POST(
   // // new message to db
   const newMessage =
     sessionTokenCookie &&
-    (await createEventLoungeMessage(
+    (await createInfoStreamMessage(
       sessionTokenCookie.value,
       Number(body.eventId),
       result.data.content,
@@ -55,7 +55,7 @@ export async function POST(
 
   // // new message to pusher
   await pusherServer.trigger(
-    toPusherKey(`eventLounge:${Number(body.eventId)}`),
+    toPusherKey(`infoStream:${Number(body.eventId)}`),
     'incoming-message',
     {
       id: newMessage.id,

@@ -107,7 +107,7 @@ export default function EventLounge(props: Props) {
             },
           )}
         </div>
-        <ChatInput eventId={Number(props.eventId)} />
+        <ChatInput eventId={Number(props.eventId)} apiRoute="EventStream" />
 
         <div ref={scrollDownRef} />
       </div>

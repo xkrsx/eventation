@@ -5,6 +5,7 @@ import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
   eventId: number;
+  apiRoute: string;
 };
 
 type NewMessageBodyResponse = {
@@ -30,7 +31,7 @@ export default function ChatInput(props: Props) {
   ) => {
     event.preventDefault();
 
-    const response = await fetch('/api/eventLounge', {
+    const response = await fetch(`/api/${props.apiRoute}}`, {
       method: 'POST',
       body: JSON.stringify({
         content: input,

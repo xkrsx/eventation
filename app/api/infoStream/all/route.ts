@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getEventLoungeAllMessages } from '../../../../database/chat/eventLounge';
-import { EventLoungeMessage } from '../../../../migrations/00004-createTableEventLounge';
+import { getInfoStreamAllMessages } from '../../../../database/chat/infoStream';
+import { InfoStreamMessage } from '../../../../migrations/00005-createTableInfoStream';
 
-export type EventLoungeMessagesResponseBodyGet =
+export type InfoStreamMessagesResponseBodyGet =
   | {
-      messages: EventLoungeMessage[];
+      messages: InfoStreamMessage[];
     }
   | {
       error: string;
@@ -17,13 +17,13 @@ export type Props = {
 export async function GET(
   request: NextRequest,
   { params }: Props,
-): Promise<NextResponse<EventLoungeMessagesResponseBodyGet>> {
+): Promise<NextResponse<InfoStreamMessagesResponseBodyGet>> {
   const sessionCookie = request.cookies.get('sessionToken');
   if (!sessionCookie) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const messages = await getEventLoungeAllMessages(
+  const messages = await getInfoStreamAllMessages(
     sessionCookie.value,
     Number(params.eventId),
   );
