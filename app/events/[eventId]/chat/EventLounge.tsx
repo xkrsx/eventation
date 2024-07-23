@@ -44,46 +44,47 @@ export default function EventLounge(props: Props) {
   return (
     <div>
       <div>
-        {messages.map(
-          (
-            message,
-            // index: number
-          ) => {
-            const isCurrentUser = message.userId === props.currentUserId;
-            // const hasNextMessageFromSameUser =
-            //   messages[index - 1]?.userId === messages[index]?.userId; // Check if there is a same message from the same user
+        <div>
+          {messages.map(
+            (
+              message,
+              // index: number
+            ) => {
+              const isCurrentUser = message.userId === props.currentUserId;
+              // const hasNextMessageFromSameUser =
+              //   messages[index - 1]?.userId === messages[index]?.userId; // Check if there is a same message from the same user
 
-            function sendingTime() {
-              if (dayjs(new Date()).diff(message.timestamp, 'minute') < 2) {
-                return 'just a moment ago';
+              function sendingTime() {
+                if (dayjs(new Date()).diff(message.timestamp, 'minute') < 2) {
+                  return 'just a moment ago';
+                }
+                if (dayjs(new Date()).diff(message.timestamp, 'minute') < 59) {
+                  return `${dayjs(new Date()).diff(message.timestamp, 'minute')} minutes ago`;
+                }
+                if (dayjs(new Date()).diff(message.timestamp, 'minute') > 59) {
+                  return `over an hour ago`;
+                }
+                if (dayjs(new Date()).diff(message.timestamp, 'minute') > 119) {
+                  return dayjs(message.timestamp).format('HH:mm');
+                }
               }
-              if (dayjs(new Date()).diff(message.timestamp, 'minute') < 59) {
-                return `${dayjs(new Date()).diff(message.timestamp, 'minute')} minutes ago`;
-              }
-              if (dayjs(new Date()).diff(message.timestamp, 'minute') > 59) {
-                return `over an hour ago`;
-              }
-              if (dayjs(new Date()).diff(message.timestamp, 'minute') > 119) {
-                return dayjs(message.timestamp).format('HH:mm');
-              }
-            }
 
-            return (
-              <div
-                key={`id-${message.id}`}
-                style={{
-                  border: '1px solid black',
-                  borderRadius: '10px',
-                  padding: '3px',
-                  textAlign: isCurrentUser ? 'right' : 'left',
-                  backgroundColor: isCurrentUser ? 'lightBlue' : 'white',
-                  margin: '10px',
-                  marginRight: isCurrentUser ? '10px' : 'auto',
-                  marginLeft: isCurrentUser ? 'auto' : '10px',
-                  width: '50vw',
-                }}
-              >
-                {/* <span
+              return (
+                <div key={`id-${message.id}`}>
+                  <div
+                    style={{
+                      border: '1px solid black',
+                      borderRadius: '10px',
+                      padding: '3px',
+                      textAlign: isCurrentUser ? 'right' : 'left',
+                      backgroundColor: isCurrentUser ? 'lightBlue' : 'white',
+                      margin: '10px',
+                      marginRight: isCurrentUser ? '10px' : 'auto',
+                      marginLeft: isCurrentUser ? 'auto' : '10px',
+                      width: '50vw',
+                    }}
+                  >
+                    {/* <span
               style={
                 {
                   // (!hasNextMessageFromSameUser && isCurrentUser) ? '' : '',
@@ -91,22 +92,25 @@ export default function EventLounge(props: Props) {
                 }
               }
             > */}
-                <p>{message.content}</p>
-                <p>{sendingTime()}</p>
-                <span>
-                  {isCurrentUser ? (
-                    <strong>You</strong>
-                  ) : (
-                    <ChatUsername chatUserId={message.userId} />
-                  )}
-                </span>
-                <div ref={scrollDownRef} />
-              </div>
-            );
-          },
-        )}
+                    <p>{message.content}</p>
+                    <p>{sendingTime()}</p>
+                    <span>
+                      {isCurrentUser ? (
+                        <strong>You</strong>
+                      ) : (
+                        <ChatUsername chatUserId={message.userId} />
+                      )}
+                    </span>
+                  </div>
+                </div>
+              );
+            },
+          )}
+        </div>
+        <ChatInput eventId={Number(props.eventId)} />
+
+        <div ref={scrollDownRef} />
       </div>
-      <ChatInput eventId={Number(props.eventId)} />
     </div>
   );
 }

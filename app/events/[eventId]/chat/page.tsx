@@ -11,6 +11,7 @@ import {
   countAttendantsInsecure,
 } from '../../../../database/usersEventsStatus';
 import AttendanceStatusForm from '../../../common/AttendanceStatus/AttendanceStatusForm';
+import ChatInput from '../../../common/Chat/ChatInput';
 import EventLounge from './EventLounge';
 import InfoStream from './InfoStream';
 
@@ -100,12 +101,13 @@ export default async function EventChat(props: Props) {
         currentUserId={session.userId}
         eventId={Number(event.id)}
       />
-      <InfoStream
+
+      {/* <InfoStream
         messages={infoStreamMessages}
         currentUserId={session.userId}
         eventId={Number(event.id)}
         isOrganiser={isOrganiser}
-      />
+      /> */}
     </div>
   );
 }
