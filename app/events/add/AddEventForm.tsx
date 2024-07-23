@@ -261,7 +261,13 @@ export default function AddEventForm(props: Props) {
               onChange={handleChange}
             />
           </label>
-          <ImageUpload />
+          <ImageUpload
+            buttonText="Upload an event poster"
+            options={{
+              sources: ['local', 'url'],
+            }}
+            alt={newEvent.name}
+          />
           <button disabled={isDisabled}>Add event</button>
         </form>
         <ErrorMessage>{errorMessage}</ErrorMessage>
