@@ -73,8 +73,8 @@ export default function ImageUpload(props: Props) {
 
       {isUploaded && (
         <CldImage
-          width="960"
-          height="600"
+          width={resultPicture?.width}
+          height={resultPicture?.height}
           src={imageUrl}
           sizes="100vw"
           alt={props.alt}
