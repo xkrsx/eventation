@@ -15,6 +15,7 @@ import {
   TagSelected,
 } from 'react-tag-autocomplete';
 import { suggestions } from '../../../database/categories';
+import ImageUpload from '../../common/ImageUpload/ImageUpload';
 import ErrorMessage from '../../ErrorMessage';
 import { RegisterResponseBodyPost } from '../api/register/route';
 
@@ -58,6 +59,10 @@ export default function RegisterForm() {
   );
 
   const router = useRouter();
+
+  function addImageUrl(url: string) {
+    setNewUser({ ...newUser, : url });
+  }
 
   async function handleRegister(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -120,6 +125,15 @@ export default function RegisterForm() {
             await handleRegister(event);
           }}
         >
+          <ImageUpload
+            buttonText="Upload profile picture"
+            options={{
+              sources: ['local', 'facebook', 'instagram', 'camera', 'url'],
+            }}
+            addUrlOnUpload={addImageUrl}
+
+            alt={newUser.username}
+          />
           <label>
             username
             <input

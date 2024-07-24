@@ -57,7 +57,7 @@ export default function ImageUpload(props: Props) {
             setImagePreviewUrl(secureUrl);
             props.addUrlOnUpload(secureUrl);
           } catch (error) {
-            console.error('Error:', error);
+            console.error('Error: ', error);
           }
         }}
       >
@@ -76,10 +76,11 @@ export default function ImageUpload(props: Props) {
 
       {isUploaded && (
         <CldImage
-          width={resultImage?.width}
-          height={resultImage?.height}
+          width="300"
+          height="100"
           src={imagePreviewUrl}
           sizes="100vw"
+          crop="fill"
           alt={props.alt}
         />
       )}

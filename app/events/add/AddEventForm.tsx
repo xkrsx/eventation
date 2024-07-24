@@ -267,7 +267,7 @@ export default function AddEventForm(props: Props) {
             />
           </label>
           <ImageUpload
-            buttonText="Upload an event poster"
+            buttonText="Upload event poster"
             options={{
               sources: ['local', 'url'],
             }}
