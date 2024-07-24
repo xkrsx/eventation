@@ -1,14 +1,6 @@
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { findSingleEventByCity } from '../../database/events';
-import {
-  getUserPublicById,
-  getUserPublicByIdInsecure,
-} from '../../database/users';
-import {
-  checkStatus,
-  countAttendantsInsecure,
-} from '../../database/usersEventsStatus';
+import { getUserPublicById } from '../../database/users';
 import { Session } from '../../migrations/00001-createTableSessions';
 import SingleEventLogged from '../common/SingleEvent/SingleEventLogged';
 
@@ -45,27 +37,8 @@ export default async function EventsLogged(props: Props) {
   return (
     <div>
       <h1>Events in your city</h1>
-      {events.map(async (event) => {
-        const organiser = await getUserPublicByIdInsecure(event.userId);
-        if (!organiser) {
-          redirect(`/events/find`);
-        }
-        const attendanceSessionCheck = await checkStatus(
-          props.session.token,
-          props.session.userId,
-          Number(event.id),
-        );
-        const attendantsCount = await countAttendantsInsecure(Number(event.id));
-        return (
-          <SingleEventLogged
-            key={`id-${event.id}`}
-            event={event}
-            organiser={organiser}
-            session={props.session}
-            attendantsCount={attendantsCount}
-            attendanceSessionCheck={attendanceSessionCheck}
-          />
-        );
+      {events.map((event) => {
+        return <SingleEventLogged key={`id-${event.id}`} event={event} />;
       })}
     </div>
   );

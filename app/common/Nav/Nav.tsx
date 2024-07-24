@@ -28,7 +28,7 @@ export default async function Nav() {
           <LogoutButton />
         </>
       ) : (
-        <Link href="/profile">Log in / Register</Link>
+        <Link href="/profile">Profile</Link>
       )}
     </div>
   );

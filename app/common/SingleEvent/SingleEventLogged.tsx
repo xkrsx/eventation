@@ -1,29 +1,52 @@
+'use server';
+
 import dayjs from 'dayjs';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { Event } from '../../../database/events';
-import { UsersEventsStatus } from '../../../database/usersEventsStatus';
-import { User } from '../../../migrations/00000-createTableUsers';
-import { Session } from '../../../migrations/00001-createTableSessions';
+import { getValidSession } from '../../../database/sessions';
+import { getUserPublicByIdInsecure } from '../../../database/users';
+import {
+  checkStatus,
+  countAttendantsInsecure,
+} from '../../../database/usersEventsStatus';
 import AttendanceStatusForm from '../AttendanceStatus/AttendanceStatusForm';
 import EventImage from '../Images/EventImage/EventImage';
 
 type Props = {
   event: Event;
-  organiser: Omit<User, 'fullName' | 'categories' | 'email'>;
-  session: Omit<Session, 'id'>;
-  attendantsCount: { count: string } | undefined;
-  attendanceSessionCheck: UsersEventsStatus | undefined;
 };
 
-export default function SingleEventLogged(props: Props) {
+export default async function SingleEventLogged(props: Props) {
+  const sessionCookie = cookies().get('sessionToken');
+  const session = sessionCookie && (await getValidSession(sessionCookie.value));
+  if (!session) {
+    return redirect('/profile?returnTo=/profile/events');
+  }
+
+  const organiser = await getUserPublicByIdInsecure(props.event.userId);
+  if (!organiser) {
+    redirect(`/events/find`);
+  }
+  const attendanceSessionCheck = await checkStatus(
+    session.token,
+    session.userId,
+    Number(props.event.id),
+  );
+  const attendantsCount = await countAttendantsInsecure(Number(props.event.id));
+  if (!attendantsCount) {
+    return redirect('/profile?returnTo=/profile/events');
+  }
+
   return (
     <div>
       <h1>{props.event.name}</h1>
       <EventImage event={props.event} />
       <p>
         Organiser:{' '}
-        <Link href={`/profile/${props.organiser.username}`}>
-          {props.organiser.username}
+        <Link href={`/profile/${organiser.username}`}>
+          {organiser.username}
         </Link>
       </p>
       <p>
@@ -40,12 +63,12 @@ export default function SingleEventLogged(props: Props) {
 
       <p>
         number of attendants:{' '}
-        {props.attendantsCount!.count
-          ? props.attendantsCount!.count
+        {attendantsCount.count
+          ? attendantsCount.count
           : 'No one yet. Be first!'}
       </p>
 
-      {props.attendanceSessionCheck ? (
+      {attendanceSessionCheck ? (
         <div>
           <p>
             chat:{' '}
@@ -55,8 +78,8 @@ export default function SingleEventLogged(props: Props) {
           </p>
           <AttendanceStatusForm
             event={props.event}
-            session={props.session}
-            isAttending={props.attendanceSessionCheck.isAttending}
+            session={session}
+            isAttending={attendanceSessionCheck.isAttending}
             isOrganising={false}
             methodAPI="PUT"
           />
@@ -64,7 +87,7 @@ export default function SingleEventLogged(props: Props) {
       ) : (
         <AttendanceStatusForm
           event={props.event}
-          session={props.session}
+          session={session}
           isOrganising={false}
           methodAPI="POST"
         />

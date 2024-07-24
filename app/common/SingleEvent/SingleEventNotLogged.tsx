@@ -1,25 +1,32 @@
 import dayjs from 'dayjs';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { Event } from '../../../database/events';
-import { User } from '../../../migrations/00000-createTableUsers';
+import { getUserPublicByIdInsecure } from '../../../database/users';
+import { countAttendantsInsecure } from '../../../database/usersEventsStatus';
 import EventImage from '../Images/EventImage/EventImage';
 
 type Props = {
   event: Event;
-  organiser: Omit<User, 'fullName' | 'categories' | 'email'>;
-
-  attendantsCount: { count: string } | undefined;
 };
 
-export default function SingleEventNotLogged(props: Props) {
+export default async function SingleEventNotLogged(props: Props) {
+  const organiser = await getUserPublicByIdInsecure(props.event.userId);
+  if (!organiser) {
+    redirect(`/events/find`);
+  }
+  const attendantsCount = await countAttendantsInsecure(Number(props.event.id));
+  if (!attendantsCount) {
+    return redirect('/profile?returnTo=/profile/events');
+  }
   return (
     <div>
       <h1>{props.event.name}</h1>
       <EventImage event={props.event} />
       <p>
         Organiser:{' '}
-        <Link href={`/profile/${props.organiser.username}`}>
-          {props.organiser.username}
+        <Link href={`/profile/${organiser.username}`}>
+          {organiser.username}
         </Link>
       </p>
       <p>
@@ -32,8 +39,8 @@ export default function SingleEventNotLogged(props: Props) {
       <p>description: {props.event.description}</p>
       <p>
         number of attendants:{' '}
-        {props.attendantsCount?.count
-          ? props.attendantsCount.count
+        {attendantsCount.count
+          ? attendantsCount.count
           : 'No one yet. Be first!'}
       </p>
       <strong>
