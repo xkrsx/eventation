@@ -51,67 +51,6 @@ export default function OrganisingEvents(props: Props) {
 
   const categories = categoriesObject;
 
-  const events = props.events.map((event) => {
-    return (
-      <div key={`event-${event.id}`} style={{ border: '1px solid black' }}>
-        <SingleEventLogged event={event} />
-        <button
-          onClick={() => {
-            setShowForm(!showForm);
-            setEventId(event.id);
-            setEditedEvent({
-              ...editedEvent,
-              userId: event.userId,
-              name: event.name,
-              timeStart: new Date(event.timeStart),
-              timeEnd: new Date(event.timeEnd),
-              category: event.category,
-              location: event.location,
-              latitude: event.latitude,
-              longitude: event.longitude,
-              price: event.price,
-              description: event.description,
-              link: event.link,
-              image: event.image,
-              cancelled: event.cancelled,
-            });
-          }}
-        >
-          {showForm ? 'Cancel event' : 'Edit event'}
-        </button>
-        <button
-          onClick={async () => {
-            const response = await fetch(`/api/events/${event.id}`, {
-              method: 'DELETE',
-            });
-
-            setErrorMessage('');
-
-            if (!response.ok) {
-              let newErrorMessage = 'Error deleting the event.';
-
-              try {
-                const body: { error: string } = await response.json();
-                newErrorMessage = body.error;
-              } catch {
-                // Don't fail if response JSON body
-                // cannot be parsed
-              }
-
-              // TODO: Use toast instead of showing
-              // this below creation / update form
-              setErrorMessage(newErrorMessage);
-              return;
-            }
-
-            router.refresh();
-          }}
-        >
-          Delete event
-        </button>
-      </div>
-    );
-  });
   return (
     <div className="organising">
       <h2>Organising</h2>
@@ -244,8 +183,71 @@ export default function OrganisingEvents(props: Props) {
       )}
       <ErrorMessage>{errorMessage}</ErrorMessage>
 
-      {events.length >= 1 ? (
-        events
+      {props.events.length >= 1 ? (
+        props.events.map((event) => {
+          return (
+            <div
+              key={`event-${event.id}`}
+              style={{ border: '1px solid black' }}
+            >
+              <SingleEventLogged event={event} />
+              <button
+                onClick={() => {
+                  setShowForm(!showForm);
+                  setEventId(event.id);
+                  setEditedEvent({
+                    ...editedEvent,
+                    userId: event.userId,
+                    name: event.name,
+                    timeStart: new Date(event.timeStart),
+                    timeEnd: new Date(event.timeEnd),
+                    category: event.category,
+                    location: event.location,
+                    latitude: event.latitude,
+                    longitude: event.longitude,
+                    price: event.price,
+                    description: event.description,
+                    link: event.link,
+                    image: event.image,
+                    cancelled: event.cancelled,
+                  });
+                }}
+              >
+                {showForm ? 'Cancel event' : 'Edit event'}
+              </button>
+              <button
+                onClick={async () => {
+                  const response = await fetch(`/api/events/${event.id}`, {
+                    method: 'DELETE',
+                  });
+
+                  setErrorMessage('');
+
+                  if (!response.ok) {
+                    let newErrorMessage = 'Error deleting the event.';
+
+                    try {
+                      const body: { error: string } = await response.json();
+                      newErrorMessage = body.error;
+                    } catch {
+                      // Don't fail if response JSON body
+                      // cannot be parsed
+                    }
+
+                    // TODO: Use toast instead of showing
+                    // this below creation / update form
+                    setErrorMessage(newErrorMessage);
+                    return;
+                  }
+
+                  router.refresh();
+                }}
+              >
+                Delete event
+              </button>
+            </div>
+          );
+        })
       ) : (
         <div>
           <strong>There are currently no events you are organising.</strong>{' '}
