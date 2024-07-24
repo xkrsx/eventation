@@ -13,33 +13,28 @@ export default async function EventsLogged(props: Props) {
     props.session.token,
     props.session.userId,
   );
-  if (!user) {
-    <div>
-      <strong>Sorry, no events found in your city.</strong>
-      <Link href="/events/find">Find other events.</Link>
-    </div>;
-    return;
-  }
+
   const events = await findSingleEventByCity(
     props.session.token,
-    String(user.location),
+    String(user!.location),
     'date',
   );
-
-  if (!events || !user.location) {
-    <div>
-      <strong>Sorry, no events found in your city.</strong>
-      <Link href="/events/find">Find other events.</Link>
-    </div>;
-    return;
-  }
 
   return (
     <div>
       <h1>Events in your city</h1>
-      {events.map((event) => {
-        return <SingleEventLogged key={`id-${event.id}`} event={event} />;
-      })}
+      {user?.location === '' ? (
+        <div>
+          <strong>
+            Please add default location to see events in your city.
+          </strong>
+          <Link href="/profile/edit">Edit your profile</Link>
+        </div>
+      ) : (
+        events.map((event) => {
+          return <SingleEventLogged key={`id-${event.id}`} event={event} />;
+        })
+      )}
     </div>
   );
 }
