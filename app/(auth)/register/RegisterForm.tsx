@@ -15,11 +15,14 @@ import {
   TagSelected,
 } from 'react-tag-autocomplete';
 import { suggestions } from '../../../database/categories';
+import { getSafeReturnToPath } from '../../../util/validation';
 import ImageUpload from '../../common/ImageUpload/ImageUpload';
 import ErrorMessage from '../../ErrorMessage';
 import { RegisterResponseBodyPost } from '../api/register/route';
 
-export default function RegisterForm() {
+type Props = { returnTo?: string | string[] };
+
+export default function RegisterForm(props: Props) {
   const [selected, setSelected] = useState<TagSelected[]>([]);
   const [newUser, setNewUser] = useState({
     username: '',
@@ -83,7 +86,10 @@ export default function RegisterForm() {
       setErrors(data.errors);
       return;
     }
-    router.push('/profile');
+
+    router.push(
+      getSafeReturnToPath(props.returnTo) || `/profile/${data.user.username}`,
+    );
 
     router.refresh();
   }

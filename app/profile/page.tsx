@@ -7,9 +7,11 @@ import { getUser } from '../../database/users';
 import ProfileImage from '../common/Images/ProfileImage/ProfileImage';
 import ProfileNotLogged from './notLogged';
 
+type Props = { searchParams: { returnTo?: string | string[] } };
+
 // when logged out: login/registration forms
 // when logged in: view with settings, links to event manager etc
-export default async function UserProfile() {
+export default async function UserProfile(props: Props) {
   // authentication
   // 1. Check if sessionToken in cookies exists
   const sessionCookie = cookies().get('sessionToken');
@@ -19,7 +21,7 @@ export default async function UserProfile() {
 
   // 3. Redirect to login if sessionToken cookie is invalid
   if (!session) {
-    return <ProfileNotLogged />;
+    return <ProfileNotLogged returnTo={props.searchParams.returnTo} />;
   }
 
   // 4. if the sessionToken cookie is valid, allow access to profile page
