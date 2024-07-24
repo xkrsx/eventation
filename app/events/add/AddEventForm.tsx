@@ -273,6 +273,7 @@ export default function AddEventForm(props: Props) {
             }}
             alt={newEvent.name}
             addUrlOnUpload={addImageUrl}
+            uploadType="event"
           />
 
           <button disabled={isDisabled}>Add event</button>

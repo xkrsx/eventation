@@ -133,6 +133,7 @@ export default function RegisterForm() {
             }}
             addUrlOnUpload={addImageUrl}
             alt={newUser.username}
+            uploadType="profile"
           />
           <label>
             username
@@ -180,7 +181,7 @@ export default function RegisterForm() {
                   checked={userLocation}
                   onChange={() => setUserLocation(!userLocation)}
                 />{' '}
-                I want to add my default location (city)
+                I want to add my default city
               </label>
             </div>
             {userLocation ? (

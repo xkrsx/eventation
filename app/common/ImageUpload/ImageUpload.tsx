@@ -22,6 +22,7 @@ type Props = {
   };
   addUrlOnUpload: (url: string) => void;
   alt: string;
+  uploadType: string;
 };
 interface UploadedImageData {
   public_id: string;
@@ -42,7 +43,7 @@ export default function ImageUpload(props: Props) {
     <div>
       <CldUploadWidget
         options={props.options}
-        signatureEndpoint="/api/imageUpload"
+        signatureEndpoint={`/api/imageUpload/${props.uploadType}`}
         onSuccess={(res) => {
           setResultImage(res.info as UploadedImageData);
           setIsUploaded(true);
