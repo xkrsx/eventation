@@ -1,18 +1,18 @@
 // TODO all events for not logged in
 // all + suggested events for logged in
 
-import AllEventsByDate from './AllEventsByDate';
-import AllEventsByPrice from './AllEventsByPrice';
+import { cookies } from 'next/headers';
+import { getValidSession } from '../../database/sessions';
 
-export default function Events() {
-  // TODO work on filtering/sorting results
-  return (
-    <div className="wrapper">
-      <h1>All Events</h1>
-      <h2>by Date</h2>
-      <AllEventsByDate />
-      <h2>by Price</h2>
-      <AllEventsByPrice />
-    </div>
-  );
+export default async function Events() {
+  // // 1. Checking if the sessionToken cookie exists
+  const sessionCookie = cookies().get('sessionToken');
+
+  // // 2. Check if the sessionToken cookie is still valid
+  const session = sessionCookie && (await getValidSession(sessionCookie.value));
+
+  // // 4. If the sessionToken cookie is invalid or doesn't exist, show link to log in
+  if (!session) {
+    return;
+  }
 }

@@ -53,6 +53,26 @@ export const findSingleEventInsecure = cache(
   },
 );
 
+export const findSingleEventByCity = cache(
+  async (sessionToken: string, city: string, order: string) => {
+    const [event] = await sql<Event[]>`
+      SELECT
+        events.*
+      FROM
+        events
+        INNER JOIN sessions ON (
+          sessions.token = ${sessionToken}
+          AND expiry_timestamp > now()
+        )
+      WHERE
+        events.location = ${city}
+      ORDER BY
+        ${order}
+    `;
+    return event;
+  },
+);
+
 export const createEvent = cache(
   async (sessionToken: string, newEvent: NewEvent) => {
     const [event] = await sql<Event[]>`
