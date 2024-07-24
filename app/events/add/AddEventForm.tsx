@@ -29,18 +29,18 @@ export default function AddEventForm(props: Props) {
     longitude: '',
     price: 0,
     description: '',
-    links: '',
-    images: '',
+    linkw: '',
+    image: '',
   });
   // const [userLocation, setUserLocation] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-  console.log('newEvent.images: ', newEvent.images);
+  console.log('newEvent.image: ', newEvent.image);
 
   const router = useRouter();
 
   function addImageUrl(url: string) {
-    setNewEvent({ ...newEvent, images: url });
+    setNewEvent({ ...newEvent, image: url });
   }
 
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
@@ -102,7 +102,7 @@ export default function AddEventForm(props: Props) {
       setErrorMessage('Event description must have at least 3 characters.');
       // setIsDisabled(true);
     }
-    if (!validator.isURL(newEvent.links)) {
+    if (!validator.isURL(newEvent.link)) {
       setErrorMessage('Link must valid URL.');
       // setIsDisabled(true);
     }
@@ -111,7 +111,7 @@ export default function AddEventForm(props: Props) {
       newEvent.name.length <= 255 &&
       newEvent.timeEnd >= newEvent.timeStart &&
       (newEvent.timeStart || newEvent.timeEnd !== '') &&
-      validator.isURL(newEvent.links)
+      validator.isURL(newEvent.link)
     ) {
       setIsDisabled(false);
     }
@@ -260,11 +260,7 @@ export default function AddEventForm(props: Props) {
           </label>
           <label>
             Link
-            <input
-              name="links"
-              value={newEvent.links}
-              onChange={handleChange}
-            />
+            <input name="link" value={newEvent.link} onChange={handleChange} />
           </label>
           <ImageUpload
             buttonText="Upload event poster"

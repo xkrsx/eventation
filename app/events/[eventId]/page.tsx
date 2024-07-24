@@ -85,13 +85,13 @@ export default async function SingleEvent(props: Props) {
       <h1>{event.name}</h1>
       {/* // eslint-disable-next-line react/jsx-no-undef */}
       <Image
-        src={event.images}
+        src={event.image}
         alt={`${event.name} poster`}
         height="100"
         width="100"
       />
       {/* <img
-          src={event.images}
+          src={event.image}
           alt={`${event.name} poster`}
           height="100px"
           width="100px"
@@ -109,7 +109,7 @@ export default async function SingleEvent(props: Props) {
       <p>category: {event.category}</p>
       <p>description: {event.description}</p>
       <p>
-        link: <a href={event.links}>{event.links}</a>
+        link: <a href={event.link}>{event.link}</a>
       </p>
 
       <p>

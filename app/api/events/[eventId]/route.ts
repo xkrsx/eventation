@@ -59,8 +59,8 @@ export async function PUT(
       longitude: String(result.data.longitude),
       price: Number(result.data.price),
       description: String(result.data.description),
-      links: String(result.data.links),
-      images: String(result.data.images),
+      link: String(result.data.link),
+      image: String(result.data.image),
     }));
 
   if (!updatedEvent) {

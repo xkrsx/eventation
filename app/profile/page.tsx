@@ -1,4 +1,3 @@
-import { CldImage } from 'next-cloudinary';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';

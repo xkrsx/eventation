@@ -12,8 +12,8 @@ export type NewEvent = {
   longitude: string;
   price: number;
   description: string;
-  links: string;
-  images: string;
+  link: string;
+  image: string;
 };
 
 export type UpdatedEvent = NewEvent & {
@@ -68,8 +68,8 @@ export const createEvent = cache(
           longitude,
           price,
           description,
-          links,
-          images
+          link,
+          image
         ) (
           SELECT
             ${newEvent.name},
@@ -82,8 +82,8 @@ export const createEvent = cache(
             ${String(newEvent.longitude)},
             ${Number(newEvent.price)},
             ${String(newEvent.description)},
-            ${String(newEvent.links)},
-            ${String(newEvent.images)}
+            ${String(newEvent.link)},
+            ${String(newEvent.image)}
           FROM
             sessions
           WHERE
@@ -187,8 +187,8 @@ export const updateEvent = cache(
         longitude = ${String(updatedEvent.longitude)},
         price = ${Number(updatedEvent.price)},
         description = ${String(updatedEvent.description)},
-        links = ${String(updatedEvent.links)},
-        images = ${String(updatedEvent.images)}
+        link = ${String(updatedEvent.link)},
+        image = ${String(updatedEvent.image)}
       FROM
         sessions
       WHERE
@@ -207,8 +207,8 @@ export const updateEvent = cache(
         events.longitude,
         events.price,
         events.description,
-        events.links,
-        events.images
+        events.link,
+        events.image
     `;
 
     return event;
