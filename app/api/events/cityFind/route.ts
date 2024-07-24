@@ -1,23 +1,23 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { Event, findSingleEventByCity } from '../../../../database/events';
-import { eventSchema } from '../../../../migrations/00002-createTableEvents';
+import { findSingleEventByCity } from '../../../../database/events';
+import { findEventSchema } from '../../../../migrations/00002-createTableEvents';
 
-export type FindEventByCityResponseBodyPost =
+export type FindEventByCityResponseBodyGet =
   | {
-      event: Event;
-      order: ['timeStart', 'price'];
+      location: string;
+      // order: ['timeStart', 'price'];
     }
   | { errors: { message: string }[] };
 
 export async function GET(
   request: NextRequest,
-): Promise<NextResponse<FindEventByCityResponseBodyPost>> {
+): Promise<NextResponse<FindEventByCityResponseBodyGet>> {
   // 1. Get the event data from the request
   const requestBody = await request.json();
 
   // 2. Validate the user data with zod
-  const result = eventSchema.safeParse(requestBody);
+  const result = findEventSchema.safeParse(requestBody);
 
   // If client sends request body with incorrect data,
   // return a response with a 400 status code to the client

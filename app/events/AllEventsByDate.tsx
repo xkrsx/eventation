@@ -7,12 +7,6 @@ import { getUserPublicByIdInsecure } from '../../database/users';
 import { countAttendantsInsecure } from '../../database/usersEventsStatus';
 
 export default async function AllEventsByDate() {
-  // // 1. Check if sessionToken in cookies exists
-  // const sessionCookie = cookies().get('sessionToken');
-
-  // // 2. Check if the sessionToken from cookie is still valid in DB
-  // const session = sessionCookie && (await getValidSession(sessionCookie.value));
-
   const events = (await getAllEventsSortDateInsecure()).map(
     async (event: Event) => {
       const organiser = await getUserPublicByIdInsecure(event.userId);
@@ -44,7 +38,6 @@ export default async function AllEventsByDate() {
               ? attendantsCount.count
               : 'No one yet. Be first!'}
           </p>
-          {/* <AttendanceStatusForm event={event} session={undefined} isOrganising={false} methodAPI={''} /> */}
           <p>
             <Link href={`/events/${event.id}`}>See more...</Link>
           </p>

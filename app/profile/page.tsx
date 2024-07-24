@@ -1,10 +1,8 @@
 import { cookies } from 'next/headers';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import LogoutButton from '../(auth)/logout/LogoutButton';
 import { getValidSession } from '../../database/sessions';
 import { getUser } from '../../database/users';
-import ProfileImage from '../common/Images/ProfileImage/ProfileImage';
+import ProfileLogged from './Logged';
 import ProfileNotLogged from './notLogged';
 
 type Props = { searchParams: { returnTo?: string | string[] } };
@@ -32,33 +30,5 @@ export default async function UserProfile(props: Props) {
     return redirect('/');
   }
 
-  return (
-    <div className="wrapper">
-      <div className="profile">
-        <h1>Welcome, {profile.username}</h1>
-        <h2>{profile.fullName}</h2>
-        {/* TODO change to CldOgImage */}
-        <ProfileImage profile={profile} />
-        <ul>
-          <li>
-            <Link href={`/profile/${profile.username}`}>
-              See your public profile
-            </Link>
-          </li>
-          <li>
-            <Link href="/profile/edit">Edit your profile</Link>
-          </li>
-          <li>
-            <Link href="/profile/settings">Settings</Link>
-          </li>
-          <li>
-            <Link href="/profile/events">My Events</Link>
-          </li>
-          <li>
-            <LogoutButton />
-          </li>
-        </ul>
-      </div>
-    </div>
-  );
+  return <ProfileLogged profile={profile} />;
 }
