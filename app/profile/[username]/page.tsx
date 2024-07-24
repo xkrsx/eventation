@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { CldImage } from 'next-cloudinary';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -38,6 +39,14 @@ export default async function UserProfile(props: Props) {
             <h1>User: {profile.username}</h1>
             <h2>Location: {profile.location}</h2>
             <h3>Account since: {String(profile.createdAt)}</h3>
+            <CldImage
+              width="150"
+              height="150"
+              src={profile.image}
+              crop="fill"
+              sizes="100vw"
+              alt={`${profile.username} profile picture`}
+            />
           </div>
         </div>
       );
@@ -63,6 +72,14 @@ export default async function UserProfile(props: Props) {
         <h1>User: {profile.username}</h1>
         <h2>Location: {profile.location}</h2>
         <h3>Account since: {dayjs(profile.createdAt).format('MM/YYYY')}</h3>
+        <CldImage
+          width="150"
+          height="150"
+          src={profile.image}
+          crop="fill"
+          sizes="100vw"
+          alt={`${profile.username} profile picture`}
+        />
         {session.userId === profile.id && (
           <Link href="/profile/edit">Edit your profile</Link>
         )}

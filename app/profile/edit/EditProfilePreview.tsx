@@ -1,5 +1,6 @@
 'use client';
 import dayjs from 'dayjs';
+import { CldImage } from 'next-cloudinary';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { User } from '../../../migrations/00000-createTableUsers';
@@ -22,6 +23,14 @@ export default function EditProfilePreview(props: Props) {
         <h3>
           Account since: {dayjs(props.profile.createdAt).format('MM/YYYY')}
         </h3>
+        <CldImage
+          width="150"
+          height="150"
+          src={props.profile.image}
+          crop="fill"
+          sizes="100vw"
+          alt={`${props.profile.username} profile picture`}
+        />
         <button
           onClick={async () => {
             const response = await fetch(`/api/users/${props.profile.id}`, {
@@ -34,7 +43,7 @@ export default function EditProfilePreview(props: Props) {
               let newErrorMessage = 'Error deleting the profile.';
 
               try {
-                const body = await response.json();
+                const body: { error: string } = await response.json();
                 newErrorMessage = body.error;
               } catch {
                 // Don't fail if response JSON body

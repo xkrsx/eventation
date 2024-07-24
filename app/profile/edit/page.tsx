@@ -1,12 +1,11 @@
 // TODO edit profile, eg.: username, full name, location etc.
 // show edit options only for each logged user
 
-import dayjs from 'dayjs';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getValidSession } from '../../../database/sessions';
-import { deleteUser, getUserPublicById } from '../../../database/users';
+import { getUserPublicById } from '../../../database/users';
 import EditProfilePreview from './EditProfilePreview';
 
 export default async function EditProfile() {

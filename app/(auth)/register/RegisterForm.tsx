@@ -31,6 +31,7 @@ export default function RegisterForm() {
     longitude: '',
     categories: '',
     email: '',
+    image: '',
   });
   const [userLocation, setUserLocation] = useState(false);
   const [userCategory, setUserCategory] = useState(false);
@@ -61,7 +62,7 @@ export default function RegisterForm() {
   const router = useRouter();
 
   function addImageUrl(url: string) {
-    setNewUser({ ...newUser, : url });
+    setNewUser({ ...newUser, image: url });
   }
 
   async function handleRegister(event: React.FormEvent<HTMLFormElement>) {
@@ -131,7 +132,6 @@ export default function RegisterForm() {
               sources: ['local', 'facebook', 'instagram', 'camera', 'url'],
             }}
             addUrlOnUpload={addImageUrl}
-
             alt={newUser.username}
           />
           <label>

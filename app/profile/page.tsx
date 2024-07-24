@@ -1,3 +1,4 @@
+import { CldImage } from 'next-cloudinary';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -33,6 +34,15 @@ export default async function UserProfile() {
       <div className="profile">
         <h1>Welcome, {profile.username}</h1>
         <h2>{profile.fullName}</h2>
+        {/* TODO change to CldOgImage */}
+        <CldImage
+          width="150"
+          height="150"
+          src={profile.image}
+          crop="fill"
+          sizes="100vw"
+          alt={`${profile.username} profile picture`}
+        />
         <ul>
           <li>
             <Link href={`/profile/${profile.username}`}>
