@@ -1,7 +1,7 @@
 'use server';
 
-import { CldImage } from 'next-cloudinary';
 import { getUserPublicByIdInsecure } from '../../../database/users';
+import ProfileImage from '../Images/ProfileImage/ProfileImage';
 
 type Props = {
   chatUserId: number;
@@ -14,14 +14,7 @@ export default async function ChatUsername(props: Props) {
   }
   return (
     <div>
-      <CldImage
-        width="150"
-        height="150"
-        src={chatUsername.image}
-        crop="fill"
-        sizes="100vw"
-        alt={`${chatUsername.username} profile picture`}
-      />{' '}
+      <ProfileImage profile={chatUsername} />{' '}
       <strong>{chatUsername.username}</strong>
     </div>
   );

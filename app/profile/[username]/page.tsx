@@ -8,6 +8,7 @@ import {
   getUserPublicByUsername,
   getUserPublicByUsernameInsecure,
 } from '../../../database/users';
+import ProfileImage from '../../common/Images/ProfileImage/ProfileImage';
 
 type Props = {
   params: {
@@ -39,14 +40,7 @@ export default async function UserProfile(props: Props) {
             <h1>User: {profile.username}</h1>
             <h2>Location: {profile.location}</h2>
             <h3>Account since: {String(profile.createdAt)}</h3>
-            <CldImage
-              width="150"
-              height="150"
-              src={profile.image}
-              crop="fill"
-              sizes="100vw"
-              alt={`${profile.username} profile picture`}
-            />
+            <ProfileImage profile={profile} />
           </div>
         </div>
       );
@@ -72,14 +66,8 @@ export default async function UserProfile(props: Props) {
         <h1>User: {profile.username}</h1>
         <h2>Location: {profile.location}</h2>
         <h3>Account since: {dayjs(profile.createdAt).format('MM/YYYY')}</h3>
-        <CldImage
-          width="150"
-          height="150"
-          src={profile.image}
-          crop="fill"
-          sizes="100vw"
-          alt={`${profile.username} profile picture`}
-        />
+        <ProfileImage profile={profile} />
+
         {session.userId === profile.id && (
           <Link href="/profile/edit">Edit your profile</Link>
         )}

@@ -4,6 +4,7 @@ import { CldImage } from 'next-cloudinary';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { User } from '../../../migrations/00000-createTableUsers';
+import ProfileImage from '../../common/Images/ProfileImage/ProfileImage';
 import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
@@ -23,14 +24,8 @@ export default function EditProfilePreview(props: Props) {
         <h3>
           Account since: {dayjs(props.profile.createdAt).format('MM/YYYY')}
         </h3>
-        <CldImage
-          width="150"
-          height="150"
-          src={props.profile.image}
-          crop="fill"
-          sizes="100vw"
-          alt={`${props.profile.username} profile picture`}
-        />
+        <ProfileImage profile={props.profile} />
+
         <button
           onClick={async () => {
             const response = await fetch(`/api/users/${props.profile.id}`, {
