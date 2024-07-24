@@ -1,3 +1,3 @@
 export default function NotLogged() {
-  return;
+  return <h1>All events</h1>;
 }

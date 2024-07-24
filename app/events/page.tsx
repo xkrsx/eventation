@@ -3,6 +3,7 @@
 
 import { cookies } from 'next/headers';
 import { getValidSession } from '../../database/sessions';
+import NotLogged from './NotLogged';
 
 export default async function Events() {
   // // 1. Checking if the sessionToken cookie exists
@@ -11,8 +12,10 @@ export default async function Events() {
   // // 2. Check if the sessionToken cookie is still valid
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
 
-  // // 4. If the sessionToken cookie is invalid or doesn't exist, show link to log in
+  // // 3. If the sessionToken cookie is invalid or doesn't exist, show all the events
   if (!session) {
-    return;
+    return <NotLogged />;
   }
+
+  // // 4. if the sessiontoken is valid, show events in the city
 }
