@@ -1,16 +1,19 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { findSingleEventByCity } from '../../database/events';
-import { getUserPublicById } from '../../database/users';
-import { UsersEventsStatus } from '../../database/usersEventsStatus';
-import { User } from '../../migrations/00000-createTableUsers';
+import {
+  getUserPublicById,
+  getUserPublicByIdInsecure,
+} from '../../database/users';
+import {
+  checkStatus,
+  countAttendantsInsecure,
+} from '../../database/usersEventsStatus';
 import { Session } from '../../migrations/00001-createTableSessions';
 import SingleEventLogged from '../common/SingleEvent/SingleEventLogged';
 
 type Props = {
   session: Omit<Session, 'id'>;
-  organiser: Omit<User, 'fullName' | 'categories' | 'email'>;
-  attendantsCount: { count: string } | undefined;
-  attendanceSessionCheck: UsersEventsStatus | undefined;
 };
 
 export default async function EventsLogged(props: Props) {
@@ -19,15 +22,19 @@ export default async function EventsLogged(props: Props) {
     props.session.userId,
   );
   if (!user) {
-    // TODO
+    <div>
+      <strong>Sorry, no events found in your city.</strong>
+      <Link href="/events/find">Find other events.</Link>
+    </div>;
+    return;
   }
   const events = await findSingleEventByCity(
     props.session.token,
-    user.location,
+    String(user.location),
     'date',
   );
 
-  if (!events) {
+  if (!events || !user.location) {
     <div>
       <strong>Sorry, no events found in your city.</strong>
       <Link href="/events/find">Find other events.</Link>
@@ -38,15 +45,25 @@ export default async function EventsLogged(props: Props) {
   return (
     <div>
       <h1>Events in your city</h1>
-      {events.map((event) => {
+      {events.map(async (event) => {
+        const organiser = await getUserPublicByIdInsecure(event.userId);
+        if (!organiser) {
+          redirect(`/events/find`);
+        }
+        const attendanceSessionCheck = await checkStatus(
+          props.session.token,
+          props.session.userId,
+          Number(event.id),
+        );
+        const attendantsCount = await countAttendantsInsecure(Number(event.id));
         return (
           <SingleEventLogged
             key={`id-${event.id}`}
             event={event}
-            organiser={props.organiser}
+            organiser={organiser}
             session={props.session}
-            attendantsCount={props.attendantsCount}
-            attendanceSessionCheck={props.attendanceSessionCheck}
+            attendantsCount={attendantsCount}
+            attendanceSessionCheck={attendanceSessionCheck}
           />
         );
       })}

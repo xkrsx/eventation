@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { getSingleEventInsecure } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { getUserPublicByIdInsecure } from '../../../database/users';
@@ -26,11 +26,19 @@ export default async function SingleEventFromParams(props: Props) {
   // // 3. Get event info
   const event = await getSingleEventInsecure(Number(props.params.eventId));
   if (!event) {
-    redirect('/events/find');
+    <div>
+      <strong>Sorry, event not found.</strong>
+      <Link href="/events/find">Find other event.</Link>
+    </div>;
+    return;
   }
   const organiser = await getUserPublicByIdInsecure(event.userId);
   if (!organiser) {
-    redirect(`/events/find`);
+    <div>
+      <strong>Sorry, an error occured.</strong>
+      <Link href="/events/find">Find other event.</Link>
+    </div>;
+    return;
   }
   const attendantsCount = await countAttendantsInsecure(event.id);
 
