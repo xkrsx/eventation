@@ -11,6 +11,7 @@ export type User = {
   categories: string | null;
   email: string;
   createdAt: Date;
+  image: string;
 };
 
 export const userRegistrationSchema = z
@@ -48,6 +49,7 @@ export const userRegistrationSchema = z
       .min(3, { message: 'E-mail must have at least 3 characters.' })
       .max(80, { message: 'E-mail must have maximum 80 characters.' })
       .email({ message: 'E-mail must a valid address.' }),
+    image: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
@@ -105,6 +107,7 @@ export const userEditSchema = z
       .min(3, { message: 'E-mail must have at least 3 characters.' })
       .max(80, { message: 'E-mail must have maximum 80 characters.' })
       .email({ message: 'E-mail must a valid address.' }),
+    image: z.string().optional(),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     path: ['confirmPassword'],
@@ -123,6 +126,7 @@ export async function up(sql: Sql) {
       longitude varchar(50) NULL,
       categories text NULL,
       email varchar(80) NOT NULL UNIQUE,
+      image text NOT NULL,
       created_at timestamp DEFAULT now() NOT NULL
     )
   `;
