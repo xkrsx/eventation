@@ -1,13 +1,16 @@
 import Link from 'next/link';
 import { findSingleEventByCity } from '../../database/events';
 import { getUserPublicById } from '../../database/users';
+import { UsersEventsStatus } from '../../database/usersEventsStatus';
+import { User } from '../../migrations/00000-createTableUsers';
 import { Session } from '../../migrations/00001-createTableSessions';
 import SingleEventLogged from '../common/SingleEvent/SingleEventLogged';
-import ProfileNotLogged from '../profile/notLogged';
 
 type Props = {
   session: Omit<Session, 'id'>;
-  searchParams: { returnTo?: string | string[] };
+  organiser: Omit<User, 'fullName' | 'categories' | 'email'>;
+  attendantsCount: { count: string } | undefined;
+  attendanceSessionCheck: UsersEventsStatus | undefined;
 };
 
 export default async function EventsLogged(props: Props) {
@@ -16,7 +19,7 @@ export default async function EventsLogged(props: Props) {
     props.session.userId,
   );
   if (!user) {
-    return <ProfileNotLogged returnTo={props.searchParams.returnTo} />;
+    // TODO
   }
   const events = await findSingleEventByCity(
     props.session.token,
@@ -31,19 +34,22 @@ export default async function EventsLogged(props: Props) {
     </div>;
     return;
   }
+
   return (
     <div>
       <h1>Events in your city</h1>
       {events.map((event) => {
-        return (<SingleEventLogged
-        key={`id-${event.id}`}
-          event={event}
-          organiser={undefined}
-          session={props.session}
-          attendantsCount={undefined}
-          attendanceSessionCheck={undefined}
-        />;
-)      })}
+        return (
+          <SingleEventLogged
+            key={`id-${event.id}`}
+            event={event}
+            organiser={props.organiser}
+            session={props.session}
+            attendantsCount={props.attendantsCount}
+            attendanceSessionCheck={props.attendanceSessionCheck}
+          />
+        );
+      })}
     </div>
   );
 }
