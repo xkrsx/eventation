@@ -35,7 +35,7 @@ export default function EditEvent() {
             <input />
           </label>
           <label>
-            Links
+            Link
             <input />
           </label>
           <button>Add event</button>

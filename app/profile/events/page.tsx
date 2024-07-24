@@ -20,7 +20,7 @@ export default async function UserEvents() {
 
   // 3. Redirect to login if sessionToken cookie is invalid
   if (!session) {
-    return redirect('/login?returnTo=/profile/events');
+    return redirect('/profile?returnTo=/profile/events');
   }
 
   // 4. if the sessionToken cookie is valid, allow access to events page

@@ -1,5 +1,6 @@
-import './page.scss';
+import './LoginForm.scss';
 import { cookies } from 'next/headers';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getValidSession } from '../../../database/sessions';
 import { getSafeReturnToPath } from '../../../util/validation';
@@ -19,5 +20,10 @@ export default async function LoginPage(props: Props) {
     redirect(getSafeReturnToPath(props.searchParams.returnTo) || `/`);
   }
   // 4. Redirect to login page if sessionToken cookie is invalid or doesn't exist
-  return <LoginForm returnTo={props.searchParams.returnTo} />;
+  return (
+    <div>
+      <LoginForm returnTo={props.searchParams.returnTo} />
+      Not registered yet? <Link href="/api/register">Click here</Link>
+    </div>
+  );
 }

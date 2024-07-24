@@ -20,13 +20,13 @@ export const eventSchema = z
     description: z.string().min(3, {
       message: 'Event description must have at least 3 characters.',
     }),
-    links: z
+    link: z
       .string()
       .regex(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/[\w.-]*)*\/?$/, {
         message: 'Link must be valid URL.',
       })
       .optional(),
-    images: z.string().optional(),
+    image: z.string().optional(),
     public: z.boolean().optional(),
     cancelled: z.boolean().optional(),
   })
@@ -49,8 +49,8 @@ export async function up(sql: Sql) {
       longitude varchar(50) NOT NULL,
       price integer NOT NULL DEFAULT 0,
       description text NOT NULL,
-      links text NOT NULL,
-      images text NOT NULL,
+      link text NOT NULL,
+      image text NOT NULL,
       public boolean NOT NULL DEFAULT TRUE,
       cancelled boolean NOT NULL DEFAULT FALSE,
       created_at timestamp DEFAULT now() NOT NULL

@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { User } from '../../../migrations/00000-createTableUsers';
+import ProfileImage from '../../common/Images/ProfileImage/ProfileImage';
 import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
@@ -22,6 +23,8 @@ export default function EditProfilePreview(props: Props) {
         <h3>
           Account since: {dayjs(props.profile.createdAt).format('MM/YYYY')}
         </h3>
+        <ProfileImage profile={props.profile} />
+
         <button
           onClick={async () => {
             const response = await fetch(`/api/users/${props.profile.id}`, {
@@ -34,7 +37,7 @@ export default function EditProfilePreview(props: Props) {
               let newErrorMessage = 'Error deleting the profile.';
 
               try {
-                const body = await response.json();
+                const body: { error: string } = await response.json();
                 newErrorMessage = body.error;
               } catch {
                 // Don't fail if response JSON body

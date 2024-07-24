@@ -15,6 +15,7 @@ import {
   TagSelected,
 } from 'react-tag-autocomplete';
 import { suggestions } from '../../../database/categories';
+import ImageUpload from '../../common/ImageUpload/ImageUpload';
 import ErrorMessage from '../../ErrorMessage';
 import { RegisterResponseBodyPost } from '../api/register/route';
 
@@ -30,6 +31,7 @@ export default function RegisterForm() {
     longitude: '',
     categories: '',
     email: '',
+    image: '',
   });
   const [userLocation, setUserLocation] = useState(false);
   const [userCategory, setUserCategory] = useState(false);
@@ -58,6 +60,10 @@ export default function RegisterForm() {
   );
 
   const router = useRouter();
+
+  function addImageUrl(url: string) {
+    setNewUser({ ...newUser, image: url });
+  }
 
   async function handleRegister(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -120,6 +126,15 @@ export default function RegisterForm() {
             await handleRegister(event);
           }}
         >
+          <ImageUpload
+            buttonText="Upload profile picture"
+            options={{
+              sources: ['local', 'facebook', 'instagram', 'camera', 'url'],
+            }}
+            addUrlOnUpload={addImageUrl}
+            alt={newUser.username}
+            uploadType="profile"
+          />
           <label>
             username
             <input
@@ -166,52 +181,22 @@ export default function RegisterForm() {
                   checked={userLocation}
                   onChange={() => setUserLocation(!userLocation)}
                 />{' '}
-                I want to add my default location for events (city or country)
+                I want to add my default location (city)
               </label>
             </div>
             {userLocation ? (
               <div>
-                <label>
-                  <input
-                    type="radio"
-                    value="City"
-                    name="type"
-                    disabled={!userLocation}
+                <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
+                  <GeoapifyGeocoderAutocomplete
+                    placeholder="City"
+                    type="city"
+                    limit={3}
+                    allowNonVerifiedHouseNumber={true}
+                    sendGeocoderRequestFunc={sendGeocoderRequest}
+                    addDetails={true}
+                    sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
                   />
-                  City
-                  <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
-                    <GeoapifyGeocoderAutocomplete
-                      placeholder="City"
-                      type="city"
-                      limit={3}
-                      allowNonVerifiedHouseNumber={true}
-                      sendGeocoderRequestFunc={sendGeocoderRequest}
-                      addDetails={true}
-                      sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
-                    />
-                  </GeoapifyContext>
-                </label>
-
-                <label>
-                  <input
-                    type="radio"
-                    value="Country"
-                    name="type"
-                    disabled={!userLocation}
-                  />
-                  Country
-                  <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
-                    <GeoapifyGeocoderAutocomplete
-                      placeholder="Country"
-                      type="country"
-                      limit={3}
-                      allowNonVerifiedHouseNumber={true}
-                      sendGeocoderRequestFunc={sendGeocoderRequest}
-                      addDetails={true}
-                      sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
-                    />
-                  </GeoapifyContext>
-                </label>
+                </GeoapifyContext>
               </div>
             ) : null}
           </div>

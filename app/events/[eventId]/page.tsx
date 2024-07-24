@@ -4,6 +4,7 @@
 
 import dayjs from 'dayjs';
 import { cookies } from 'next/headers';
+import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSingleEventInsecure } from '../../../database/events';
@@ -63,7 +64,7 @@ export default async function SingleEvent(props: Props) {
             : 'No one yet. Be first!'}
         </p>
         <strong>
-          <Link href={`/login?returnTo=/events/${event.id}`}>
+          <Link href={`/profile?returnTo=/events/${event.id}`}>
             Log in to attend this event or chat with others.
           </Link>
         </strong>
@@ -82,6 +83,19 @@ export default async function SingleEvent(props: Props) {
   return (
     <div>
       <h1>{event.name}</h1>
+      {/* // eslint-disable-next-line react/jsx-no-undef */}
+      <Image
+        src={event.image}
+        alt={`${event.name} poster`}
+        height="100"
+        width="100"
+      />
+      {/* <img
+          src={event.image}
+          alt={`${event.name} poster`}
+          height="100px"
+          width="100px"
+        /> */}
       <p>
         Organiser:{' '}
         <Link href={`/profile/${organiser.username}`}>
@@ -95,7 +109,7 @@ export default async function SingleEvent(props: Props) {
       <p>category: {event.category}</p>
       <p>description: {event.description}</p>
       <p>
-        link: <a href={event.links}>{event.links}</a>
+        link: <a href={event.link}>{event.link}</a>
       </p>
 
       <p>

@@ -26,8 +26,8 @@ export default function OrganisingEvents(props: Props) {
     longitude: '',
     price: 0,
     description: '',
-    links: '',
-    images: '',
+    link: '',
+    image: '',
     public: true,
     cancelled: false,
   });
@@ -81,8 +81,8 @@ export default function OrganisingEvents(props: Props) {
                 longitude: event.longitude,
                 price: event.price,
                 description: event.description,
-                links: event.links,
-                images: event.images,
+                link: event.link,
+                image: event.image,
                 cancelled: event.cancelled,
               });
             }}
@@ -234,10 +234,10 @@ export default function OrganisingEvents(props: Props) {
             />
           </label>
           <label>
-            Links
+            Link
             <input
-              name="links"
-              value={editedEvent.links}
+              name="link"
+              value={editedEvent.link}
               onChange={handleChange}
             />
           </label>

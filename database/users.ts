@@ -18,6 +18,7 @@ export const getUser = cache(async (sessionToken: string) => {
       users.longitude,
       users.categories,
       users.email,
+      users.image,
       users.created_at
     FROM
       users
@@ -83,6 +84,7 @@ export const deleteUser = cache(async (sessionToken: string, id: number) => {
       users.longitude,
       users.categories,
       users.email,
+      users.image,
       users.created_at
   `;
   return user;
@@ -101,6 +103,7 @@ export const getUserPublicByUsername = cache(
         users.longitude,
         users.categories,
         users.email,
+        users.image,
         users.created_at
       FROM
         users
@@ -127,6 +130,7 @@ export const getUserPublicById = cache(
         users.longitude,
         users.categories,
         users.email,
+        users.image,
         users.created_at
       FROM
         users
@@ -151,6 +155,7 @@ export const getUserPublicByUsernameInsecure = cache(
         users.location,
         users.latitude,
         users.longitude,
+        users.image,
         users.created_at
       FROM
         users
@@ -170,6 +175,7 @@ export const getUserPublicByIdInsecure = cache(async (id: number) => {
       users.location,
       users.latitude,
       users.longitude,
+      users.image,
       users.created_at
     FROM
       users
@@ -181,10 +187,11 @@ export const getUserPublicByIdInsecure = cache(async (id: number) => {
 
 // login
 export const getUserByUsernameInsecure = cache(async (username: string) => {
-  const [user] = await sql<Pick<User, 'id' | 'username'>[]>`
+  const [user] = await sql<Pick<User, 'id' | 'username' | 'image'>[]>`
     SELECT
       users.id,
-      users.username
+      users.username,
+      users.image
     FROM
       users
     WHERE
@@ -220,7 +227,8 @@ export const createUserInsecure = cache(
           latitude,
           longitude,
           categories,
-          email
+          email,
+          image
         )
       VALUES
         (
@@ -231,7 +239,8 @@ export const createUserInsecure = cache(
           ${newUser.latitude},
           ${newUser.longitude},
           ${newUser.categories},
-          ${newUser.email.toLowerCase()}
+          ${newUser.email.toLowerCase()},
+          ${newUser.image}
         )
       RETURNING
         users.id,
@@ -241,7 +250,8 @@ export const createUserInsecure = cache(
         users.latitude,
         users.longitude,
         users.categories,
-        users.email
+        users.email,
+        users.image
     `;
     return user;
   },

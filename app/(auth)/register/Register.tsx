@@ -1,6 +1,5 @@
 import './page.scss';
 import { cookies } from 'next/headers';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getValidSession } from '../../../database/sessions';
 import RegisterForm from './RegisterForm';
@@ -17,10 +16,5 @@ export default async function RegisterPage() {
     redirect('/');
   }
   // 4. Redirect to reg/login page if sessionToken cookie is invalid or doesn't exist
-  return (
-    <div>
-      <RegisterForm />
-      Already registered? <Link href="/api/login">Click here</Link>
-    </div>
-  );
+  return <RegisterForm />;
 }
