@@ -41,7 +41,7 @@ export default async function EventChat(props: Props) {
         <h1>{event.name}</h1>
         <Link href={`/events/${event.id}`}>See more about this event...</Link>
         {' | '}
-        <Link href={`/login?returnTo=/events/${event.id}/chat`}>
+        <Link href={`/profile?returnTo=/events/${event.id}/chat`}>
           Log in to chat with others.
         </Link>
       </div>

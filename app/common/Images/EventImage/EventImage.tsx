@@ -1,9 +1,10 @@
 'use client';
 import { CldImage } from 'next-cloudinary';
 import { Event } from '../../../../database/events';
+import { User } from '../../../../migrations/00000-createTableUsers';
 
 type Props = {
-  event: Event;
+  event: Event | User;
 };
 
 export default function EventImage(props: Props) {

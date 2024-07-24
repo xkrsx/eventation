@@ -13,7 +13,7 @@ export default async function AddEvent() {
 
   // 3. Redirect to login if sessionToken cookie is invalid
   if (!session) {
-    return redirect('/login?returnTo=/events/add');
+    return redirect('/profile?returnTo=/events/add');
   }
 
   // 4. if the sessionToken cookie is valid, allow access to add event page

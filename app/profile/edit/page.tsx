@@ -17,7 +17,7 @@ export default async function EditProfile() {
   if (!session) {
     return (
       <strong>
-        <Link href="/login?returnTo=/profile/edit">
+        <Link href="/profile?returnTo=/profile/edit">
           Log in to edit your profile.
         </Link>
       </strong>

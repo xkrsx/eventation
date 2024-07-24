@@ -181,7 +181,7 @@ export default function RegisterForm() {
                   checked={userLocation}
                   onChange={() => setUserLocation(!userLocation)}
                 />{' '}
-                I want to add my default city
+                I want to add my default location (city)
               </label>
             </div>
             {userLocation ? (

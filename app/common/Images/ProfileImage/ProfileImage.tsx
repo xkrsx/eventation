@@ -1,9 +1,10 @@
 'use client';
 import { CldImage } from 'next-cloudinary';
+import { Event } from '../../../../database/events';
 import { User } from '../../../../migrations/00000-createTableUsers';
 
 type Props = {
-  profile: Omit<User, 'fullName' | 'categories' | 'email'>;
+  profile: Omit<User, 'fullName' | 'categories' | 'email'> | Event;
 };
 
 export default function ProfileImage(props: Props) {

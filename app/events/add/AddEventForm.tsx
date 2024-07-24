@@ -29,7 +29,7 @@ export default function AddEventForm(props: Props) {
     longitude: '',
     price: 0,
     description: '',
-    linkw: '',
+    link: '',
     image: '',
   });
   // const [userLocation, setUserLocation] = useState(false);

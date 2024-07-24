@@ -20,7 +20,6 @@ export default async function UserProfile() {
   // 3. Redirect to login if sessionToken cookie is invalid
   if (!session) {
     return <ProfileNotLogged />;
-    // return redirect('/login?returnTo=/profile');
   }
 
   // 4. if the sessionToken cookie is valid, allow access to profile page

@@ -64,7 +64,7 @@ export default async function SingleEvent(props: Props) {
             : 'No one yet. Be first!'}
         </p>
         <strong>
-          <Link href={`/login?returnTo=/events/${event.id}`}>
+          <Link href={`/profile?returnTo=/events/${event.id}`}>
             Log in to attend this event or chat with others.
           </Link>
         </strong>

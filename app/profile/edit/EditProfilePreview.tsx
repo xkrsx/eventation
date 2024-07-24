@@ -1,6 +1,5 @@
 'use client';
 import dayjs from 'dayjs';
-import { CldImage } from 'next-cloudinary';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { User } from '../../../migrations/00000-createTableUsers';
