@@ -61,23 +61,19 @@ export default function AttendanceStatusForm(props: Props) {
       ) : (
         ''
       )}
-      <ul>
-        <li>
-          <button onClick={handleStatusChange} name="yes">
-            YES
-          </button>
-        </li>
-        <li>
-          <button onClick={handleStatusChange} name="maybe">
-            MAYBE
-          </button>
-        </li>
-        <li>
-          <button onClick={handleStatusChange} name="no">
-            NO
-          </button>
-        </li>
-      </ul>
+
+      <button onClick={handleStatusChange} name="yes">
+        YES
+      </button>
+      {' | '}
+      <button onClick={handleStatusChange} name="maybe">
+        MAYBE
+      </button>
+      {' | '}
+      <button onClick={handleStatusChange} name="no">
+        NO
+      </button>
+
       {errors.map((error) => (
         <div className="error" key={`error-${error.message}`}>
           <ErrorMessage>{error.message}</ErrorMessage>

@@ -11,6 +11,7 @@ import {
 } from '../../../database/usersEventsStatus';
 import AttendanceStatusForm from '../../common/AttendanceStatus/AttendanceStatusForm';
 import EventImage from '../../common/Images/EventImage/EventImage';
+import SingleEventLogged from '../../common/SingleEvent/SingleEventLogged';
 
 type Props = {
   params: {
@@ -77,44 +78,12 @@ export default async function SingleEventFromParams(props: Props) {
   );
 
   return (
-    <div>
-      <h1>{event.name}</h1>
-      <EventImage event={event} />
-      <p>
-        Organiser:{' '}
-        <Link href={`/profile/${organiser.username}`}>
-          {organiser.username}
-        </Link>
-      </p>
-      <p>start: {dayjs(event.timeStart).format('dddd, HH:mm, DD/MM/YYYY')}</p>
-      <p>end: {dayjs(event.timeEnd).format('dddd, HH:mm, DD/MM/YYYY')}</p>
-      <p>price: {event.price}</p>
-      <p>location: {event.location}</p>
-      <p>category: {event.category}</p>
-      <p>description: {event.description}</p>
-      <p>
-        link: <a href={event.link}>{event.link}</a>
-      </p>
-
-      <p>
-        number of attendants:{' '}
-        {attendantsCount?.count
-          ? attendantsCount.count
-          : 'No one yet. Be first!'}
-      </p>
-
-      {attendanceSessionCheck ? (
-        <p>
-          chat: <Link href={`/events/${event.id}/chat`}>event lounge</Link>
-        </p>
-      ) : (
-        <AttendanceStatusForm
-          event={event}
-          session={session}
-          isOrganising={false}
-          methodAPI="POST"
-        />
-      )}
-    </div>
+    <SingleEventLogged
+      event={event}
+      organiser={organiser}
+      session={session}
+      attendantsCount={attendantsCount}
+      attendanceSessionCheck={attendanceSessionCheck}
+    />
   );
 }
