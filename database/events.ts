@@ -54,8 +54,8 @@ export const findSingleEventInsecure = cache(
 );
 
 export const findSingleEventByCity = cache(
-  async (sessionToken: string, city: string, order: string) => {
-    const [event] = await sql<Event[]>`
+  async (sessionToken: string, city: string, order: string | null) => {
+    const event = await sql<Event[]>`
       SELECT
         events.*
       FROM

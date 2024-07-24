@@ -1,9 +1,7 @@
-// TODO all events for not logged in
-// all + suggested events for logged in
-
 import { cookies } from 'next/headers';
 import { getValidSession } from '../../database/sessions';
-import NotLogged from './NotLogged';
+import EventsLogged from './EventsLogged';
+import EventsNotLogged from './EventsNotLogged';
 
 export default async function Events() {
   // // 1. Checking if the sessionToken cookie exists
@@ -14,8 +12,16 @@ export default async function Events() {
 
   // // 3. If the sessionToken cookie is invalid or doesn't exist, show all the events
   if (!session) {
-    return <NotLogged />;
+    return <EventsNotLogged />;
   }
 
   // // 4. if the sessiontoken is valid, show events in the city
+  return (
+    <EventsLogged
+      session={session}
+      searchParams={{
+        returnTo: undefined,
+      }}
+    />
+  );
 }
