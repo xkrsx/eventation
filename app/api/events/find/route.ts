@@ -17,6 +17,7 @@ export async function POST(
   // 2. Validate the user data with zod
   const result = eventSchema.safeParse(body.event);
 
+  // TODO change function arguments
   const singleEvent = await findSingleEventInsecure();
   console.log(singleEvent);
 
