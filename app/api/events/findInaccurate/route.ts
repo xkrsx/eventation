@@ -24,21 +24,31 @@ export async function POST(
     location: string;
   } = await request.json();
 
+  // // 2. change username key to userId before finding user in DB
   const { username: userId, ...rest } = body;
   const updatedBody = { ...rest, userId };
 
   const foundUserId = await getUserByUsernameInsecure(updatedBody.userId);
 
+  if (!foundUserId) {
+    return NextResponse.json(
+      { errors: { message: 'No user found.' } },
+      {
+        status: 500,
+      },
+    );
+  }
+
   // 2. Validate the user data with zod
   const bodyWithUserId = {
     name: String(body.name ? body.name : ''),
-    userId: String(foundUserId ? foundUserId.id : ''),
+    userId: String(foundUserId.id ? foundUserId.id : ''),
     category: String(body.category ? body.category : ''),
     location: String(body.location ? body.location : ''),
   };
 
   const result = inaccurateSearchedEventSchema.safeParse(bodyWithUserId);
-  console.log(result);
+
   if (!result.success) {
     return NextResponse.json(
       { errors: { message: result.error.issues } },
@@ -48,11 +58,7 @@ export async function POST(
     );
   }
 
-  console.log(result);
-
   const foundEvents = await findEventsInaccurateInsecure(result.data);
-
-  console.log('foundEvents: ', foundEvents);
 
   if (foundEvents.length === 0) {
     return NextResponse.json(

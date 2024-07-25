@@ -16,7 +16,7 @@ export default function FindEventInaccurateForm() {
     category: '',
     location: '',
   });
-  const [errorMessage, setErrorMessage] = useState<string>([]);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   function handleChange(
     event: React.ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,

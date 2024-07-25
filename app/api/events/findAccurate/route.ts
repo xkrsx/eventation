@@ -36,7 +36,7 @@ export async function POST(
 
   if (!userId) {
     return NextResponse.json(
-      { errors: { message: 'No events found.' } },
+      { errors: { message: 'No user found.' } },
       {
         status: 500,
       },
