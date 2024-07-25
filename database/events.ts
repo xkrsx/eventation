@@ -27,7 +27,7 @@ export type Event = NewEvent & {
   cancelled: boolean;
 };
 
-export const findSingleEventInsecure = cache(
+export const findSingleEventInaccurateInsecure = cache(
   async (
     formField1: string,
     userQuery1: string,
@@ -45,9 +45,22 @@ export const findSingleEventInsecure = cache(
         events
       WHERE
         ${formField1} = ${userQuery1}
-        AND ${formField2} = ${userQuery2}
+        OR ${formField2} = ${userQuery2}
         OR ${formField3} = ${userQuery3}
         OR ${formField4} = ${userQuery4}
+    `;
+    return event;
+  },
+);
+export const findSingleEventAccurateInsecure = cache(
+  async (formField: string, userQuery: string) => {
+    const [event] = await sql<Event[]>`
+      SELECT
+        *
+      FROM
+        events
+      WHERE
+        ${formField} = ${userQuery}
     `;
     return event;
   },
