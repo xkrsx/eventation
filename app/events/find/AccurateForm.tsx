@@ -5,6 +5,7 @@ import {
 } from '@geoapify/react-geocoder-autocomplete';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
+import { ZodIssue } from 'zod';
 import { categoriesObject } from '../../../database/categories';
 import { EventResponseBodyPost } from '../../api/events/route';
 import ErrorMessage from '../../ErrorMessage';
@@ -25,8 +26,7 @@ export default function FindEventCccurateForm() {
     location: '',
   });
 
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | ZodIssue[]>('');
 
   const router = useRouter();
 
@@ -180,7 +180,7 @@ export default function FindEventCccurateForm() {
               </label>
             </label>
           </div>
-          <button disabled={isDisabled}>Find event</button>
+          <button>Find matching events</button>
         </form>
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </div>
