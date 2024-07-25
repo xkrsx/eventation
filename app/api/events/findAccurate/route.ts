@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { ZodIssue } from 'zod';
 import { Event, findEventsAccurateInsecure } from '../../../../database/events';
 import { getUserByUsernameInsecure } from '../../../../database/users';
 import { accurateSearchedFieldSchema } from '../../../../migrations/00002-createTableEvents';
@@ -7,7 +8,7 @@ export type EventResponseBodyPost =
   | {
       events: (Event | undefined)[];
     }
-  | { errors: { message: string } };
+  | { message: string | ZodIssue[] };
 
 export async function POST(
   request: NextRequest,
@@ -22,7 +23,7 @@ export async function POST(
   const result = accurateSearchedFieldSchema.safeParse(body);
   if (!result.success) {
     return NextResponse.json(
-      { errors: result.error.issues },
+      { message: result.error.issues },
       {
         status: 400,
       },
@@ -35,7 +36,7 @@ export async function POST(
 
   if (!userId) {
     return NextResponse.json(
-      { errors: { message: 'No events found.' } },
+      { message: 'No events found.' },
       {
         status: 500,
       },
