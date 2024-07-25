@@ -22,7 +22,7 @@ export default function AddEventForm(props: Props) {
     userId: props.userId,
     timeStart: '',
     timeEnd: '',
-    category: 'Activism / Politics',
+    category: '',
     location: '',
     latitude: '',
     longitude: '',
@@ -90,7 +90,6 @@ export default function AddEventForm(props: Props) {
     ) {
       setErrorMessage('Starting date/time must be earlier than ending.');
     }
-
     if (newEvent.description.length < 3) {
       setErrorMessage('Event description must have at least 3 characters.');
     }
@@ -178,6 +177,8 @@ export default function AddEventForm(props: Props) {
           <label>
             Category
             <select name="category" onChange={handleChange}>
+              <option defaultValue="true" hidden disabled />
+
               {categories.map((category) => {
                 return (
                   <option

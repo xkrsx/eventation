@@ -22,19 +22,18 @@ export default async function SingleCategoryFromParams(props: Props) {
   const events = await getAllEventsSingleCategoryInsecure(
     Number(props.params.eventId),
   );
-  if (!events) {
+  console.log(events);
+
+  // // 4. If the sessionToken cookie is invalid or doesn't exist, show single event for unlogged
+
+  // TODO FIX when there are no events in category
+  // // 5. If the sessionToken cookie is valid, show single event for logged
+  return events.length > 1 ? (
     <div>
       <strong>Sorry, category not found.</strong>
       <Link href="/events/find">Find event.</Link>
-    </div>;
-    return;
-  }
-
-  // // 4. If the sessionToken cookie is invalid or doesn't exist, show single event for unlogged
-  if (!session) {
-    return <SingleCategoryNotLogged events={events} />;
-  }
-
-  // // 5. If the sessionToken cookie is valid, show single event for logged
-  return <SingleCategoryLogged events={events} />;
+    </div>
+  ) : (
+    <SingleCategoryLogged events={events} />
+  );
 }

@@ -22,7 +22,7 @@ export default function FindEventCccurateForm() {
   const [formFields, setFormFields] = useState<FormFields>({
     name: '',
     userId: '',
-    category: 'Activism / Politics',
+    category: '',
     location: '',
   });
 
@@ -141,6 +141,7 @@ export default function FindEventCccurateForm() {
                 />
                 Category
                 <select name="category" onChange={handleInputChange}>
+                  <option defaultValue="true" />
                   {categories.map((category) => {
                     return (
                       <option

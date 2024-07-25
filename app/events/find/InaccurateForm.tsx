@@ -14,11 +14,10 @@ export default function FindEventInaccurateForm() {
   const [searchedEvent, setSearchedEvent] = useState({
     name: '',
     userId: '',
-    category: 'Activism / Politics',
+    category: ' ',
     location: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
-  const [isDisabled, setIsDisabled] = useState(false);
 
   const router = useRouter();
 
@@ -99,7 +98,8 @@ export default function FindEventInaccurateForm() {
           </label>
           <label htmlFor="category">
             Category
-            <select name="category" onChange={handleChange}>
+            <select name="category" defaultChecked onChange={handleChange}>
+              <option defaultValue="true" />
               {categories.map((category) => {
                 return (
                   <option
@@ -126,7 +126,7 @@ export default function FindEventInaccurateForm() {
               />
             </GeoapifyContext>
           </label>
-          <button disabled={isDisabled}>Find event</button>
+          <button>Find matching events</button>
         </form>
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </div>

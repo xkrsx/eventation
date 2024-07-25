@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { ZodIssue } from 'zod';
 import {
   Event,
   findEventsInaccurateInsecure,
@@ -10,7 +11,7 @@ export type EventResponseBodyPost =
   | {
       events: (Event | undefined)[];
     }
-  | { errors: { message: string }[] };
+  | { message: string | ZodIssue[] };
 
 export async function POST(
   request: NextRequest,
