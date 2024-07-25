@@ -27,16 +27,11 @@ export type Event = NewEvent & {
   cancelled: boolean;
 };
 
-export const findSingleEventInaccurateInsecure = cache(
+export const findEventsInaccurateInsecure = cache(
+  // TODO add finding user by name not id
+
   async (
-    formField1: string,
-    userQuery1: string,
-    formField2: string,
-    userQuery2: string,
-    formField3: string,
-    userQuery3: string,
-    formField4: string,
-    userQuery4: string,
+    searchedEvent: Pick<Event, 'name' | 'userId' | 'category' | 'location'>,
   ) => {
     const [event] = await sql<Event[]>`
       SELECT
@@ -44,15 +39,15 @@ export const findSingleEventInaccurateInsecure = cache(
       FROM
         events
       WHERE
-        ${formField1} = ${userQuery1}
-        OR ${formField2} = ${userQuery2}
-        OR ${formField3} = ${userQuery3}
-        OR ${formField4} = ${userQuery4}
+        events.name = ${searchedEvent.name}
+        OR events.user_id = ${searchedEvent.userId}
+        OR events.category = ${searchedEvent.category}
+        OR events.location = ${searchedEvent.location}
     `;
-    return event;
+    return [event];
   },
 );
-export const findSingleEventAccurateInsecure = cache(
+export const findEventsAccurateInsecure = cache(
   async (formField: string, userQuery: string) => {
     const [event] = await sql<Event[]>`
       SELECT
@@ -62,7 +57,7 @@ export const findSingleEventAccurateInsecure = cache(
       WHERE
         ${formField} = ${userQuery}
     `;
-    return event;
+    return [event];
   },
 );
 

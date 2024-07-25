@@ -22,27 +22,7 @@ export default function FindEventInaccurateForm() {
 
   const router = useRouter();
 
-  async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
-    checkForm();
-    event.preventDefault();
-
-    const response = await fetch('/api/events/findInaccurate', {
-      method: 'GET',
-      body: JSON.stringify(searchedEvent),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const data: EventResponseBodyPost = await response.json();
-
-    if ('errors' in data) {
-      setErrorMessage(String(data.errors));
-      return;
-    }
-    if ('event' in data) {
-      router.push(`/events/${data.event.id}`);
-    }
-  }
+  const categories = categoriesObject;
 
   function sendGeocoderRequest(value: string, geocoder: any) {
     return geocoder.sendGeocoderRequest(value);
@@ -54,18 +34,6 @@ export default function FindEventInaccurateForm() {
       location: feature.properties.formatted,
     });
     return geocoder.sendPlaceDetailsRequest(feature);
-  }
-
-  function checkForm() {
-    if (searchedEvent.name.length < 3) {
-      setErrorMessage('Event name must have at least 3 characters.');
-    }
-    if (searchedEvent.name.length >= 255) {
-      setErrorMessage('Event name must have maximum 255 characters.');
-    }
-    if (searchedEvent.name.length >= 3 && searchedEvent.name.length <= 255) {
-      setIsDisabled(false);
-    }
   }
 
   function handleChange(
@@ -80,7 +48,40 @@ export default function FindEventInaccurateForm() {
     });
   }
 
-  const categories = categoriesObject;
+  function checkForm() {
+    if (searchedEvent.name.length < 3) {
+      setErrorMessage('Event name must have at least 3 characters.');
+    }
+    if (searchedEvent.name.length >= 255) {
+      setErrorMessage('Event name must have maximum 255 characters.');
+    }
+    if (searchedEvent.name.length >= 3 && searchedEvent.name.length <= 255) {
+      setIsDisabled(false);
+    }
+  }
+
+  async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    checkForm();
+
+    const response = await fetch('/api/events/findInaccurate', {
+      method: 'POST',
+      body: JSON.stringify(searchedEvent),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data: EventResponseBodyPost = await response.json();
+
+    if ('errors' in data) {
+      setErrorMessage(String(data.errors));
+      return;
+    }
+    // TODO show results
+    if ('event' in data) {
+      router.push(`/events/${data.event.id}`);
+    }
+  }
 
   return (
     <div className="wrapper">

@@ -37,6 +37,13 @@ export const findEventSchema = z.object({
   location: z.string(),
 });
 
+export const searchedEventSchema = z.object({
+  name: z.string(),
+  userId: z.number(),
+  category: z.string(),
+  location: z.string(),
+});
+
 // TODO add optional short name to generate link with, instead of id
 export async function up(sql: Sql) {
   await sql`

@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  Event,
-  findSingleEventAccurateInsecure,
-} from '../../../../database/events';
-import {
-  eventSchema,
-  safeEventQuerySchema,
-} from '../../../../migrations/00002-createTableEvents';
+import { Event, findEventsAccurateInsecure } from '../../../../database/events';
+import { searchedEventSchema } from '../../../../migrations/00002-createTableEvents';
 
 export type EventResponseBodyPost =
   | {
-      event: Event;
+      events: (Event | undefined)[];
     }
   | { errors: { message: string }[] };
 
@@ -18,13 +12,12 @@ export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<EventResponseBodyPost>> {
   // 1. Get the event data from the request
-  const body: { event: Event } = await request.json();
+  const body: {
+    event: { name: string; userId: number; category: string; location: string };
+  } = await request.json();
 
   // 2. Validate the user data with zod
-  const result = eventSchema.safeParse(body.event);
-
-  // TODO change function arguments
-  const singleEvent = await findSingleEventAccurateInsecure(result.data.);
+  const result = searchedEventSchema.safeParse(body.event);
 
   if (!result.success) {
     return NextResponse.json(
@@ -35,8 +28,19 @@ export async function POST(
     );
   }
 
+  const foundEvents = await findEventsAccurateInsecure(result.data);
+
+  if (!foundEvents) {
+    return NextResponse.json(
+      { errors: [{ message: 'Username or password invalid.' }] },
+      {
+        status: 500,
+      },
+    );
+  }
+
   // 8. Return found event
   return NextResponse.json({
-    event: body.event,
+    events: foundEvents,
   });
 }

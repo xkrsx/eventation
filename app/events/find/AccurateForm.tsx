@@ -18,9 +18,6 @@ export default function FindEventAccurateForm() {
     category: 'Activism / Politics',
     location: '',
   });
-  console.log('searchedField: ', searchedField);
-  console.log('searchedEvent: ', searchedEvent);
-
   const [errorMessage, setErrorMessage] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
   const handleRadioChange = (value: string) => {
@@ -28,6 +25,8 @@ export default function FindEventAccurateForm() {
   };
 
   const router = useRouter();
+
+  const categories = categoriesObject;
 
   function sendGeocoderRequest(value: string, geocoder: any) {
     return geocoder.sendGeocoderRequest(value);
@@ -54,8 +53,6 @@ export default function FindEventAccurateForm() {
     });
   }
 
-  const categories = categoriesObject;
-
   function checkForm() {
     if (searchedEvent.name.length < 3) {
       setErrorMessage('Event name must have at least 3 characters.');
@@ -73,7 +70,7 @@ export default function FindEventAccurateForm() {
     checkForm();
 
     const response = await fetch('/api/events/findAccurate', {
-      method: 'GET',
+      method: 'POST',
       body: JSON.stringify({ field: searchedField, event: searchedEvent }),
       headers: {
         'Content-Type': 'application/json',
