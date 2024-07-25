@@ -4,7 +4,7 @@ import {
   findEventsInaccurateInsecure,
 } from '../../../../database/events';
 import { getUserByUsernameInsecure } from '../../../../database/users';
-import { searchedEventSchema } from '../../../../migrations/00002-createTableEvents';
+import { inaccurateSearchedEventSchema } from '../../../../migrations/00002-createTableEvents';
 
 export type EventResponseBodyPost =
   | {
@@ -28,7 +28,6 @@ export async function POST(
   const userId =
     body.event.username !== '' &&
     (await getUserByUsernameInsecure(body.event.username));
-  userId;
 
   // 2. Validate the user data with zod
   const event = {
@@ -38,7 +37,7 @@ export async function POST(
     location: body.event.location,
   };
 
-  const result = searchedEventSchema.safeParse(event);
+  const result = inaccurateSearchedEventSchema.safeParse(event);
 
   if (!result.success) {
     return NextResponse.json(

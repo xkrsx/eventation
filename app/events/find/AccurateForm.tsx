@@ -11,7 +11,7 @@ import ErrorMessage from '../../ErrorMessage';
 
 type FormFields = {
   name: string;
-  organiser: string;
+  userId: string;
   location: string;
   category: string;
 };
@@ -20,19 +20,19 @@ export default function FindEventCccurateForm() {
   const [selectedField, setSelectedField] = useState<keyof FormFields>('name');
   const [formFields, setFormFields] = useState<FormFields>({
     name: '',
-    organiser: '',
+    userId: '',
     category: 'Activism / Politics',
     location: '',
   });
 
-  console.log('selectedField: ', selectedField);
-  console.log('formFields: ', formFields);
   const [isDisabled, setIsDisabled] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const router = useRouter();
 
   const handleRadioChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setErrorMessage('');
+
     setSelectedField(e.target.value as keyof FormFields);
   };
 
@@ -76,7 +76,8 @@ export default function FindEventCccurateForm() {
     const data: EventResponseBodyPost = await response.json();
 
     if ('errors' in data) {
-      setErrorMessage(String(data.errors));
+      console.log(data);
+      setErrorMessage(data.errors.message);
       return;
     }
     // TODO show results
@@ -91,16 +92,15 @@ export default function FindEventCccurateForm() {
         Choose one option to find exact match
         <form onSubmit={handleSearch}>
           <div>
-            <label>
-              <input
-                type="radio"
-                name="selectedField"
-                value="name"
-                checked={selectedField === 'name'}
-                onChange={handleRadioChange}
-              />
-              Name
+            <label htmlFor="name">
               <label>
+                <input
+                  type="radio"
+                  name="selectedField"
+                  value="name"
+                  checked={selectedField === 'name'}
+                  onChange={handleRadioChange}
+                />
                 Name:
                 <input
                   name="name"
@@ -111,36 +111,35 @@ export default function FindEventCccurateForm() {
             </label>
           </div>
           <div>
-            <label>
-              <input
-                type="radio"
-                name="selectedField"
-                value="organiser"
-                checked={selectedField === 'organiser'}
-                onChange={handleRadioChange}
-              />
-              Organiser
+            <label htmlFor="userId">
               <label>
+                <input
+                  type="radio"
+                  name="selectedField"
+                  value="userId"
+                  checked={selectedField === 'userId'}
+                  onChange={handleRadioChange}
+                />
                 Organiser:
                 <input
-                  name="organiser"
-                  value={formFields.organiser}
+                  name="userId"
+                  value={formFields.userId}
                   onChange={handleInputChange}
                 />
               </label>
             </label>
           </div>
           <div>
-            <label>
-              <input
-                type="radio"
-                name="selectedField"
-                value="category"
-                checked={selectedField === 'category'}
-                onChange={handleRadioChange}
-              />
-              Category
+            <label htmlFor="category">
               <label>
+                <input
+                  type="radio"
+                  name="selectedField"
+                  value="category"
+                  checked={selectedField === 'category'}
+                  onChange={handleRadioChange}
+                />
+                Category
                 <select name="category" onChange={handleInputChange}>
                   {categories.map((category) => {
                     return (
@@ -157,15 +156,15 @@ export default function FindEventCccurateForm() {
             </label>
           </div>
           <div>
-            <label>
-              <input
-                type="radio"
-                name="selectedField"
-                value="location"
-                checked={selectedField === 'location'}
-                onChange={handleRadioChange}
-              />
-              <label htmlFor="location">
+            <label htmlFor="location">
+              <label>
+                <input
+                  type="radio"
+                  name="selectedField"
+                  value="location"
+                  checked={selectedField === 'location'}
+                  onChange={handleRadioChange}
+                />
                 Location:
                 <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
                   <GeoapifyGeocoderAutocomplete

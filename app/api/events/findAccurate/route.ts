@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Event, findEventsAccurateInsecure } from '../../../../database/events';
-import { searchedFieldSchema } from '../../../../migrations/00002-createTableEvents';
+import { getUserByUsernameInsecure } from '../../../../database/users';
+import { accurateSearchedFieldSchema } from '../../../../migrations/00002-createTableEvents';
 
 export type EventResponseBodyPost =
   | {
       events: (Event | undefined)[];
     }
-  | { errors: { message: string }[] };
+  | { errors: { message: string } };
 
 export async function POST(
   request: NextRequest,
@@ -18,26 +19,37 @@ export async function POST(
   } = await request.json();
 
   // 2. Validate the user data with zod
-  const fieldResult = searchedFieldSchema.safeParse(body.field);
-  // const eventResult = searchedAccurateEventSchema.safeParse(body.event);
-
-  if (!fieldResult.success) {
+  const result = accurateSearchedFieldSchema.safeParse(body);
+  if (!result.success) {
     return NextResponse.json(
-      { errors: fieldResult.error.issues },
+      { errors: result.error.issues },
       {
         status: 400,
       },
     );
   }
 
+  const userId =
+    result.data.field === 'userId' &&
+    (await getUserByUsernameInsecure(result.data.query));
+
+  if (!userId) {
+    return NextResponse.json(
+      { errors: { message: 'No events found.' } },
+      {
+        status: 500,
+      },
+    );
+  }
+
   const foundEvents = await findEventsAccurateInsecure(
-    fieldResult.data,
-    body.query,
+    result.data.field,
+    result.data.field === 'userId' ? userId.id : result.data.query,
   );
 
-  if (!foundEvents) {
+  if (foundEvents.length === 0) {
     return NextResponse.json(
-      { errors: [{ message: 'No events found.' }] },
+      { message: 'No events found.' },
       {
         status: 500,
       },

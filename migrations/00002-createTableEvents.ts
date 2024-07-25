@@ -37,7 +37,7 @@ export const findEventSchema = z.object({
   location: z.string(),
 });
 
-export const searchedEventSchema = z.object({
+export const inaccurateSearchedEventSchema = z.object({
   name: z.string().optional(),
   userId: z.number().optional(),
   category: z.string().optional(),
@@ -51,8 +51,10 @@ export const searchedEventSchema = z.object({
 //   location: z.string().optional(),
 // });
 
-export const searchedFieldSchema = z.string();
-// .regex(/^(name|organiser|category|location)$/),
+export const accurateSearchedFieldSchema = z.object({
+  field: z.string().regex(/^(name|userId|category|location)$/),
+  query: z.string(),
+});
 
 // TODO add optional short name to generate link with, instead of id
 export async function up(sql: Sql) {

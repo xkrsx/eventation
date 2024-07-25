@@ -50,7 +50,7 @@ export const findEventsInaccurateInsecure = cache(
 );
 export const findEventsAccurateInsecure = cache(
   // TODO for after graaduation: fix this sql, risky to injections
-  async (formField: string, userQuery: string) => {
+  async (formField: string, userQuery: number | string) => {
     const event = await sql<Event[]>`
       SELECT
         *
