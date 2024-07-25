@@ -38,10 +38,10 @@ export const findEventSchema = z.object({
 });
 
 export const inaccurateSearchedEventSchema = z.object({
-  name: z.string().optional(),
-  userId: z.string().optional(),
-  category: z.string().optional(),
-  location: z.string().optional(),
+  name: z.string(),
+  userId: z.string(),
+  category: z.string(),
+  location: z.string(),
 });
 
 export const accurateSearchedFieldSchema = z.object({

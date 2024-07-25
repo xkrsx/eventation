@@ -30,7 +30,7 @@ export type Event = NewEvent & {
 export const findEventsInaccurateInsecure = cache(
   async (searchedEvent: {
     name: string;
-    userId: number;
+    userId: string;
     category: string;
     location: string;
   }) => {
@@ -41,7 +41,7 @@ export const findEventsInaccurateInsecure = cache(
         events
       WHERE
         events.name = ${searchedEvent.name}
-        OR events.user_id = ${searchedEvent.userId}
+        OR events.user_id = ${Number(searchedEvent.userId)}
         OR events.category = ${searchedEvent.category}
         OR events.location = ${searchedEvent.location}
     `;

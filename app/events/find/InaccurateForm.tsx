@@ -13,7 +13,7 @@ export default function FindEventInaccurateForm() {
   const [searchedEvent, setSearchedEvent] = useState({
     name: '',
     username: '',
-    category: ' ',
+    category: '',
     location: '',
   });
   const [errorMessage, setErrorMessage] = useState<string>([]);

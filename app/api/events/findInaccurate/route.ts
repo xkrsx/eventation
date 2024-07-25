@@ -24,18 +24,21 @@ export async function POST(
     location: string;
   } = await request.json();
 
-  const userId = await getUserByUsernameInsecure(body.username);
+  const { username: userId, ...rest } = body;
+  const updatedBody = { ...rest, userId };
+
+  const foundUserId = await getUserByUsernameInsecure(updatedBody.userId);
 
   // 2. Validate the user data with zod
   const bodyWithUserId = {
     name: String(body.name ? body.name : ''),
-    userId: String(userId ? userId : ''),
+    userId: String(foundUserId ? foundUserId.id : ''),
     category: String(body.category ? body.category : ''),
     location: String(body.location ? body.location : ''),
   };
 
   const result = inaccurateSearchedEventSchema.safeParse(bodyWithUserId);
-
+  console.log(result);
   if (!result.success) {
     return NextResponse.json(
       { errors: { message: result.error.issues } },
@@ -45,8 +48,11 @@ export async function POST(
     );
   }
 
+  console.log(result);
+
   const foundEvents = await findEventsInaccurateInsecure(result.data);
-  console.log('result.data: ', result.data);
+
+  console.log('foundEvents: ', foundEvents);
 
   if (foundEvents.length === 0) {
     return NextResponse.json(
@@ -57,7 +63,7 @@ export async function POST(
     );
   }
 
-  // 8. Return found event
+  // // 8. Return found event
   return NextResponse.json({
     events: foundEvents,
   });
