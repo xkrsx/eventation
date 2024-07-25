@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Event, findEventsAccurateInsecure } from '../../../../database/events';
-import { searchedEventSchema } from '../../../../migrations/00002-createTableEvents';
+import { searchedFieldSchema } from '../../../../migrations/00002-createTableEvents';
 
 export type EventResponseBodyPost =
   | {
@@ -13,22 +13,27 @@ export async function POST(
 ): Promise<NextResponse<EventResponseBodyPost>> {
   // 1. Get the event data from the request
   const body: {
-    event: { name: string; userId: number; category: string; location: string };
+    field: string;
+    query: string;
   } = await request.json();
 
   // 2. Validate the user data with zod
-  const result = searchedEventSchema.safeParse(body.event);
+  const fieldResult = searchedFieldSchema.safeParse(body.field);
+  // const eventResult = searchedAccurateEventSchema.safeParse(body.event);
 
-  if (!result.success) {
+  if (!fieldResult.success) {
     return NextResponse.json(
-      { errors: result.error.issues },
+      { errors: fieldResult.error.issues },
       {
         status: 400,
       },
     );
   }
 
-  const foundEvents = await findEventsAccurateInsecure(result.data);
+  const foundEvents = await findEventsAccurateInsecure(
+    fieldResult.data.field,
+    body.query,
+  );
 
   if (!foundEvents) {
     return NextResponse.json(

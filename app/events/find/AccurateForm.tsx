@@ -68,10 +68,14 @@ export default function FindEventAccurateForm() {
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     checkForm();
+    // const query = searchedEvent
 
     const response = await fetch('/api/events/findAccurate', {
       method: 'POST',
-      body: JSON.stringify({ field: searchedField, event: searchedEvent }),
+      body: JSON.stringify({
+        field: searchedField,
+        event: { query: searchedEvent },
+      }),
       headers: {
         'Content-Type': 'application/json',
       },
