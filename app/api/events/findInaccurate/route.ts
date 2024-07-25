@@ -11,7 +11,7 @@ export type EventResponseBodyPost =
   | {
       events: (Event | undefined)[];
     }
-  | { message: string | ZodIssue[] };
+  | { errors: { message: string | ZodIssue[] } };
 
 export async function POST(
   request: NextRequest,
@@ -42,7 +42,7 @@ export async function POST(
 
   if (!result.success) {
     return NextResponse.json(
-      { errors: result.error.issues },
+      { errors: { message: result.error.issues } },
       {
         status: 400,
       },
@@ -51,9 +51,9 @@ export async function POST(
 
   const foundEvents = await findEventsInaccurateInsecure(result.data);
 
-  if (!foundEvents) {
+  if (foundEvents.length === 0) {
     return NextResponse.json(
-      { message: 'Username or password invalid.' },
+      { errors: { message: 'No events found.' } },
       {
         status: 500,
       },

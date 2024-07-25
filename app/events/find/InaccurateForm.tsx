@@ -4,7 +4,6 @@ import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
-import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import { categoriesObject } from '../../../database/categories';
 import { EventResponseBodyPost } from '../../api/events/route';
@@ -18,8 +17,6 @@ export default function FindEventInaccurateForm() {
     location: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
-
-  const router = useRouter();
 
   const categories = categoriesObject;
 
@@ -65,7 +62,6 @@ export default function FindEventInaccurateForm() {
     }
     // TODO show results
     if ('event' in data) {
-      router.push(`/events/${data.event.id}`);
     }
   }
 

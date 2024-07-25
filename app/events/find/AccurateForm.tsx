@@ -3,11 +3,10 @@ import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
-import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
 import { ZodIssue } from 'zod';
 import { categoriesObject } from '../../../database/categories';
-import { EventResponseBodyPost } from '../../api/events/route';
+import { EventResponseBodyPost } from '../../api/events/findAccurate/route';
 import ErrorMessage from '../../ErrorMessage';
 
 type FormFields = {
@@ -27,8 +26,6 @@ export default function FindEventCccurateForm() {
   });
 
   const [errorMessage, setErrorMessage] = useState<string | ZodIssue[]>('');
-
-  const router = useRouter();
 
   const handleRadioChange = (e: ChangeEvent<HTMLInputElement>) => {
     setErrorMessage('');
@@ -76,13 +73,12 @@ export default function FindEventCccurateForm() {
     const data: EventResponseBodyPost = await response.json();
 
     if ('errors' in data) {
-      console.log(data);
-      setErrorMessage(data.errors.message);
+      const message = data.errors.message;
+      setErrorMessage(message);
       return;
     }
     // TODO show results
     if ('event' in data) {
-      router.push(`/events/${data.event.id}`);
     }
   }
 
@@ -183,7 +179,7 @@ export default function FindEventCccurateForm() {
           </div>
           <button>Find matching events</button>
         </form>
-        <ErrorMessage>{errorMessage}</ErrorMessage>
+        <ErrorMessage>{errorMessage as string}</ErrorMessage>
       </div>
     </div>
   );

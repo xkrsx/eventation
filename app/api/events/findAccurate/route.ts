@@ -8,7 +8,7 @@ export type EventResponseBodyPost =
   | {
       events: (Event | undefined)[];
     }
-  | { message: string | ZodIssue[] };
+  | { errors: { message: string | ZodIssue[] } };
 
 export async function POST(
   request: NextRequest,
@@ -23,7 +23,7 @@ export async function POST(
   const result = accurateSearchedFieldSchema.safeParse(body);
   if (!result.success) {
     return NextResponse.json(
-      { message: result.error.issues },
+      { errors: { message: result.error.issues } },
       {
         status: 400,
       },
@@ -36,7 +36,7 @@ export async function POST(
 
   if (!userId) {
     return NextResponse.json(
-      { message: 'No events found.' },
+      { errors: { message: 'No events found.' } },
       {
         status: 500,
       },
@@ -50,7 +50,7 @@ export async function POST(
 
   if (foundEvents.length === 0) {
     return NextResponse.json(
-      { message: 'No events found.' },
+      { errors: { message: 'No events found.' } },
       {
         status: 500,
       },
