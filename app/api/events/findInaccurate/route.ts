@@ -30,19 +30,10 @@ export async function POST(
 
   const foundUserId = await getUserByUsernameInsecure(updatedBody.userId);
 
-  if (!foundUserId) {
-    return NextResponse.json(
-      { errors: { message: 'No user found.' } },
-      {
-        status: 500,
-      },
-    );
-  }
-
   // 2. Validate the user data with zod
   const bodyWithUserId = {
     name: String(body.name ? body.name : ''),
-    userId: String(foundUserId.id ? foundUserId.id : ''),
+    userId: String(foundUserId ? foundUserId.id : ''),
     category: String(body.category ? body.category : ''),
     location: String(body.location ? body.location : ''),
   };

@@ -6,7 +6,6 @@ import {
 import React, { ChangeEvent, useState } from 'react';
 import { ZodIssue } from 'zod';
 import { categoriesObject } from '../../../database/categories';
-import { EventResponseBodyPost } from '../../api/events/findAccurate/route';
 import ErrorMessage from '../../ErrorMessage';
 
 type FormFields = {
@@ -15,6 +14,12 @@ type FormFields = {
   location: string;
   category: string;
 };
+
+type EventResponseBodyPost =
+  | {
+      events: (Event | undefined)[];
+    }
+  | { message: string | ZodIssue[] };
 
 export default function FindEventCccurateForm() {
   const [selectedField, setSelectedField] = useState<keyof FormFields>('name');
@@ -73,8 +78,8 @@ export default function FindEventCccurateForm() {
     });
     const data: EventResponseBodyPost = await response.json();
 
-    if ('errors' in data) {
-      setErrorMessage(data.errors.message);
+    if ('message' in data) {
+      setErrorMessage(data.message);
       return;
     }
     // TODO show results

@@ -5,9 +5,15 @@ import {
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
 import { ChangeEvent, useState } from 'react';
+import { ZodIssue } from 'zod';
 import { categoriesObject } from '../../../database/categories';
-import { EventResponseBodyPost } from '../../api/events/route';
 import ErrorMessage from '../../ErrorMessage';
+
+type EventResponseBodyPost =
+  | {
+      events: (Event | undefined)[];
+    }
+  | { message: string | ZodIssue[] };
 
 export default function FindEventInaccurateForm() {
   const [searchedEvent, setSearchedEvent] = useState({
@@ -16,7 +22,8 @@ export default function FindEventInaccurateForm() {
     category: '',
     location: '',
   });
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string | ZodIssue[]>('');
+  const [results, setResults] = useState('');
 
   function handleChange(
     event: React.ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
@@ -55,8 +62,9 @@ export default function FindEventInaccurateForm() {
     });
     const data: EventResponseBodyPost = await response.json();
 
-    if ('errors' in data) {
-      return setErrorMessage('');
+    if ('message' in data) {
+      setErrorMessage(data.message);
+      return;
     }
     // TODO show results
     if ('event' in data) {

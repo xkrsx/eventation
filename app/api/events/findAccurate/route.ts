@@ -4,11 +4,11 @@ import { Event, findEventsAccurateInsecure } from '../../../../database/events';
 import { getUserByUsernameInsecure } from '../../../../database/users';
 import { accurateSearchedFieldSchema } from '../../../../migrations/00002-createTableEvents';
 
-export type EventResponseBodyPost =
+type EventResponseBodyPost =
   | {
       events: (Event | undefined)[];
     }
-  | { errors: { message: string | ZodIssue[] } };
+  | { message: string | ZodIssue[] };
 
 export async function POST(
   request: NextRequest,
@@ -23,7 +23,7 @@ export async function POST(
   const result = accurateSearchedFieldSchema.safeParse(body);
   if (!result.success) {
     return NextResponse.json(
-      { errors: { message: result.error.issues } },
+      { message: result.error.issues },
       {
         status: 400,
       },
@@ -36,7 +36,7 @@ export async function POST(
 
   if (!userId) {
     return NextResponse.json(
-      { errors: { message: 'No user found.' } },
+      { message: 'No user or events found.' },
       {
         status: 500,
       },
@@ -50,7 +50,7 @@ export async function POST(
 
   if (foundEvents.length === 0) {
     return NextResponse.json(
-      { errors: { message: 'No events found.' } },
+      { message: 'No events found.' },
       {
         status: 500,
       },
