@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { ZodIssue } from 'zod';
 import { createEvent, Event } from '../../../database/events';
 import { addStatus } from '../../../database/usersEventsStatus';
 import { eventSchema } from '../../../migrations/00002-createTableEvents';
@@ -8,9 +9,8 @@ export type EventResponseBodyPost =
   | {
       event: Event;
     }
-  | {
-      error: string;
-    };
+  | { error: string }
+  | { errorIssues: ZodIssue[] };
 
 export async function POST(
   request: Request,

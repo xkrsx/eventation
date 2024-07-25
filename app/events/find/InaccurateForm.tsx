@@ -12,11 +12,22 @@ import ErrorMessage from '../../ErrorMessage';
 export default function FindEventInaccurateForm() {
   const [searchedEvent, setSearchedEvent] = useState({
     name: '',
-    userId: '',
+    username: '',
     category: ' ',
     location: '',
   });
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string>([]);
+
+  function handleChange(
+    event: React.ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
+  ) {
+    const value = event.target.value;
+    setErrorMessage('');
+    setSearchedEvent({
+      ...searchedEvent,
+      [event.target.name]: value,
+    });
+  }
 
   const categories = categoriesObject;
 
@@ -32,18 +43,6 @@ export default function FindEventInaccurateForm() {
     return geocoder.sendPlaceDetailsRequest(feature);
   }
 
-  function handleChange(
-    event: React.ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
-  ) {
-    const value = event.target.value;
-
-    setErrorMessage('');
-    setSearchedEvent({
-      ...searchedEvent,
-      [event.target.name]: value,
-    });
-  }
-
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -57,8 +56,7 @@ export default function FindEventInaccurateForm() {
     const data: EventResponseBodyPost = await response.json();
 
     if ('errors' in data) {
-      setErrorMessage(String(data.errors));
-      return;
+      return setErrorMessage('');
     }
     // TODO show results
     if ('event' in data) {
@@ -87,8 +85,8 @@ export default function FindEventInaccurateForm() {
           <label htmlFor="organiser">
             Organiser
             <input
-              name="userId"
-              value={searchedEvent.userId}
+              name="username"
+              value={searchedEvent.username}
               onChange={handleChange}
             />
           </label>

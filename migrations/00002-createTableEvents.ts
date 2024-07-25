@@ -39,17 +39,10 @@ export const findEventSchema = z.object({
 
 export const inaccurateSearchedEventSchema = z.object({
   name: z.string().optional(),
-  userId: z.number().optional(),
+  userId: z.string().optional(),
   category: z.string().optional(),
   location: z.string().optional(),
 });
-
-// export const searchedAccurateEventSchema = z.object({
-//   name: z.string().optional(),
-//   userId: z.number().optional(),
-//   category: z.string().optional(),
-//   location: z.string().optional(),
-// });
 
 export const accurateSearchedFieldSchema = z.object({
   field: z.string().regex(/^(name|userId|category|location)$/),

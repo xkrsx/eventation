@@ -18,27 +18,23 @@ export async function POST(
 ): Promise<NextResponse<EventResponseBodyPost>> {
   // 1. Get the event data from the request
   const body: {
-    event: {
-      name: string;
-      username: string;
-      category: string;
-      location: string;
-    };
+    name: string;
+    username: string;
+    category: string;
+    location: string;
   } = await request.json();
 
-  const userId =
-    body.event.username !== '' &&
-    (await getUserByUsernameInsecure(body.event.username));
+  const userId = await getUserByUsernameInsecure(body.username);
 
   // 2. Validate the user data with zod
-  const event = {
-    name: body.event.name,
-    userId: userId,
-    category: body.event.category,
-    location: body.event.location,
+  const bodyWithUserId = {
+    name: String(body.name ? body.name : ''),
+    userId: String(userId ? userId : ''),
+    category: String(body.category ? body.category : ''),
+    location: String(body.location ? body.location : ''),
   };
 
-  const result = inaccurateSearchedEventSchema.safeParse(event);
+  const result = inaccurateSearchedEventSchema.safeParse(bodyWithUserId);
 
   if (!result.success) {
     return NextResponse.json(
@@ -50,6 +46,7 @@ export async function POST(
   }
 
   const foundEvents = await findEventsInaccurateInsecure(result.data);
+  console.log('result.data: ', result.data);
 
   if (foundEvents.length === 0) {
     return NextResponse.json(

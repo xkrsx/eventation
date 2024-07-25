@@ -43,6 +43,7 @@ export default function FindEventCccurateForm() {
       [name]: value,
     });
   };
+
   const categories = categoriesObject;
 
   function sendGeocoderRequest(value: string, geocoder: any) {
@@ -73,8 +74,7 @@ export default function FindEventCccurateForm() {
     const data: EventResponseBodyPost = await response.json();
 
     if ('errors' in data) {
-      const message = data.errors.message;
-      setErrorMessage(message);
+      setErrorMessage(data.errors.message);
       return;
     }
     // TODO show results
