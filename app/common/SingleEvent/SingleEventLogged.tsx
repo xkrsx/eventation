@@ -15,7 +15,7 @@ import AttendanceStatusForm from '../AttendanceStatus/AttendanceStatusForm';
 import EventImage from '../Images/EventImage/EventImage';
 
 type Props = {
-  event: Event;
+  event: Event | undefined;
 };
 
 export default async function SingleEventLogged(props: Props) {
@@ -23,6 +23,9 @@ export default async function SingleEventLogged(props: Props) {
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
   if (!session) {
     return redirect('/profile?returnTo=/profile/events');
+  }
+  if (!props.event) {
+    return redirect('/events/find');
   }
 
   const organiser = await getUserPublicByIdInsecure(props.event.userId);

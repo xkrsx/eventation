@@ -7,10 +7,13 @@ import { countAttendantsInsecure } from '../../../database/usersEventsStatus';
 import EventImage from '../Images/EventImage/EventImage';
 
 type Props = {
-  event: Event;
+  event: Event | undefined;
 };
 
 export default async function SingleEventNotLogged(props: Props) {
+  if (!props.event) {
+    return redirect('/events/find');
+  }
   const organiser = await getUserPublicByIdInsecure(props.event.userId);
   if (!organiser) {
     redirect(`/events/find`);

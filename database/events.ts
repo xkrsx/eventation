@@ -73,6 +73,20 @@ export const findSingleEventByCity = cache(
   },
 );
 
+export const getAllEventsSingleCategoryInsecure = cache(
+  async (category: string) => {
+    const [event] = await sql<Event[]>`
+      SELECT
+        events.*
+      FROM
+        events
+      WHERE
+        events.category = ${category}
+    `;
+    return [event];
+  },
+);
+
 export const createEvent = cache(
   async (sessionToken: string, newEvent: NewEvent) => {
     const [event] = await sql<Event[]>`
