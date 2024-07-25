@@ -93,7 +93,7 @@ export default function FindEventInaccurateForm() {
             await handleSearch(event);
           }}
         >
-          <label>
+          <label htmlFor="name">
             Name
             <input
               name="name"
@@ -101,7 +101,7 @@ export default function FindEventInaccurateForm() {
               onChange={handleChange}
             />
           </label>
-          <label>
+          <label htmlFor="organiser">
             Organiser
             <input
               name="userId"
@@ -109,7 +109,7 @@ export default function FindEventInaccurateForm() {
               onChange={handleChange}
             />
           </label>
-          <label>
+          <label htmlFor="category">
             Category
             <select name="category" onChange={handleChange}>
               {categories.map((category) => {
@@ -124,18 +124,20 @@ export default function FindEventInaccurateForm() {
               })}
             </select>
           </label>
-          <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
-            <GeoapifyGeocoderAutocomplete
-              placeholder="City"
-              type="city"
-              limit={3}
-              allowNonVerifiedHouseNumber={true}
-              sendGeocoderRequestFunc={sendGeocoderRequest}
-              addDetails={true}
-              sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
-            />
-          </GeoapifyContext>
-
+          <label htmlFor="location">
+            Location
+            <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
+              <GeoapifyGeocoderAutocomplete
+                placeholder="City"
+                type="city"
+                limit={3}
+                allowNonVerifiedHouseNumber={true}
+                sendGeocoderRequestFunc={sendGeocoderRequest}
+                addDetails={true}
+                sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
+              />
+            </GeoapifyContext>
+          </label>
           <button disabled={isDisabled}>Find event</button>
         </form>
         <ErrorMessage>{errorMessage}</ErrorMessage>
