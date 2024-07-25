@@ -31,13 +31,13 @@ export async function POST(
   }
 
   const foundEvents = await findEventsAccurateInsecure(
-    fieldResult.data.field,
+    fieldResult.data,
     body.query,
   );
 
   if (!foundEvents) {
     return NextResponse.json(
-      { errors: [{ message: 'Username or password invalid.' }] },
+      { errors: [{ message: 'No events found.' }] },
       {
         status: 500,
       },

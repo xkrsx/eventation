@@ -28,14 +28,15 @@ export type Event = NewEvent & {
 };
 
 export const findEventsInaccurateInsecure = cache(
-  // TODO add finding user by name not id
-
-  async (
-    searchedEvent: Pick<Event, 'name' | 'userId' | 'category' | 'location'>,
-  ) => {
-    const [event] = await sql<Event[]>`
+  async (searchedEvent: {
+    name: string;
+    userId: number;
+    category: string;
+    location: string;
+  }) => {
+    const event = await sql<Event[]>`
       SELECT
-        *
+        events.*
       FROM
         events
       WHERE
@@ -44,20 +45,21 @@ export const findEventsInaccurateInsecure = cache(
         OR events.category = ${searchedEvent.category}
         OR events.location = ${searchedEvent.location}
     `;
-    return [event];
+    return event;
   },
 );
 export const findEventsAccurateInsecure = cache(
+  // TODO for after graaduation: fix this sql, risky to injections
   async (formField: string, userQuery: string) => {
-    const [event] = await sql<Event[]>`
+    const event = await sql<Event[]>`
       SELECT
         *
       FROM
         events
       WHERE
-        ${formField} = ${userQuery}
+        ${sql(formField)} = ${userQuery}
     `;
-    return [event];
+    return event;
   },
 );
 

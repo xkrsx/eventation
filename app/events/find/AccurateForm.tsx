@@ -1,31 +1,51 @@
 'use client';
-
 import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { categoriesObject } from '../../../database/categories';
 import { EventResponseBodyPost } from '../../api/events/route';
 import ErrorMessage from '../../ErrorMessage';
 
-export default function FindEventAccurateForm() {
-  const [searchedField, setSearchedField] = useState('');
-  const [searchedEvent, setSearchedEvent] = useState({
+type FormFields = {
+  name: string;
+  organiser: string;
+  location: string;
+  category: string;
+};
+
+export default function FindEventCccurateForm() {
+  const [selectedField, setSelectedField] = useState<keyof FormFields>('name');
+  const [formFields, setFormFields] = useState<FormFields>({
     name: '',
-    userId: '',
+    organiser: '',
     category: 'Activism / Politics',
     location: '',
   });
-  const [errorMessage, setErrorMessage] = useState('');
+
+  console.log('selectedField: ', selectedField);
+  console.log('formFields: ', formFields);
   const [isDisabled, setIsDisabled] = useState(false);
-  const handleRadioChange = (value: string) => {
-    setSearchedField(value);
-  };
+  const [errorMessage, setErrorMessage] = useState('');
 
   const router = useRouter();
 
+  const handleRadioChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSelectedField(e.target.value as keyof FormFields);
+  };
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const { name, value } = event.target;
+    setErrorMessage('');
+    setFormFields({
+      ...formFields,
+      [name]: value,
+    });
+  };
   const categories = categoriesObject;
 
   function sendGeocoderRequest(value: string, geocoder: any) {
@@ -33,48 +53,21 @@ export default function FindEventAccurateForm() {
   }
 
   function sendPlaceDetailsRequest(feature: any, geocoder: any) {
-    setSearchedEvent({
-      ...searchedEvent,
+    setFormFields({
+      ...formFields,
       location: feature.properties.formatted,
     });
     return geocoder.sendPlaceDetailsRequest(feature);
   }
 
-  function handleChange(
-    event: React.ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
-  ) {
-    const value = event.target.value;
-
-    setErrorMessage('');
-    setSearchedField(event.target.name);
-    setSearchedEvent({
-      ...searchedEvent,
-      [event.target.name]: value,
-    });
-  }
-
-  function checkForm() {
-    if (searchedEvent.name.length < 3) {
-      setErrorMessage('Event name must have at least 3 characters.');
-    }
-    if (searchedEvent.name.length >= 255) {
-      setErrorMessage('Event name must have maximum 255 characters.');
-    }
-    if (searchedEvent.name.length >= 3 && searchedEvent.name.length <= 255) {
-      setIsDisabled(false);
-    }
-  }
-
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    checkForm();
-    // const query = searchedEvent
 
     const response = await fetch('/api/events/findAccurate', {
       method: 'POST',
       body: JSON.stringify({
-        field: searchedField,
-        event: { query: searchedEvent },
+        field: selectedField,
+        query: formFields[selectedField],
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -96,93 +89,96 @@ export default function FindEventAccurateForm() {
     <div className="wrapper">
       <div className="event">
         Choose one option to find exact match
-        <form
-          className="form"
-          onSubmit={async (event) => {
-            // eslint error: no preventDefault() even though there is one in called function
-            event.preventDefault();
-            await handleSearch(event);
-          }}
-        >
+        <form onSubmit={handleSearch}>
           <div>
-            <input
-              type="radio"
-              id="name"
-              value="name"
-              checked={searchedField === 'name'}
-              onChange={() => handleRadioChange('name')}
-            />
-            <label htmlFor="name">
+            <label>
+              <input
+                type="radio"
+                name="selectedField"
+                value="name"
+                checked={selectedField === 'name'}
+                onChange={handleRadioChange}
+              />
               Name
-              <input
-                name="name"
-                value={searchedEvent.name}
-                onChange={handleChange}
-              />
-            </label>
-          </div>
-          <div>
-            <input
-              type="radio"
-              id="organiser"
-              value="organiser"
-              checked={searchedField === 'organiser'}
-              onChange={() => handleRadioChange('organiser')}
-            />
-            <label htmlFor="organiser">
-              Organiser
-              <input
-                name="userId"
-                value={searchedEvent.userId}
-                onChange={handleChange}
-              />
-            </label>
-          </div>
-          <div>
-            <input
-              type="radio"
-              id="category"
-              value="category"
-              checked={searchedField === 'category'}
-              onChange={() => handleRadioChange('category')}
-            />
-            <label htmlFor="category">
-              Category
-              <select name="category" onChange={handleChange}>
-                {categories.map((category) => {
-                  return (
-                    <option
-                      key={`option-key-${category.name}`}
-                      value={category.name}
-                    >
-                      {category.name}
-                    </option>
-                  );
-                })}
-              </select>
-            </label>
-          </div>
-          <div>
-            <input
-              type="radio"
-              id="location"
-              value="location"
-              checked={searchedField === 'location'}
-              onChange={() => handleRadioChange('location')}
-            />
-            <label htmlFor="location">
-              Location
-              <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
-                <GeoapifyGeocoderAutocomplete
-                  placeholder="City"
-                  type="city"
-                  limit={3}
-                  allowNonVerifiedHouseNumber={true}
-                  sendGeocoderRequestFunc={sendGeocoderRequest}
-                  addDetails={true}
-                  sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
+              <label>
+                Name:
+                <input
+                  name="name"
+                  value={formFields.name}
+                  onChange={handleInputChange}
                 />
-              </GeoapifyContext>
+              </label>
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="radio"
+                name="selectedField"
+                value="organiser"
+                checked={selectedField === 'organiser'}
+                onChange={handleRadioChange}
+              />
+              Organiser
+              <label>
+                Organiser:
+                <input
+                  name="organiser"
+                  value={formFields.organiser}
+                  onChange={handleInputChange}
+                />
+              </label>
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="radio"
+                name="selectedField"
+                value="category"
+                checked={selectedField === 'category'}
+                onChange={handleRadioChange}
+              />
+              Category
+              <label>
+                <select name="category" onChange={handleInputChange}>
+                  {categories.map((category) => {
+                    return (
+                      <option
+                        key={`option-key-${category.name}`}
+                        value={category.name}
+                      >
+                        {category.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </label>
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="radio"
+                name="selectedField"
+                value="location"
+                checked={selectedField === 'location'}
+                onChange={handleRadioChange}
+              />
+              <label htmlFor="location">
+                Location:
+                <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
+                  <GeoapifyGeocoderAutocomplete
+                    placeholder="City"
+                    type="city"
+                    limit={3}
+                    allowNonVerifiedHouseNumber={true}
+                    sendGeocoderRequestFunc={sendGeocoderRequest}
+                    addDetails={true}
+                    sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
+                  />
+                </GeoapifyContext>
+              </label>
             </label>
           </div>
           <button disabled={isDisabled}>Find event</button>

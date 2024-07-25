@@ -48,21 +48,8 @@ export default function FindEventInaccurateForm() {
     });
   }
 
-  function checkForm() {
-    if (searchedEvent.name.length < 3) {
-      setErrorMessage('Event name must have at least 3 characters.');
-    }
-    if (searchedEvent.name.length >= 255) {
-      setErrorMessage('Event name must have maximum 255 characters.');
-    }
-    if (searchedEvent.name.length >= 3 && searchedEvent.name.length <= 255) {
-      setIsDisabled(false);
-    }
-  }
-
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    checkForm();
 
     const response = await fetch('/api/events/findInaccurate', {
       method: 'POST',
@@ -106,7 +93,7 @@ export default function FindEventInaccurateForm() {
             Organiser
             <input
               name="userId"
-              value={searchedEvent.name}
+              value={searchedEvent.userId}
               onChange={handleChange}
             />
           </label>

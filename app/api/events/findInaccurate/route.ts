@@ -3,6 +3,7 @@ import {
   Event,
   findEventsInaccurateInsecure,
 } from '../../../../database/events';
+import { getUserByUsernameInsecure } from '../../../../database/users';
 import { searchedEventSchema } from '../../../../migrations/00002-createTableEvents';
 
 export type EventResponseBodyPost =
@@ -16,11 +17,28 @@ export async function POST(
 ): Promise<NextResponse<EventResponseBodyPost>> {
   // 1. Get the event data from the request
   const body: {
-    event: { name: string; userId: number; category: string; location: string };
+    event: {
+      name: string;
+      username: string;
+      category: string;
+      location: string;
+    };
   } = await request.json();
 
+  const userId =
+    body.event.username !== '' &&
+    (await getUserByUsernameInsecure(body.event.username));
+  userId;
+
   // 2. Validate the user data with zod
-  const result = searchedEventSchema.safeParse(body.event);
+  const event = {
+    name: body.event.name,
+    userId: userId,
+    category: body.event.category,
+    location: body.event.location,
+  };
+
+  const result = searchedEventSchema.safeParse(event);
 
   if (!result.success) {
     return NextResponse.json(
@@ -35,7 +53,7 @@ export async function POST(
 
   if (!foundEvents) {
     return NextResponse.json(
-      { errors: [{ message: 'Username or password invalid.' }] },
+      { message: 'Username or password invalid.' },
       {
         status: 500,
       },
