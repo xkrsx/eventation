@@ -7,7 +7,7 @@ import SingleCategoryNotLogged from '../../common/SingleCategory/SingleCategoryN
 
 type Props = {
   params: {
-    category: string;
+    eventId: string;
   };
 };
 
@@ -20,7 +20,7 @@ export default async function SingleCategoryFromParams(props: Props) {
 
   // // 3. Get event info
   const events = await getAllEventsSingleCategoryInsecure(
-    props.params.category,
+    Number(props.params.eventId),
   );
   if (!events) {
     <div>
@@ -32,16 +32,9 @@ export default async function SingleCategoryFromParams(props: Props) {
 
   // // 4. If the sessionToken cookie is invalid or doesn't exist, show single event for unlogged
   if (!session) {
-    return (
-      <SingleCategoryNotLogged
-        category={props.params.category}
-        events={events}
-      />
-    );
+    return <SingleCategoryNotLogged events={events} />;
   }
 
   // // 5. If the sessionToken cookie is valid, show single event for logged
-  return (
-    <SingleCategoryLogged category={props.params.category} events={events} />
-  );
+  return <SingleCategoryLogged events={events} />;
 }

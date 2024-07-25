@@ -14,6 +14,8 @@ export default async function Nav() {
     <div className="nav">
       <Link href="/">Main stage</Link>
       {' | '}
+      <Link href="/categories">Categories</Link>
+      {' | '}
       <Link href="/events">Events</Link>
       {' | '}
       <Link href="/events/add">Add</Link>
