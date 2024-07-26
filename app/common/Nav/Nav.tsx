@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import * as React from 'react';
 import LogoutButton from '../../(auth)/logout/LogoutButton';
 import { getUser } from '../../../database/users';
 
@@ -12,12 +13,6 @@ export default async function Nav() {
 
   return (
     <div className="nav">
-      <Link href="/">Main stage</Link>
-      {' | '}
-      <Link href="/categories">Categories</Link>
-      {' | '}
-      <Link href="/events">Events</Link>
-      {' | '}
       <Link href="/events/add">Add</Link>
       {' | '}
       <Link href="/events/find">Find</Link>
