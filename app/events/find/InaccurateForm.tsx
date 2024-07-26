@@ -7,7 +7,12 @@ import {
 import { ChangeEvent, useState } from 'react';
 import { ZodIssue } from 'zod';
 import { categoriesObject } from '../../../database/categories';
+import { Event } from '../../../database/events';
 import ErrorMessage from '../../ErrorMessage';
+
+type Props = {
+  addResultsToShow: (events: (Event | undefined)[]) => void;
+};
 
 type EventResponseBodyPost =
   | {
@@ -15,7 +20,7 @@ type EventResponseBodyPost =
     }
   | { message: string | ZodIssue[] };
 
-export default function FindEventInaccurateForm() {
+export default function FindEventInaccurateForm(props: Props) {
   const [searchedEvent, setSearchedEvent] = useState({
     name: '',
     username: '',
@@ -23,7 +28,6 @@ export default function FindEventInaccurateForm() {
     location: '',
   });
   const [errorMessage, setErrorMessage] = useState<string | ZodIssue[]>('');
-  const [results, setResults] = useState('');
 
   function handleChange(
     event: React.ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
@@ -66,8 +70,9 @@ export default function FindEventInaccurateForm() {
       setErrorMessage(data.message);
       return;
     }
-    // TODO show results
-    if ('event' in data) {
+
+    if ('events' in data) {
+      props.addResultsToShow(data.events);
     }
   }
 
@@ -130,7 +135,7 @@ export default function FindEventInaccurateForm() {
           </label>
           <button>Find matching events</button>
         </form>
-        <ErrorMessage>{errorMessage}</ErrorMessage>
+        <ErrorMessage>{errorMessage as string}</ErrorMessage>
       </div>
     </div>
   );

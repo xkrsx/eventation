@@ -8,6 +8,10 @@ import { ZodIssue } from 'zod';
 import { categoriesObject } from '../../../database/categories';
 import ErrorMessage from '../../ErrorMessage';
 
+type Props = {
+  addResultsToShow: (events: (Event | undefined)[]) => void;
+};
+
 type FormFields = {
   name: string;
   userId: string;
@@ -21,7 +25,7 @@ type EventResponseBodyPost =
     }
   | { message: string | ZodIssue[] };
 
-export default function FindEventCccurateForm() {
+export default function FindEventCccurateForm(props: Props) {
   const [selectedField, setSelectedField] = useState<keyof FormFields>('name');
   const [formFields, setFormFields] = useState<FormFields>({
     name: '',
@@ -82,8 +86,9 @@ export default function FindEventCccurateForm() {
       setErrorMessage(data.message);
       return;
     }
-    // TODO show results
+
     if ('event' in data) {
+      props.addResultsToShow(data.events);
     }
   }
 

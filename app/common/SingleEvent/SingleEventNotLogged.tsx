@@ -1,3 +1,5 @@
+'use server';
+
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
