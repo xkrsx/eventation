@@ -1,25 +1,30 @@
 'use client';
 
 import { useState } from 'react';
+import { ZodIssue } from 'zod';
 import { Event } from '../../../database/events';
 import { Session } from '../../../migrations/00001-createTableSessions';
-import SingleEventLogged from '../../common/SingleEvent/SingleEventLogged';
-import SingleEventNotLogged from '../../common/SingleEvent/SingleEventNotLogged';
 import FindEventAccurateForm from './AccurateForm';
 import FindEventInaccurateForm from './InaccurateForm';
 
 type Props = {
   session: Omit<Session, 'id'> | undefined;
 };
+
 export default function FindEventForm(props: Props) {
   const [accurate, setAccurate] = useState('inaccurate');
-  const [results, setResults] = useState<(Event | undefined)[]>([]);
+  const [results, setResults] = useState<
+    (Event | undefined)[] | (string | ZodIssue[])
+  >([]);
+  console.log('results top: ', results);
 
   const handleRadioChange = (value: string) => {
     setAccurate(value);
   };
 
-  function addSearchResults(events: (Event | undefined)[]) {
+  function addSearchResults(
+    events: (Event | undefined)[] | (string | ZodIssue[]),
+  ) {
     setResults(events);
   }
 
@@ -50,14 +55,12 @@ export default function FindEventForm(props: Props) {
           <FindEventAccurateForm addResultsToShow={addSearchResults} />
         )}
         <h2>Results</h2>
-        {results.length >= 1 &&
-          results.map((event) =>
-            props.session ? (
-              <SingleEventLogged key={`key-${event!.id}`} event={event} />
-            ) : (
-              <SingleEventNotLogged key={`key-${event!.id}`} event={event} />
-            ),
-          )}
+        {/* TODO FIX show results */}
+        {/* <ErrorMessage>{results as string}</ErrorMessage> */}
+        {/* {results.length >= 1 &&
+          results.map((event) => (
+            <SingleEventNotLogged key={`key-${event!.id}`} event={event} />
+          ))} */}
       </div>
     </div>
   );

@@ -1,3 +1,5 @@
+'use server';
+
 import './ErrorMessage.scss';
 import { ReactNode } from 'react';
 
@@ -5,6 +7,6 @@ type Props = {
   children: ReactNode;
 };
 
-export default function ErrorMessage(props: Props) {
-  return <div className="errorMessage">{props.children}</div>;
+export default async function ErrorMessage(props: Props) {
+  return await (<div className="errorMessage">{props.children}</div>);
 }

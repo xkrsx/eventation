@@ -22,7 +22,6 @@ export default async function SingleCategoryFromParams(props: Props) {
   const events = await getAllEventsSingleCategoryInsecure(
     Number(props.params.eventId),
   );
-  console.log(events);
 
   // // 4. If the sessionToken cookie is invalid or doesn't exist, show single event for unlogged
 
