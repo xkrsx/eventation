@@ -7,7 +7,6 @@ import React, { ChangeEvent, useState } from 'react';
 import { ZodIssue } from 'zod';
 import { categoriesObject } from '../../../database/categories';
 import { Event } from '../../../database/events';
-import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
   addResultsToShow: (
@@ -37,11 +36,7 @@ export default function FindEventCccurateForm(props: Props) {
     location: '',
   });
 
-  const [errorMessage, setErrorMessage] = useState<string | ZodIssue[]>('');
-
   const handleRadioChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setErrorMessage('');
-
     setSelectedField(e.target.value as keyof FormFields);
   };
 
@@ -49,7 +44,7 @@ export default function FindEventCccurateForm(props: Props) {
     event: React.ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>,
   ) => {
     const { name, value } = event.target;
-    setErrorMessage('');
+
     setFormFields({
       ...formFields,
       [name]: value,
@@ -86,7 +81,6 @@ export default function FindEventCccurateForm(props: Props) {
     const data: EventResponseBodyPost = await response.json();
 
     if ('errors' in data) {
-      setErrorMessage(data.errors.message);
       props.addResultsToShow(data.errors.message);
       return;
     }
@@ -193,7 +187,6 @@ export default function FindEventCccurateForm(props: Props) {
           </div>
           <button>Find matching events</button>
         </form>
-        <ErrorMessage>{errorMessage as string}</ErrorMessage>
       </div>
     </div>
   );
