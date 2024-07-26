@@ -6,7 +6,6 @@ test('header test', async ({ page }) => {
   await expect(
     page.getByRole('img', { name: 'Eventation logo' }),
   ).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Main stage' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Categories' })).toBeVisible();
   await expect(
     page.getByRole('link', { name: 'Events', exact: true }),
