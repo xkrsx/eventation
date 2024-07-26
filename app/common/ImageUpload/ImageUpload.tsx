@@ -75,16 +75,28 @@ export default function ImageUpload(props: Props) {
         }}
       </CldUploadWidget>
 
-      {isUploaded && (
-        <CldImage
-          width="300"
-          height="100"
-          src={imagePreviewUrl}
-          sizes="100vw"
-          crop="fill"
-          alt={props.alt}
-        />
-      )}
+      {isUploaded &&
+        (props.uploadType === 'event' ? (
+          <CldImage
+            width="300"
+            height="100"
+            src={imagePreviewUrl}
+            sizes="100vw"
+            crop="fill"
+            alt={props.alt}
+          />
+        ) : (
+          <div style={{ borderRadius: '50%' }}>
+            <CldImage
+              width="100"
+              height="100"
+              src={imagePreviewUrl}
+              sizes="100vw"
+              crop="fill"
+              alt={props.alt}
+            />
+          </div>
+        ))}
     </div>
   );
 }
