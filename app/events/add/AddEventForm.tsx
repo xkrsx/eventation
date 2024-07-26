@@ -1,15 +1,13 @@
 'use client';
 
-// import {
-//   GeoapifyContext,
-//   GeoapifyGeocoderAutocomplete,
-// } from '@geoapify/react-geocoder-autocomplete';
-
+import {
+  GeoapifyContext,
+  GeoapifyGeocoderAutocomplete,
+} from '@geoapify/react-geocoder-autocomplete';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import validator from 'validator';
 import { categoriesObject } from '../../../database/categories';
-import { EventResponseBodyPost } from '../../api/events/route';
 import ImageUpload from '../../common/ImageUpload/ImageUpload';
 import ErrorMessage from '../../ErrorMessage';
 
@@ -23,7 +21,7 @@ export default function AddEventForm(props: Props) {
     userId: props.userId,
     timeStart: '',
     timeEnd: '',
-    category: 'Activism / Politics',
+    category: '',
     location: '',
     latitude: '',
     longitude: '',
@@ -32,10 +30,8 @@ export default function AddEventForm(props: Props) {
     link: '',
     image: '',
   });
-  // const [userLocation, setUserLocation] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-  console.log('newEvent.image: ', newEvent.image);
 
   const router = useRouter();
 
@@ -65,46 +61,39 @@ export default function AddEventForm(props: Props) {
       router.push(`/events/${data.event.id}`);
     }
   }
-  // TODO type req object
-  // function sendGeocoderRequest(value: string, geocoder: any) {
-  //   return geocoder.sendGeocoderRequest(value);
-  // }
 
-  // TODO type res object
-  // function sendPlaceDetailsRequest(feature: any, geocoder: any) {
-  //   setNewEvent({
-  //     ...newEvent,
-  //     location: feature.properties.formatted,
-  //     latitude: String(feature.properties.lat),
-  //     longitude: String(feature.properties.lon),
-  //   });
-  //   return geocoder.sendPlaceDetailsRequest(feature);
-  // }
+  function sendGeocoderRequest(value: string, geocoder: any) {
+    return geocoder.sendGeocoderRequest(value);
+  }
+
+  function sendPlaceDetailsRequest(feature: any, geocoder: any) {
+    setNewEvent({
+      ...newEvent,
+      location: feature.properties.formatted,
+      latitude: String(feature.properties.lat),
+      longitude: String(feature.properties.lon),
+    });
+    return geocoder.sendPlaceDetailsRequest(feature);
+  }
 
   function checkForm() {
     if (newEvent.name.length < 3) {
       setErrorMessage('Event name must have at least 3 characters.');
-      // setIsDisabled(true);
     }
     if (newEvent.name.length >= 255) {
       setErrorMessage('Event name must have maximum 255 characters.');
-      // setIsDisabled(true);
     }
     if (
       newEvent.timeEnd <= newEvent.timeStart &&
       (newEvent.timeStart || newEvent.timeEnd === '')
     ) {
       setErrorMessage('Starting date/time must be earlier than ending.');
-      // setIsDisabled(true);
     }
-
     if (newEvent.description.length < 3) {
       setErrorMessage('Event description must have at least 3 characters.');
-      // setIsDisabled(true);
     }
     if (!validator.isURL(newEvent.link)) {
       setErrorMessage('Link must valid URL.');
-      // setIsDisabled(true);
     }
     if (
       newEvent.name.length >= 3 &&
@@ -135,11 +124,6 @@ export default function AddEventForm(props: Props) {
     <div className="wrapper">
       <div className="event">
         <h1>Add event</h1>
-        {/* add picture upload */}
-        {/* fix time editing */}
-        {/* fix location */}
-        {/* fix category */}
-
         <form
           className="form"
           onSubmit={async (event) => {
@@ -189,10 +173,11 @@ export default function AddEventForm(props: Props) {
             />
             ,-
           </label>
-
           <label>
             Category
             <select name="category" onChange={handleChange}>
+              <option defaultValue="true" hidden disabled />
+
               {categories.map((category) => {
                 return (
                   <option
@@ -205,50 +190,18 @@ export default function AddEventForm(props: Props) {
               })}
             </select>
           </label>
-          {/* <div className="location">
-            <label>
-              <label>
-                <input
-                  type="radio"
-                  value="City"
-                  name="type"
-                  disabled={!userLocation}
-                />
-                City
-              </label>
-              <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
-                <GeoapifyGeocoderAutocomplete
-                  placeholder="City"
-                  type="city"
-                  limit={3}
-                  allowNonVerifiedHouseNumber={true}
-                  sendGeocoderRequestFunc={sendGeocoderRequest}
-                  addDetails={true}
-                  sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
-                />
-              </GeoapifyContext>
-              <label>
-                <input
-                  type="radio"
-                  value="Country"
-                  name="type"
-                  disabled={!userLocation}
-                />
-                Country
-              </label>
-              <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
-                <GeoapifyGeocoderAutocomplete
-                  placeholder="Country"
-                  type="country"
-                  limit={3}
-                  allowNonVerifiedHouseNumber={true}
-                  sendGeocoderRequestFunc={sendGeocoderRequest}
-                  addDetails={true}
-                  sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
-                />
-              </GeoapifyContext>
-            </label>
-          </div> */}
+          City
+          <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
+            <GeoapifyGeocoderAutocomplete
+              placeholder="City"
+              type="city"
+              limit={3}
+              allowNonVerifiedHouseNumber={true}
+              sendGeocoderRequestFunc={sendGeocoderRequest}
+              addDetails={true}
+              sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
+            />
+          </GeoapifyContext>
           <label>
             Description
             <input
@@ -265,13 +218,18 @@ export default function AddEventForm(props: Props) {
           <ImageUpload
             buttonText="Upload event poster"
             options={{
-              sources: ['local', 'url'],
+              sources: [
+                'local',
+                'url',
+                'facebook',
+                'google_drive',
+                'instagram',
+              ],
             }}
             alt={newEvent.name}
             addUrlOnUpload={addImageUrl}
             uploadType="event"
           />
-
           <button disabled={isDisabled}>Add event</button>
         </form>
         <ErrorMessage>{errorMessage}</ErrorMessage>

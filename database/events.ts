@@ -27,31 +27,73 @@ export type Event = NewEvent & {
   cancelled: boolean;
 };
 
-export const findSingleEventInsecure = cache(
-  async (
-    formField1: string,
-    userQuery1: string,
-    formField2: string,
-    userQuery2: string,
-    formField3: string,
-    userQuery3: string,
-    formField4: string,
-    userQuery4: string,
-  ) => {
-    const [event] = await sql<Event[]>`
+export const findEventsInaccurateInsecure = cache(
+  async (searchedEvent: {
+    name: string;
+    userId: string;
+    category: string;
+    location: string;
+  }) => {
+    const event = await sql<Event[]>`
+      SELECT
+        events.*
+      FROM
+        events
+      WHERE
+        events.name = ${searchedEvent.name}
+        OR events.user_id = ${Number(searchedEvent.userId)}
+        OR events.category = ${searchedEvent.category}
+        OR events.location = ${searchedEvent.location}
+    `;
+    return event;
+  },
+);
+export const findEventsAccurateInsecure = cache(
+  // TODO for after graaduation: fix this sql, risky to injections
+  async (formField: string, userQuery: number | string) => {
+    const event = await sql<Event[]>`
       SELECT
         *
       FROM
         events
       WHERE
-        ${formField1} = ${userQuery1}
-        AND ${formField2} = ${userQuery2}
-        OR ${formField3} = ${userQuery3}
-        OR ${formField4} = ${userQuery4}
+        ${sql(formField)} = ${userQuery}
     `;
     return event;
   },
 );
+
+export const findSingleEventByCity = cache(
+  async (sessionToken: string, city: string, order: string | null) => {
+    const event = await sql<Event[]>`
+      SELECT
+        events.*
+      FROM
+        events
+        INNER JOIN sessions ON (
+          sessions.token = ${sessionToken}
+          AND expiry_timestamp > now()
+        )
+      WHERE
+        events.location = ${city}
+      ORDER BY
+        ${order}
+    `;
+    return event;
+  },
+);
+
+export const getAllEventsSingleCategoryInsecure = cache(async (id: number) => {
+  const [event] = await sql<Event[]>`
+    SELECT
+      events.*
+    FROM
+      events
+    WHERE
+      events.id = ${id}
+  `;
+  return [event];
+});
 
 export const createEvent = cache(
   async (sessionToken: string, newEvent: NewEvent) => {

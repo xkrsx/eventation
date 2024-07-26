@@ -1,34 +1,17 @@
-// works for not logged users too
+import { cookies } from 'next/headers';
+import { getValidSession } from '../../../database/sessions';
+import FindEventForm from './FindEventForm';
 
-export default function FindEvent() {
+export default async function FindEvent() {
+  // 1. Check if sessionToken in cookies exists
+  const sessionCookie = cookies().get('sessionToken');
+
+  // 2. Check if the sessionToken from cookie is still valid in DB
+  const session = sessionCookie && (await getValidSession(sessionCookie.value));
   return (
-    <div className="wrapper">
-      <div className="event">
-        <h1>Find event</h1>
-        {/* TODO add functionality to the form */}
-        <form>
-          <label>
-            Name
-            <input />
-          </label>
-          <label>
-            Start time
-            <input type="time" />
-            <input type="date" />
-          </label>
-          <label>
-            End time
-            <input type="time" />
-            <input type="date" />
-          </label>
-          <label>
-            Price from <input type="number" />
-            to
-            <input type="number" />
-          </label>
-          <button>Find event</button>
-        </form>
-      </div>
+    <div>
+      <h1>Find events</h1>
+      <FindEventForm session={session} />
     </div>
   );
 }

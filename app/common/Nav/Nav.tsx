@@ -14,6 +14,10 @@ export default async function Nav() {
     <div className="nav">
       <Link href="/">Main stage</Link>
       {' | '}
+      <Link href="/categories">Categories</Link>
+      {' | '}
+      <Link href="/events">Events</Link>
+      {' | '}
       <Link href="/events/add">Add</Link>
       {' | '}
       <Link href="/events/find">Find</Link>
@@ -26,7 +30,7 @@ export default async function Nav() {
           <LogoutButton />
         </>
       ) : (
-        <Link href="/profile">Log in / Register</Link>
+        <Link href="/profile">Profile</Link>
       )}
     </div>
   );

@@ -10,8 +10,6 @@ export const eventSchema = z
     userId: z.number(),
     timeStart: z.string(),
     timeEnd: z.string(),
-    // timeStart: z.date(),
-    // timeEnd: z.date(),
     category: z.string(),
     location: z.string().optional(),
     latitude: z.string().optional(),
@@ -34,6 +32,23 @@ export const eventSchema = z
     path: ['timeEnd'],
     message: 'Start time/date must be earlier than ending.',
   });
+
+export const findEventSchema = z.object({
+  location: z.string(),
+});
+
+export const inaccurateSearchedEventSchema = z.object({
+  name: z.string(),
+  userId: z.string(),
+  category: z.string(),
+  location: z.string(),
+});
+
+export const accurateSearchedFieldSchema = z.object({
+  field: z.string().regex(/^(name|userId|category|location)$/),
+  query: z.string(),
+});
+
 // TODO add optional short name to generate link with, instead of id
 export async function up(sql: Sql) {
   await sql`
