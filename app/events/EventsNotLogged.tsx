@@ -8,14 +8,15 @@ export default async function EventsNotLogged() {
   return (
     <div className="wrapper">
       <div className="events">
-      <h1>All events</h1>
-      <Link href="/profile?returnTo=/profile/events">
-        Log or register to see events in your location
-      </Link>
+        <h1>All events</h1>
+        <Link href="/profile?returnTo=/profile/events">
+          Log or register to see events in your location
+        </Link>
 
-      {events.map((event) => {
-        return <SingleEventNotLogged key={`id-${event.id}`} event={event} />;
-      })}
+        {events.map((event) => {
+          return <SingleEventNotLogged key={`id-${event.id}`} event={event} />;
+        })}
+      </div>
     </div>
   );
 }
