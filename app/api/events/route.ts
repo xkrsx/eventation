@@ -5,7 +5,7 @@ import { createEvent, Event } from '../../../database/events';
 import { addStatus } from '../../../database/usersEventsStatus';
 import { eventSchema } from '../../../migrations/00002-createTableEvents';
 
-type EventResponseBodyPost =
+export type EventResponseBodyPost =
   | {
       event: Event;
     }

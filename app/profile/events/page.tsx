@@ -35,8 +35,8 @@ export default async function UserEvents() {
     <div className="wrapper">
       <h1>User events</h1>
       <OrganisingEvents events={eventsOrganising} />
-      <AttendingEvents events={eventsAttending} session={session} />
-      <PastEvents events={eventsPast} session={session} />
+      <AttendingEvents events={eventsAttending} />
+      <PastEvents events={eventsPast} />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import validator from 'validator';
 import { categoriesObject } from '../../../database/categories';
+import { EventResponseBodyPost } from '../../api/events/route';
 import ImageUpload from '../../common/ImageUpload/ImageUpload';
 import ErrorMessage from '../../ErrorMessage';
 
