@@ -14,7 +14,7 @@ export const eventSchema = z
     location: z.string().optional(),
     latitude: z.string().optional(),
     longitude: z.string().optional(),
-    price: z.number().optional(),
+    price: z.string().optional(),
     description: z.string().min(3, {
       message: 'Event description must have at least 3 characters.',
     }),
