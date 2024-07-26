@@ -10,8 +10,8 @@ export type User = {
   longitude: string | null;
   categories: string | null;
   email: string;
-  createdAt: Date;
   image: string;
+  createdAt: Date;
 };
 
 export const userRegistrationSchema = z
