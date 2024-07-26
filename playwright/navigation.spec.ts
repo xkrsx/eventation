@@ -4,22 +4,15 @@ test('header test', async ({ page }) => {
   await page.goto('/');
 
   await expect(
-    page.getByRole('heading', { name: 'EVENTATION MAIN STAGE' }),
+    page.getByRole('img', { name: 'Eventation logo' }),
   ).toBeVisible();
   await expect(page.getByRole('link', { name: 'Main stage' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Categories' })).toBeVisible();
   await expect(
-    page.getByRole('link', { name: 'Add', exact: true }),
+    page.getByRole('link', { name: 'Events', exact: true }),
   ).toBeVisible();
-  await expect(
-    page.getByRole('link', { name: 'Find', exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('link', { name: 'My Events', exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('link', { name: 'Login', exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('link', { name: 'Register', exact: true }),
-  ).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Add' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Find' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'My Events' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Profile' })).toBeVisible();
 });
