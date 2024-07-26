@@ -2,6 +2,8 @@
 
 An app (website), where users can search, add or join events.
 Any not logged user can search and browse events, but only registered and logged users can add or join them (attending, maybe and not attending).
+Events contain location (autocompletion with geocoordinates), category (out of available list), image uploaded by organiser and chat (two channels).
+Every event has two chat channels: open for every attendant to participate with other and second where organiser can message all attendants.
 
 ### Planned basic functionalities:
 
@@ -12,14 +14,26 @@ Any not logged user can search and browse events, but only registered and logged
   - adding to the database
   - editing existing record in the database
   - deleting the record from database
+  - user's attendance to the event (saving, editing in the database)
+  - saving and editing cloudinary uploaded image url in the database
+- users full API (internal):
+  - searching in the database
+  - adding to the database
+  - editing existing record in the database
+  - deleting the record from database
+  - saving and editing cloudinary uploaded image url in the database
+- chat API (internal):
+  - saving and getting messages from internal database
+- autocomplete of addresses when creating new user and event
 - adding event image using cloudinary
+- adding user profile image using cloudinary
 - two types of chats for each event: open one for all users who joined the event (yes/maybe/no) and info channel, where only admin sends messages to all subscribed users (those who joined the event)
 
 ### Planned extra functionalities:
 
-- event/organiser reviews
-- calendar with events, second step: with export option to ICS and eventually: subscribing locally to the event calendar
-- events map: using autocomplete from mapbox/google maps saving address, coding it into geolocation coordinates and pinning on the map
+- event/organiser reviews by attendants;
+- calendar feature: event export to ICS file for user to download locally; calendar with all/users events; subscribing locally to the event calendar;
+- map feature: showing all and approximate locations and events on map based on autocomplete function
 
 ### Database schema:
 
@@ -33,19 +47,19 @@ Any not logged user can search and browse events, but only registered and logged
 
 - Next.js
 - Postgres.js
+- Javascript/Node.js
+- Typescript
+- React
+- Material UI
 - HTML
 - CSS
-- Javascript/Node.js
-- React
-- Typescript
 - Jest
 - Playwright
 
 ### External technologies:
 
-- Ably (chat API)
-- Cloudinary (upload file and link to image generate API)
-- Mapbox (autocomplete + map API)
+- Pusher (real-time features API)
+- Cloudinary (upload image and its link generator API)
 - Geoapify (autocomplete)
 
 ## Database Setup
@@ -151,6 +165,7 @@ export type User = {
   longitude: string | null;
   categories: string | null;
   email: string;
+  image: string;
   createdAt: Date;
 };
 
