@@ -181,7 +181,7 @@ export default function AddEventForm(props: Props) {
             <input
               type="number"
               name="price"
-              value={newEvent.price}
+              value={Number(newEvent.price)}
               onChange={handleChange}
             />
             ,-
