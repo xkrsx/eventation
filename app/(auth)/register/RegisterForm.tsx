@@ -36,7 +36,6 @@ export default function RegisterForm(props: Props) {
     email: '',
     image: '',
   });
-  const [userLocation, setUserLocation] = useState(false);
   const [userCategory, setUserCategory] = useState(false);
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const SELECTED_LENGTH = 3;
@@ -127,7 +126,7 @@ export default function RegisterForm(props: Props) {
         <ImageUpload
           buttonText="Upload profile picture"
           options={{
-            sources: ['local', 'dropbox', 'google_drive', 'camera', 'url'],
+            sources: ['local', 'camera', 'url', 'dropbox', 'google_drive'],
           }}
           addUrlOnUpload={addImageUrl}
           alt={newUser.username}
@@ -180,31 +179,17 @@ export default function RegisterForm(props: Props) {
             />
           </label>
           <div className="location">
-            <div>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={userLocation}
-                  onChange={() => setUserLocation(!userLocation)}
-                />{' '}
-                I want to add my default location (city)
-              </label>
-            </div>
-            {userLocation ? (
-              <div>
-                <GeoapifyContext apiKey="4ca7dda985114a55bf51c15172c59328">
-                  <GeoapifyGeocoderAutocomplete
-                    placeholder="City"
-                    type="city"
-                    limit={3}
-                    allowNonVerifiedHouseNumber={true}
-                    sendGeocoderRequestFunc={sendGeocoderRequest}
-                    addDetails={true}
-                    sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
-                  />
-                </GeoapifyContext>
-              </div>
-            ) : null}
+            <GeoapifyContext apiKey="4ca7dda985114a55bf51c15172c59328">
+              <GeoapifyGeocoderAutocomplete
+                placeholder="City"
+                type="city"
+                limit={3}
+                allowNonVerifiedHouseNumber={true}
+                sendGeocoderRequestFunc={sendGeocoderRequest}
+                addDetails={true}
+                sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
+              />
+            </GeoapifyContext>
           </div>
           <label>
             e-mail
