@@ -10,15 +10,15 @@ export default function PastEvents(props: Props) {
   return (
     <div className="attending">
       <h2>Past</h2>
-      {props.events.length >= 1 ? (
-        props.events.map((event) => {
-          return <SingleEventLogged key={`id-${event.id}`} event={event} />;
-        })
-      ) : (
+      {props.events.length === 0 ? (
         <div>
           <strong>There are currently no events you were attending.</strong>{' '}
           <Link href="/events/find">Find event</Link>
         </div>
+      ) : (
+        props.events.map((event) => {
+          return <SingleEventLogged key={`id-${event.id}`} event={event} />;
+        })
       )}
     </div>
   );

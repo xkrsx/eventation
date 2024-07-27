@@ -15,7 +15,7 @@ import AttendanceStatusForm from '../AttendanceStatus/AttendanceStatusForm';
 import EventImage from '../Images/EventImage/EventImage';
 
 type Props = {
-  event: Event | undefined;
+  event: Event;
 };
 
 export default async function SingleEventLogged(props: Props) {
@@ -44,8 +44,12 @@ export default async function SingleEventLogged(props: Props) {
 
   return (
     <div>
-      <h1>{props.event.name}</h1>
-      <EventImage event={props.event} />
+      <h1>
+        <Link href={`/events/${props.event.id}`}>{props.event.name}</Link>
+      </h1>
+      <Link href={`/events/${props.event.id}`}>
+        <EventImage event={props.event} />
+      </Link>
       <p>
         Organiser:{' '}
         <Link href={`/profile/${organiser.username}`}>
@@ -61,7 +65,10 @@ export default async function SingleEventLogged(props: Props) {
       <p>category: {props.event.category}</p>
       <p>description: {props.event.description}</p>
       <p>
-        link: <a href={props.event.link}>{props.event.link}</a>
+        link:{' '}
+        <a target="_blank" rel="noreferrer" href={props.event.link}>
+          {props.event.link}
+        </a>
       </p>
 
       <p>
@@ -70,23 +77,39 @@ export default async function SingleEventLogged(props: Props) {
           ? attendantsCount.count
           : 'No one yet. Be first!'}
       </p>
+      <Link href={`/events/${props.event.id}`}>See more</Link>
 
       {attendanceSessionCheck ? (
-        <div>
-          <p>
-            chat:{' '}
-            <Link href={`/events/${props.event.id}/chat`}>
-              event lounge & info stream
+        session.userId === organiser.id ? (
+          <div>
+            <strong>You are an organiser</strong>
+            <p>
+              chat:{' '}
+              <Link href={`/events/${props.event.id}/chat`}>
+                event lounge & info stream
+              </Link>
+            </p>
+            <Link href={`/events/${props.event.id}/edit`}>
+              Edit or delete this event
             </Link>
-          </p>
-          <AttendanceStatusForm
-            event={props.event}
-            session={session}
-            isAttending={attendanceSessionCheck.isAttending}
-            isOrganising={false}
-            methodAPI="PUT"
-          />
-        </div>
+          </div>
+        ) : (
+          <div>
+            <p>
+              chat:{' '}
+              <Link href={`/events/${props.event.id}/chat`}>
+                event lounge & info stream
+              </Link>
+            </p>
+            <AttendanceStatusForm
+              event={props.event}
+              session={session}
+              isAttending={attendanceSessionCheck.isAttending}
+              isOrganising={false}
+              methodAPI="PUT"
+            />
+          </div>
+        )
       ) : (
         <AttendanceStatusForm
           event={props.event}

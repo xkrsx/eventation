@@ -1,7 +1,13 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { createEventLoungeMessage } from '../../../database/chat/eventLounge';
-import { eventLoungeMessageSchema } from '../../../migrations/00004-createTableEventLounge';
+import {
+  createEventLoungeMessage,
+  getEventLoungeLastHourMessages,
+} from '../../../database/chat/eventLounge';
+import {
+  EventLoungeMessage,
+  eventLoungeMessageSchema,
+} from '../../../migrations/00004-createTableEventLounge';
 import { pusherServer, toPusherKey } from '../../../util/pusher';
 
 export type EventLoungeMessagesResponseBodyPost =
@@ -15,6 +21,7 @@ export type EventLoungeMessagesResponseBodyPost =
 interface RequestBody {
   eventId: string;
   content: string;
+  username: string;
 }
 
 export async function POST(
@@ -40,7 +47,8 @@ export async function POST(
     sessionTokenCookie &&
     (await createEventLoungeMessage(
       sessionTokenCookie.value,
-      Number(body.eventId),
+      result.data.eventId,
+      result.data.username,
       result.data.content,
     ));
 
@@ -59,6 +67,7 @@ export async function POST(
     'incoming-message',
     {
       id: newMessage.id,
+      username: newMessage.username,
       userId: newMessage.userId,
       eventId: newMessage.eventId,
       content: newMessage.content,
@@ -70,10 +79,40 @@ export async function POST(
   return NextResponse.json({
     message: {
       id: newMessage.id,
+      username: newMessage.username,
       userId: newMessage.userId,
       eventId: newMessage.eventId,
       content: newMessage.content,
       timestamp: newMessage.timestamp,
     },
   });
+}
+
+export type EventLoungeMessagesResponseBodyGet =
+  | {
+      messages: EventLoungeMessage[];
+    }
+  | {
+      error: string;
+    };
+
+export type Props = {
+  params: { eventId: string };
+};
+
+export async function GET(
+  request: NextRequest,
+  { params }: Props,
+): Promise<NextResponse<EventLoungeMessagesResponseBodyGet>> {
+  const sessionCookie = request.cookies.get('sessionToken');
+  if (!sessionCookie) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const messages = await getEventLoungeLastHourMessages(
+    sessionCookie.value,
+    Number(params.eventId),
+  );
+
+  return NextResponse.json({ messages });
 }

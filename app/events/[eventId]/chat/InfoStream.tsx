@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 import { InfoStreamMessage } from '../../../../migrations/00005-createTableInfoStream';
 import { pusherClient, toPusherKey } from '../../../../util/pusher';
 import ChatInput from '../../../common/Chat/ChatInput';
-import ChatUsername from '../../../common/Chat/ChatUsername';
 
 type Props = {
   messages: InfoStreamMessage[];
   currentUserId: number;
   eventId: number;
   isOrganiser: boolean | undefined;
+  username: string;
 };
 
 export default function InfoStream(props: Props) {
@@ -86,7 +86,7 @@ export default function InfoStream(props: Props) {
                   {isCurrentUser ? (
                     <strong>You</strong>
                   ) : (
-                    <ChatUsername chatUserId={message.userId} />
+                    <strong>{message.username}</strong>
                   )}
                 </span>
                 <div ref={scrollDownRef} />
@@ -96,7 +96,11 @@ export default function InfoStream(props: Props) {
         )}
       </div>
       {props.isOrganiser && (
-        <ChatInput eventId={Number(props.eventId)} apiRoute="infoStream" />
+        <ChatInput
+          eventId={Number(props.eventId)}
+          apiRoute="infoStream"
+          username={props.username}
+        />
       )}
     </div>
   );

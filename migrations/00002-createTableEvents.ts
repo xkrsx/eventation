@@ -11,10 +11,10 @@ export const eventSchema = z
     timeStart: z.string(),
     timeEnd: z.string(),
     category: z.string(),
-    location: z.string().optional(),
-    latitude: z.string().optional(),
-    longitude: z.string().optional(),
-    price: z.number().optional(),
+    location: z.string(),
+    latitude: z.string(),
+    longitude: z.string(),
+    price: z.number(),
     description: z.string().min(3, {
       message: 'Event description must have at least 3 characters.',
     }),
@@ -22,8 +22,7 @@ export const eventSchema = z
       .string()
       .regex(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/[\w.-]*)*\/?$/, {
         message: 'Link must be valid URL.',
-      })
-      .optional(),
+      }),
     image: z.string().optional(),
     public: z.boolean().optional(),
     cancelled: z.boolean().optional(),
