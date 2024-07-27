@@ -2,6 +2,8 @@
 
 :root {
   --primary-font-style: Roboto, Arial, Helvetica, sans-serif;
+  --primary-font-size: 1.5rem;
+  --primary-menu-icons-size: 2.5rem;
 
   --primary-color-one: #ffea3f;
   --primary-color-two: #e59e73;
@@ -17,6 +19,7 @@
 
   --primary-background-color: var(--primary-color-eigth);
   --primary-font-color: var(--primary-color-seven);
+  --primary-menu-icons-color: var(--primary-color-seven);
   --secondary-background-color: var(--primary-color-three);
   --secondary-font-color: var(--primary-color-eigth);
   --primary-accept-color: var(--primary-color-nine);
