@@ -8,7 +8,7 @@ import SingleEventNotLogged from '../../common/SingleEvent/SingleEventNotLogged'
 
 type Props = {
   params: {
-    eventId: string;
+    categoryId: string;
   };
 };
 
@@ -20,7 +20,7 @@ export default async function SingleCategoryFromParams(props: Props) {
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
 
   // // 3. Get category name by id from params
-  const categoryName = getCategoryNameById(Number(props.params.eventId));
+  const categoryName = getCategoryNameById(Number(props.params.categoryId));
 
   if (categoryName === undefined) {
     return (

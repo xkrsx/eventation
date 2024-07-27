@@ -46,8 +46,8 @@ export default function EditEventPreview(props: Props) {
 
   // TODO type res object
   function sendPlaceDetailsRequest(feature: any, geocoder: any) {
-    setEditedUser({
-      ...editedUser,
+    setEditedEvent({
+      ...editedEvent,
       location: feature.properties.formatted,
       latitude: String(feature.properties.lat),
       longitude: String(feature.properties.lon),

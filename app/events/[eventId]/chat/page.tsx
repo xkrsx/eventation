@@ -87,7 +87,9 @@ export default async function EventChat(props: Props) {
 
   return (
     <div>
-      <h1>{event.name} Chat</h1>
+      <h1>
+        <Link href={`/events/${event.id}`}>{event.name} Chat</Link>
+      </h1>
       <p>start: {dayjs(event.timeStart).format('dddd, HH:mm, DD/MM/YYYY')}</p>
       <p>end: {dayjs(event.timeEnd).format('dddd, HH:mm, DD/MM/YYYY')}</p>
       <p>location: {event.location}</p>

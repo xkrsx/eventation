@@ -16,6 +16,7 @@ export async function POST(
   request: Request,
 ): Promise<NextResponse<EventResponseBodyPost>> {
   const requestBody = await request.json();
+  console.log(requestBody);
 
   // Validation schema for request body
   const result = eventSchema.safeParse(requestBody);

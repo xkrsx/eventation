@@ -65,7 +65,10 @@ export default async function SingleEventLogged(props: Props) {
       <p>category: {props.event.category}</p>
       <p>description: {props.event.description}</p>
       <p>
-        link: <a href={props.event.link}>{props.event.link}</a>
+        link:{' '}
+        <a target="_blank" rel="noreferrer" href={props.event.link}>
+          {props.event.link}
+        </a>
       </p>
 
       <p>
@@ -80,6 +83,12 @@ export default async function SingleEventLogged(props: Props) {
         session.userId === organiser.id ? (
           <div>
             <strong>You are an organiser</strong>
+            <p>
+              chat:{' '}
+              <Link href={`/events/${props.event.id}/chat`}>
+                event lounge & info stream
+              </Link>
+            </p>
             <Link href={`/events/${props.event.id}/edit`}>
               Edit or delete this event
             </Link>
