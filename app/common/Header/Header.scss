@@ -1,7 +1,7 @@
 .header {
-  background-color: var(--primary-background-color);
   display: flex;
   justify-content: space-between;
+  border-bottom: var(--primary-border-style);
 
   .logo-icons {
     width: 30%;
