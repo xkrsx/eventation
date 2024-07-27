@@ -83,11 +83,11 @@ export default function InfoStream(props: Props) {
                 <p>{message.content}</p>
                 <p>{sendingTime()}</p>
                 <span>
-                  {isCurrentUser ? (
+                  {/* {isCurrentUser ? (
                     <strong>You</strong>
                   ) : (
                     <ChatUsername chatUserId={message.userId} />
-                  )}
+                  )} */}
                 </span>
                 <div ref={scrollDownRef} />
               </div>

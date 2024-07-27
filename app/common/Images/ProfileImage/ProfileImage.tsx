@@ -19,7 +19,7 @@ export default function ProfileImage(props: Props) {
           textAlign: 'center',
         }}
       >
-        {props.profile.username.slice(2)}
+        {props.profile.username.slice(0, 2)}
       </div>
     );
   }
