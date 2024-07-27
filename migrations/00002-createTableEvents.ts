@@ -23,9 +23,7 @@ export const eventSchema = z
       .regex(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/[\w.-]*)*\/?$/, {
         message: 'Link must be valid URL.',
       }),
-    image: z.string().min(3, {
-      message: 'Image URL invalid.',
-    }),
+    image: z.string().optional(),
     public: z.boolean().optional(),
     cancelled: z.boolean().optional(),
   })

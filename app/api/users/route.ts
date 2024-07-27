@@ -21,8 +21,6 @@ export async function PUT(
 ): Promise<NextResponse<UserResponseBodyPut>> {
   const requestBody = await request.json();
 
-  console.log(requestBody);
-
   // If client sends request body with incorrect data,
   // return a response with a 400 status code to the client
   const result = userEditSchema.safeParse(requestBody);

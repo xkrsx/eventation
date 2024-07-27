@@ -26,8 +26,12 @@ export default async function SingleEventNotLogged(props: Props) {
   }
   return (
     <div>
-      <h1>{props.event.name}</h1>
-      <EventImage event={props.event} />
+      <h1>
+        <Link href={`/events/${props.event.id}`}>{props.event.name}</Link>
+      </h1>
+      <Link href={`/events/${props.event.id}`}>
+        <EventImage event={props.event} />
+      </Link>
       <p>
         Organiser:{' '}
         <Link href={`/profile/${organiser.username}`}>

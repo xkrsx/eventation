@@ -124,6 +124,15 @@ export default function RegisterForm(props: Props) {
     <div className="wrapper">
       <div className="register">
         <h1>Register</h1>
+        <ImageUpload
+          buttonText="Upload profile picture"
+          options={{
+            sources: ['local', 'dropbox', 'google_drive', 'camera', 'url'],
+          }}
+          addUrlOnUpload={addImageUrl}
+          alt={newUser.username}
+          uploadType="profile"
+        />
         <form
           className="form"
           onSubmit={async (event) => {
@@ -132,15 +141,6 @@ export default function RegisterForm(props: Props) {
             await handleRegister(event);
           }}
         >
-          <ImageUpload
-            buttonText="Upload profile picture"
-            options={{
-              sources: ['local', 'dropbox', 'google_drive', 'camera', 'url'],
-            }}
-            addUrlOnUpload={addImageUrl}
-            alt={newUser.username}
-            uploadType="profile"
-          />
           <label>
             username
             <input

@@ -50,7 +50,7 @@ export const userRegistrationSchema = z
       .min(3, { message: 'E-mail must have at least 3 characters.' })
       .max(80, { message: 'E-mail must have maximum 80 characters.' })
       .email({ message: 'E-mail must a valid address.' }),
-    image: z.string(),
+    image: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
@@ -113,7 +113,7 @@ export const userEditSchema = z.object({
     .min(3, { message: 'E-mail must have at least 3 characters.' })
     .max(80, { message: 'E-mail must have maximum 80 characters.' })
     .email({ message: 'E-mail must a valid address.' }),
-  image: z.string(),
+  image: z.string().optional(),
 });
 
 export async function up(sql: Sql) {

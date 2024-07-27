@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { ZodIssue } from 'zod';
-import { createEvent, Event } from '../../../database/events';
+import { createEvent, Event, NewEvent } from '../../../database/events';
 import { addStatus } from '../../../database/usersEventsStatus';
 import { eventSchema } from '../../../migrations/00002-createTableEvents';
 
@@ -15,10 +15,14 @@ export type EventResponseBodyPost =
 export async function POST(
   request: Request,
 ): Promise<NextResponse<EventResponseBodyPost>> {
-  const requestBody = await request.json();
+  const requestBody: NewEvent = await request.json();
+
+  const priceNumber = Number(requestBody.price);
+
+  const updatedBody = { ...requestBody, price: priceNumber };
 
   // Validation schema for request body
-  const result = eventSchema.safeParse(requestBody);
+  const result = eventSchema.safeParse(updatedBody);
 
   // If client sends request body with incorrect data,
   // return a response with a 400 status code to the client
