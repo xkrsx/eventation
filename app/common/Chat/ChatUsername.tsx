@@ -14,7 +14,7 @@ export default async function ChatUsername(props: Props) {
   }
   return (
     <div>
-      <ProfileImage profile={chatUsername} />{' '}
+      <ProfileImage profile={chatUsername} />
       <strong>{chatUsername.username}</strong>
     </div>
   );
