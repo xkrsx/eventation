@@ -1,5 +1,38 @@
-.menu-icon {
-  height: var(--primary-menu-icons-size);
-  width: var(--primary-menu-icons-size);
-  color: var(--primary-menu-icons-color);
+.header {
+  background-color: var(--primary-background-color);
+  display: flex;
+  justify-content: space-between;
+
+  .logo-icons {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav {
+    justify-content: flex-end;
+    align-items: center;
+    width: 50%;
+    display: flex;
+
+    .profile-logout {
+      margin-right: var(--primary-margin);
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  .menu-icon {
+    margin: var(--primary-margin);
+    height: var(--primary-menu-icons-size);
+    width: var(--primary-menu-icons-size);
+    color: var(--primary-menu-icons-color);
+    transition: var(--primary-transition);
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
 }

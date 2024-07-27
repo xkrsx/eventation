@@ -4,6 +4,10 @@
   --primary-font-style: Roboto, Arial, Helvetica, sans-serif;
   --primary-font-size: 1.5rem;
   --primary-menu-icons-size: 2.5rem;
+  --primary-gap: 1rem;
+  --primary-padding: 1rem;
+  --primary-margin: 1rem;
+  --primary-transition: 0.5s ease-in-out;
 
   --primary-color-one: #ffea3f;
   --primary-color-two: #e59e73;
@@ -12,7 +16,7 @@
   --primary-color-five: #ced3b8;
   --primary-color-six: #203931;
   --primary-color-seven: #0f0c1d;
-  --primary-color-eigth: #fdf9fe;
+  --primary-color-eigth: rgb(253, 249, 254);
   --primary-color-nine: #008524;
   --primary-color-ten: #5200ff;
   --primary-color-eleven: #b21e10;
@@ -20,8 +24,10 @@
   --primary-background-color: var(--primary-color-eigth);
   --primary-font-color: var(--primary-color-seven);
   --primary-menu-icons-color: var(--primary-color-seven);
+  --primary-logout-color: var(--primary-color-six);
   --secondary-background-color: var(--primary-color-three);
   --secondary-font-color: var(--primary-color-eigth);
+  --third-background-color: var(--primary-color-five);
   --primary-accept-color: var(--primary-color-nine);
   --primary-maybe-color: var(--primary-color-ten);
   --primary-error-color: var(--primary-color-eleven);
@@ -47,13 +53,26 @@ body {
 }
 
 body {
-  background: var(--primary-background-color);
+  background-color: var(--primary-background-color);
   font-family: var(--primary-font-style);
 
   .wrapper {
+    background: var(--third-background-color);
+
     width: 95vw;
     margin: 0 auto;
-    padding: 1rem;
+
+    .logout-button {
+      padding: 0;
+      border: none;
+      font: inherit;
+      background-color: transparent;
+      height: var(--primary-menu-icons-size);
+      width: var(--primary-menu-icons-size);
+      color: var(--primary-logout-color);
+
+      cursor: pointer;
+    }
 
     form {
       display: flex;
