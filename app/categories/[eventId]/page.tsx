@@ -1,6 +1,5 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { getAllEventsSingleCategoryInsecure } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
 import { getCategoryNameById } from '../../../util/categories';
@@ -20,6 +19,7 @@ export default async function SingleCategoryFromParams(props: Props) {
   // // 2. Check if the sessionToken cookie is still valid
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
 
+  // // 3. Get category name by id from params
   const categoryName = getCategoryNameById(Number(props.params.eventId));
 
   if (categoryName === undefined) {
@@ -30,27 +30,27 @@ export default async function SingleCategoryFromParams(props: Props) {
       </div>
     );
   }
-  // // 3. Get event info
+  // // 4. Get all events from category
   const events = await getAllEventsSingleCategoryInsecure(categoryName);
-  console.log(events);
 
-  // // 4. If the sessionToken cookie is invalid or doesn't exist, show single event for unlogged
-
+  // // 5. if no events, show info; show events for not logged and logged
   return (
     <div>
       <h1>{categoryName}</h1>
-      {events.length < 1 ? (
+      {events.length === 0 ? (
         <div>
-          <strong>Sorry, no events not found.</strong>
+          <strong>Sorry, no events found in this category.</strong>
           <Link href="/events/find">Find event.</Link>
         </div>
       ) : (
-        events.map((event) =>
-          events.length >= 1 && session ? (
-            <SingleEventLogged key={`id-${event.id}`} event={event} />
-          ) : (
-            <SingleEventNotLogged key={`id-${event.id}`} event={event} />
-          ),
+        events.map(
+          (event) =>
+            events.length >= 1 &&
+            (session ? (
+              <SingleEventLogged key={`id-${event.id}`} event={event} />
+            ) : (
+              <SingleEventNotLogged key={`id-${event.id}`} event={event} />
+            )),
         )
       )}
     </div>

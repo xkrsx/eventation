@@ -135,7 +135,7 @@ export default function RegisterForm(props: Props) {
           <ImageUpload
             buttonText="Upload profile picture"
             options={{
-              sources: ['local', 'facebook', 'instagram', 'camera', 'url'],
+              sources: ['local', 'dropbox', 'google_drive', 'camera', 'url'],
             }}
             addUrlOnUpload={addImageUrl}
             alt={newUser.username}
@@ -225,7 +225,7 @@ export default function RegisterForm(props: Props) {
                   checked={userCategory}
                   onChange={() => setUserCategory(!userCategory)}
                 />{' '}
-                I want to add my default favorite categories (max 3)
+                I want to add my favorite categories (max 3)
               </label>
             </div>
 

@@ -41,8 +41,8 @@ export default function AddEventForm(props: Props) {
   }
 
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
-    checkForm();
     event.preventDefault();
+    checkForm();
 
     // TODO add session token to validate if it's really same user?
     const response = await fetch('/api/events/', {
@@ -96,6 +96,9 @@ export default function AddEventForm(props: Props) {
     if (!validator.isURL(newEvent.link)) {
       setErrorMessage('Link must valid URL.');
     }
+    if (newEvent.image === '') {
+      setErrorMessage('Please add event image');
+    }
     if (
       newEvent.name.length >= 3 &&
       newEvent.name.length <= 255 &&
@@ -125,6 +128,15 @@ export default function AddEventForm(props: Props) {
     <div className="wrapper">
       <div className="event">
         <h1>Add event</h1>
+        <ImageUpload
+          buttonText="Upload event image"
+          options={{
+            sources: ['local', 'url', 'google_drive'],
+          }}
+          alt={newEvent.name}
+          addUrlOnUpload={addImageUrl}
+          uploadType="event"
+        />
         <form
           className="form"
           onSubmit={async (event) => {
@@ -219,21 +231,6 @@ export default function AddEventForm(props: Props) {
             Link
             <input name="link" value={newEvent.link} onChange={handleChange} />
           </label>
-          <ImageUpload
-            buttonText="Upload event poster"
-            options={{
-              sources: [
-                'local',
-                'url',
-                'facebook',
-                'google_drive',
-                'instagram',
-              ],
-            }}
-            alt={newEvent.name}
-            addUrlOnUpload={addImageUrl}
-            uploadType="event"
-          />
           <button disabled={isDisabled}>Add event</button>
         </form>
         <ErrorMessage>{errorMessage}</ErrorMessage>
