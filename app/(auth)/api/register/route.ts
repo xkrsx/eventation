@@ -67,6 +67,7 @@ export async function POST(
 
   // 5. Save the user information with the hashed password in the database
   const newUser = await createUserInsecure(result.data, passwordHash);
+  console.log(newUser);
 
   if (!newUser) {
     return NextResponse.json(
