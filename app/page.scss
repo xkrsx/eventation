@@ -1,0 +1,19 @@
+.home-wrapper {
+  padding: var(--primary-padding);
+  margin: 0 auto;
+
+  .home-banner {
+    position: absolute;
+
+    padding: var(--primary-padding);
+    width: 90vw;
+    height: 70vh;
+
+    .category-banner {
+      overflow: hidden;
+      padding: var(--primary-padding);
+      object-fit: cover;
+      transition: transform var(--primary-transition);
+    }
+  }
+}

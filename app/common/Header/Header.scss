@@ -1,10 +1,38 @@
 .header {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid black;
+  border-bottom: var(--primary-border-style);
 
-  .links-left {
+  .logo-icons {
+    width: 30%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav {
+    justify-content: flex-end;
+    align-items: center;
+    width: 50%;
+    display: flex;
+
+    .profile-logout {
+      margin-right: var(--primary-margin);
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  .menu-icon {
+    margin: var(--primary-margin);
+    height: var(--primary-menu-icons-size);
+    width: var(--primary-menu-icons-size);
+    color: var(--primary-menu-icons-color);
+    transition: var(--primary-transition);
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.2);
+    }
   }
 }
