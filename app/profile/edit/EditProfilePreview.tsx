@@ -141,6 +141,7 @@ export default function EditProfilePreview(props: Props) {
                   sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
                 />
               </GeoapifyContext>
+              Original location: {props.profile.location}
             </div>
             <label>
               e-mail

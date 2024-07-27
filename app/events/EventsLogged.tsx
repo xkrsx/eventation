@@ -19,6 +19,7 @@ export default async function EventsLogged(props: Props) {
     String(user!.location),
     'date',
   );
+  console.log(events);
 
   return (
     <div className="wrapper">
