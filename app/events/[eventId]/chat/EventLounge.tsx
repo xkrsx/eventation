@@ -5,12 +5,12 @@ import { useEffect, useRef, useState } from 'react';
 import { EventLoungeMessage } from '../../../../migrations/00004-createTableEventLounge';
 import { pusherClient, toPusherKey } from '../../../../util/pusher';
 import ChatInput from '../../../common/Chat/ChatInput';
-import ChatUsername from '../../../common/Chat/ChatUsername';
 
 type Props = {
   messages: EventLoungeMessage[];
   currentUserId: number;
   eventId: number;
+  username: string;
 };
 
 export default function EventLounge(props: Props) {
@@ -84,8 +84,7 @@ export default function EventLounge(props: Props) {
                     {isCurrentUser ? (
                       <strong>You</strong>
                     ) : (
-                      // <ChatUsername chatUserId={message.userId} />
-                      'user'
+                      <strong>{message.username}</strong>
                     )}
                   </span>
                 </div>
@@ -93,7 +92,11 @@ export default function EventLounge(props: Props) {
             );
           })}
         </div>
-        <ChatInput eventId={Number(props.eventId)} apiRoute="eventLounge" />
+        <ChatInput
+          eventId={Number(props.eventId)}
+          apiRoute="eventLounge"
+          username={props.username}
+        />
 
         <div ref={scrollDownRef} />
       </div>

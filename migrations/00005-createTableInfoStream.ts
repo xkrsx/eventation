@@ -2,6 +2,8 @@ import { Sql } from 'postgres';
 import { z } from 'zod';
 
 export const infoStreamMessageSchema = z.object({
+  userId: z.number(),
+  username: z.string(),
   content: z.string(),
 });
 
@@ -9,6 +11,7 @@ export type InfoStreamMessage = {
   id: number;
   userId: number;
   eventId: number;
+  username: string;
   content: string;
   timestamp: Date;
 };
@@ -18,6 +21,7 @@ export async function up(sql: Sql) {
     CREATE TABLE info_stream (
       id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
       user_id integer NOT NULL REFERENCES users (id) ON DELETE cascade,
+      username varchar(30) NOT NULL,
       event_id integer NOT NULL REFERENCES events (id) ON DELETE cascade,
       content text NOT NULL,
       timestamp timestamp NOT NULL DEFAULT now()

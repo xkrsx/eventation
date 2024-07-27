@@ -7,6 +7,7 @@ import { getEventLoungeLastHourMessages } from '../../../../database/chat/eventL
 import { getInfoStreamLastHourMessages } from '../../../../database/chat/infoStream';
 import { getSingleEventInsecure } from '../../../../database/events';
 import { getValidSession } from '../../../../database/sessions';
+import { getUserPublicById } from '../../../../database/users';
 import {
   checkStatus,
   countAttendantsInsecure,
@@ -82,6 +83,7 @@ export default async function EventChat(props: Props) {
   }
   const isOrganiser = checkIfOrganiser();
   const attendantsCount = await countAttendantsInsecure(event.id);
+  const username = await getUserPublicById(session.token, session.userId);
 
   return (
     <div>
@@ -103,6 +105,7 @@ export default async function EventChat(props: Props) {
               messages={eventLoungeMessages}
               currentUserId={session.userId}
               eventId={Number(event.id)}
+              username={username!.username}
             />
           ),
           name: 'EventLounge',
@@ -115,6 +118,7 @@ export default async function EventChat(props: Props) {
               currentUserId={session.userId}
               eventId={Number(event.id)}
               isOrganiser={isOrganiser}
+              username={username!.username}
             />
           ),
           name: 'InfoStream',

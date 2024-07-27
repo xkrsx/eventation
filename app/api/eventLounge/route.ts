@@ -21,6 +21,7 @@ export type EventLoungeMessagesResponseBodyPost =
 interface RequestBody {
   eventId: string;
   content: string;
+  username: string;
 }
 
 export async function POST(
@@ -46,7 +47,8 @@ export async function POST(
     sessionTokenCookie &&
     (await createEventLoungeMessage(
       sessionTokenCookie.value,
-      Number(body.eventId),
+      result.data.eventId,
+      result.data.username,
       result.data.content,
     ));
 
@@ -65,6 +67,7 @@ export async function POST(
     'incoming-message',
     {
       id: newMessage.id,
+      username: newMessage.username,
       userId: newMessage.userId,
       eventId: newMessage.eventId,
       content: newMessage.content,
@@ -76,6 +79,7 @@ export async function POST(
   return NextResponse.json({
     message: {
       id: newMessage.id,
+      username: newMessage.username,
       userId: newMessage.userId,
       eventId: newMessage.eventId,
       content: newMessage.content,
