@@ -65,7 +65,12 @@ export const getInfoStreamAllMessages = cache(
 );
 
 export const createInfoStreamMessage = cache(
-  async (sessionToken: string, eventId: number, content: string) => {
+  async (
+    sessionToken: string,
+    eventId: number,
+    username: string,
+    content: string,
+  ) => {
     const [message] = await sql<InfoStreamMessage[]>`
       WITH
         user_info AS (
@@ -79,9 +84,15 @@ export const createInfoStreamMessage = cache(
             AND sessions.expiry_timestamp > now()
         )
       INSERT INTO
-        info_stream (user_id, event_id, content)
+        info_stream (
+          user_id,
+          username,
+          event_id,
+          content
+        )
       SELECT
         user_info.user_id,
+        ${username},
         ${eventId},
         ${content}
       FROM

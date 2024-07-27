@@ -65,7 +65,12 @@ export const getEventLoungeAllMessages = cache(
 );
 
 export const createEventLoungeMessage = cache(
-  async (sessionToken: string, eventId: number, content: string) => {
+  async (
+    sessionToken: string,
+    eventId: number,
+    username: string,
+    content: string,
+  ) => {
     const [message] = await sql<EventLoungeMessage[]>`
       WITH
         user_info AS (
@@ -79,9 +84,15 @@ export const createEventLoungeMessage = cache(
             AND sessions.expiry_timestamp > now()
         )
       INSERT INTO
-        event_lounge (user_id, event_id, content)
+        event_lounge (
+          user_id,
+          username,
+          event_id,
+          content
+        )
       SELECT
         user_info.user_id,
+        ${username},
         ${eventId},
         ${content}
       FROM
