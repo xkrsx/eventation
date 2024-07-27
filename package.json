@@ -15,7 +15,6 @@
     "@emotion/styled": "^11.13.0",
     "@geoapify/geocoder-autocomplete": "^2.0.1",
     "@geoapify/react-geocoder-autocomplete": "^2.0.0",
-    "@mui/icons-material": "^5.16.5",
     "@mui/material": "^5.16.4",
     "@upleveled/ley": "^0.8.6",
     "bcrypt": "^5.1.1",
