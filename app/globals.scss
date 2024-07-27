@@ -44,8 +44,7 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  background: var(--primary-background-color);
   font-family: var(--primary-font-style);
 
   .wrapper {

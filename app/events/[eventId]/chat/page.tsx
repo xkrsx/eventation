@@ -7,6 +7,7 @@ import { getEventLoungeLastHourMessages } from '../../../../database/chat/eventL
 import { getInfoStreamLastHourMessages } from '../../../../database/chat/infoStream';
 import { getSingleEventInsecure } from '../../../../database/events';
 import { getValidSession } from '../../../../database/sessions';
+import { getUserPublicById } from '../../../../database/users';
 import {
   checkStatus,
   countAttendantsInsecure,
@@ -82,10 +83,13 @@ export default async function EventChat(props: Props) {
   }
   const isOrganiser = checkIfOrganiser();
   const attendantsCount = await countAttendantsInsecure(event.id);
+  const username = await getUserPublicById(session.token, session.userId);
 
   return (
     <div>
-      <h1>{event.name} Chat</h1>
+      <h1>
+        <Link href={`/events/${event.id}`}>{event.name} Chat</Link>
+      </h1>
       <p>start: {dayjs(event.timeStart).format('dddd, HH:mm, DD/MM/YYYY')}</p>
       <p>end: {dayjs(event.timeEnd).format('dddd, HH:mm, DD/MM/YYYY')}</p>
       <p>location: {event.location}</p>
@@ -103,6 +107,7 @@ export default async function EventChat(props: Props) {
               messages={eventLoungeMessages}
               currentUserId={session.userId}
               eventId={Number(event.id)}
+              username={username!.username}
             />
           ),
           name: 'EventLounge',
@@ -115,6 +120,7 @@ export default async function EventChat(props: Props) {
               currentUserId={session.userId}
               eventId={Number(event.id)}
               isOrganiser={isOrganiser}
+              username={username!.username}
             />
           ),
           name: 'InfoStream',

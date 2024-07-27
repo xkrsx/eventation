@@ -16,7 +16,6 @@ export default function FindEventForm(props: Props) {
   const [results, setResults] = useState<
     (Event | undefined)[] | (string | ZodIssue[])
   >([]);
-  console.log('results top: ', results);
 
   const handleRadioChange = (value: string) => {
     setAccurate(value);

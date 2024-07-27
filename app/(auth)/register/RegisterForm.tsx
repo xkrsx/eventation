@@ -36,7 +36,6 @@ export default function RegisterForm(props: Props) {
     email: '',
     image: '',
   });
-  const [userLocation, setUserLocation] = useState(false);
   const [userCategory, setUserCategory] = useState(false);
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const SELECTED_LENGTH = 3;
@@ -124,6 +123,15 @@ export default function RegisterForm(props: Props) {
     <div className="wrapper">
       <div className="register">
         <h1>Register</h1>
+        <ImageUpload
+          buttonText="Upload profile picture"
+          options={{
+            sources: ['local', 'camera', 'url', 'dropbox', 'google_drive'],
+          }}
+          addUrlOnUpload={addImageUrl}
+          alt={newUser.username}
+          uploadType="profile"
+        />
         <form
           className="form"
           onSubmit={async (event) => {
@@ -132,15 +140,6 @@ export default function RegisterForm(props: Props) {
             await handleRegister(event);
           }}
         >
-          <ImageUpload
-            buttonText="Upload profile picture"
-            options={{
-              sources: ['local', 'facebook', 'instagram', 'camera', 'url'],
-            }}
-            addUrlOnUpload={addImageUrl}
-            alt={newUser.username}
-            uploadType="profile"
-          />
           <label>
             username
             <input
@@ -180,31 +179,17 @@ export default function RegisterForm(props: Props) {
             />
           </label>
           <div className="location">
-            <div>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={userLocation}
-                  onChange={() => setUserLocation(!userLocation)}
-                />{' '}
-                I want to add my default location (city)
-              </label>
-            </div>
-            {userLocation ? (
-              <div>
-                <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
-                  <GeoapifyGeocoderAutocomplete
-                    placeholder="City"
-                    type="city"
-                    limit={3}
-                    allowNonVerifiedHouseNumber={true}
-                    sendGeocoderRequestFunc={sendGeocoderRequest}
-                    addDetails={true}
-                    sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
-                  />
-                </GeoapifyContext>
-              </div>
-            ) : null}
+            <GeoapifyContext apiKey="4ca7dda985114a55bf51c15172c59328">
+              <GeoapifyGeocoderAutocomplete
+                placeholder="City"
+                type="city"
+                limit={3}
+                allowNonVerifiedHouseNumber={true}
+                sendGeocoderRequestFunc={sendGeocoderRequest}
+                addDetails={true}
+                sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
+              />
+            </GeoapifyContext>
           </div>
           <label>
             e-mail
@@ -225,7 +210,7 @@ export default function RegisterForm(props: Props) {
                   checked={userCategory}
                   onChange={() => setUserCategory(!userCategory)}
                 />{' '}
-                I want to add my default favorite categories (max 3)
+                I want to add my favorite categories (max 3)
               </label>
             </div>
 

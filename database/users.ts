@@ -31,40 +31,43 @@ export const getUser = cache(async (sessionToken: string) => {
   return user;
 });
 
-// export const updateUser = cache(
-//   async (sessionToken: string, updatedUser: UserWithPasswordHash) => {
-//     const [user] = await sql<User[]>`
-//       UPDATE users
-//       SET
-//         username = ${updatedUser.username.toLocaleLowerCase()},
-//         full_name = ${updatedUser.fullName},
-//         location = ${updatedUser.location},
-//         latitude = ${updatedUser.latitude},
-//         longitude = ${updatedUser.longitude},
-//         categories = ${updatedUser.categories},
-//         email = ${updatedUser.email},
-//         password_hash = ${updatedUser.passwordHash}
-//       FROM
-//         sessions
-//       WHERE
-//         sessions.token = ${sessionToken}
-//         AND sessions.expiry_timestamp > now()
-//         AND users.id = ${updatedUser.id}
-//       RETURNING
-//         users.id,
-//         users.username,
-//         users.full_name,
-//         users.location,
-//         users.latitude,
-//         users.longitude,
-//         users.categories,
-//         users.email,
-//         users.created_at
-//     `;
+export const updateUser = cache(
+  async (
+    sessionToken: string,
+    updatedUser: Omit<User, 'categories' | 'createdAt'>,
+  ) => {
+    const [user] = await sql<User[]>`
+      UPDATE users
+      SET
+        username = ${updatedUser.username.toLocaleLowerCase()},
+        full_name = ${updatedUser.fullName},
+        location = ${updatedUser.location},
+        latitude = ${updatedUser.latitude},
+        longitude = ${updatedUser.longitude},
+        image = ${updatedUser.image},
+        email = ${updatedUser.email}
+      FROM
+        sessions
+      WHERE
+        sessions.token = ${sessionToken}
+        AND sessions.expiry_timestamp > now()
+        AND users.id = ${updatedUser.id}
+      RETURNING
+        users.id,
+        users.username,
+        users.full_name,
+        users.location,
+        users.latitude,
+        users.longitude,
+        users.categories,
+        users.email,
+        users.image,
+        users.created_at
+    `;
 
-//     return user;
-//   },
-// );
+    return user;
+  },
+);
 
 export const deleteUser = cache(async (sessionToken: string, id: number) => {
   const [user] = await sql<User[]>`

@@ -171,7 +171,7 @@ export default function FindEventCccurateForm(props: Props) {
                   onChange={handleRadioChange}
                 />
                 Location:
-                <GeoapifyContext apiKey="00a9862ac01f454887fc285e220d8460">
+                <GeoapifyContext apiKey="4ca7dda985114a55bf51c15172c59328">
                   <GeoapifyGeocoderAutocomplete
                     placeholder="City"
                     type="city"

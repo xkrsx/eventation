@@ -6,6 +6,7 @@ import ErrorMessage from '../../ErrorMessage';
 type Props = {
   eventId: number;
   apiRoute: string;
+  username: string;
 };
 
 type NewMessageBodyResponse = {
@@ -36,6 +37,7 @@ export default function ChatInput(props: Props) {
       body: JSON.stringify({
         content: input,
         eventId: props.eventId,
+        username: props.username,
       }),
       headers: {
         'Content-Type': 'application/json',
