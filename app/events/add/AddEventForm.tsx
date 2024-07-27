@@ -205,7 +205,7 @@ export default function AddEventForm(props: Props) {
           </label>
           City
           <GeoapifyContext
-            apiKey="00a9862ac01f454887fc285e220d8460"
+            apiKey="4ca7dda985114a55bf51c15172c59328"
             // apiKey={process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY}
           >
             <GeoapifyGeocoderAutocomplete
