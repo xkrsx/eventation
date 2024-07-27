@@ -19,7 +19,8 @@ export const userRegistrationSchema = z
     username: z
       .string()
       .min(3, { message: 'Username must have at least 3 characters.' })
-      .max(30, { message: 'Username must have maximum 30 characters.' }),
+      .max(30, { message: 'Username must have maximum 30 characters.' })
+      .refine((s) => !s.includes(' '), 'No spaces are allowed in username.'),
     password: z
       .string()
       .min(4, { message: 'Password must be have least 4 characters.' })
@@ -98,7 +99,8 @@ export const userEditSchema = z.object({
   username: z
     .string()
     .min(3, { message: 'Username must have at least 3 characters.' })
-    .max(30, { message: 'Username must have maximum 30 characters.' }),
+    .max(30, { message: 'Username must have maximum 30 characters.' })
+    .refine((s) => !s.includes(' '), 'No spaces are allowed in username.'),
   fullName: z
     .string()
     .min(3, { message: 'Name must have at least 3 characters.' })
