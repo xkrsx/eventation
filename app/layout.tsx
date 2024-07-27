@@ -22,9 +22,11 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body>
-        <Header />
-        {children}
-        <CookieBanner />
+        <div className="wrapper">
+          <Header />
+          {children}
+          <CookieBanner />
+        </div>
       </body>
     </html>
   );

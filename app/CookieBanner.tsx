@@ -28,7 +28,10 @@ export default function CookieBanner() {
 
   return (
     <div className={`cookieBanner ${areCookiesAccepted ? 'closed' : 'open'}`}>
-      <div>Do you accept the use of Cookies?</div>
+      <div>
+        This website uses cookies to create better performance and experience
+        for users. Do you accept the use of Cookies?
+      </div>
       <button
         className="button"
         onClick={() => {
