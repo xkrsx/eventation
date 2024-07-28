@@ -47,7 +47,7 @@ export default function TwoTabs(props: Props) {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '90%', height: '60vh', margin: '0 auto' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>
           <Tab label={props.tabOne.name} {...a11yProps(0)} />

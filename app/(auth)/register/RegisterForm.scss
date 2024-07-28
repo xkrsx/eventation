@@ -1,10 +1,11 @@
 .form {
   display: flex;
   flex-direction: column;
-  width: 30%;
-  height: 100vh;
+  // width: 40%;
+  // height: 100vh;
   overflow: true;
-  align-items: flex-end;
+  // align-items: flex-end;
+  padding: var(--primary-padding);
 
   label {
     display: flex;

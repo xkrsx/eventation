@@ -1,4 +1,7 @@
 'use client';
+
+import './LoginForm.scss';
+import { Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { getSafeReturnToPath } from '../../../util/validation';
@@ -54,8 +57,7 @@ export default function LoginForm(props: Props) {
 
   return (
     <div className="wrapper">
-      <div className="register">
-        <h1>Login</h1>
+      <div className="login">
         <form
           className="form"
           onSubmit={async (event) => {
@@ -84,8 +86,7 @@ export default function LoginForm(props: Props) {
               onChange={handleChange}
             />
           </label>
-
-          <button>Login</button>
+          <Button variant="outlined">Login</Button>
 
           {errors.map((error) => (
             <div className="error" key={`error-${error.message}`}>

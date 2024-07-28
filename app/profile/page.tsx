@@ -1,3 +1,4 @@
+import './page.scss';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getValidSession } from '../../database/sessions';

@@ -6,8 +6,8 @@ type Props = { returnTo?: string | string[] };
 
 export default function ProfileNotLogged(props: Props) {
   return (
-    <div>
-      <h1>Log in/Register</h1>
+    <div className="wrapper">
+      <h1>Log in / Register</h1>
       <TwoTabs
         tabOne={{
           comp: <Login returnTo={props.returnTo} />,
