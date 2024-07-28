@@ -8,7 +8,7 @@ export default function HomePage() {
   return (
     <div className="home-wrapper">
       <h1>We are here for everyone</h1>
-      <Link href="/categories">
+      <Link className="system-link" href="/categories">
         <div className="home-banner">
           <Image
             className="category-banner"

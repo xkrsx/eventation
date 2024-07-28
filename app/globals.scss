@@ -76,7 +76,6 @@ body {
       height: var(--primary-menu-icons-size);
       width: var(--primary-menu-icons-size);
       color: var(--primary-logout-color);
-
       cursor: pointer;
     }
 
@@ -87,8 +86,12 @@ body {
   }
 
   a {
-    color: inherit;
+    color: var(--secondary-background-color);
+    font-weight: 500;
     text-decoration: none;
+  }
+  .system-link {
+    color: var(--primary-logout-color);
   }
 
   @media (prefers-color-scheme: dark) {
