@@ -102,9 +102,10 @@ export default async function SingleEventLogged(props: Props) {
               : 'No one yet. Be first!'}
           </p>
 
+          <p>
+            <Link href={`/events/${props.event.id}`}>See more</Link>
+          </p>
           <DownloadIcsButton event={props.event} />
-
-          <Link href={`/events/${props.event.id}`}>See more</Link>
         </div>
 
         {attendanceSessionCheck ? (

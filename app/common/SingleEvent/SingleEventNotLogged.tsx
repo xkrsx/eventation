@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { Event } from '../../../database/events';
 import { getUserPublicByIdInsecure } from '../../../database/users';
 import { countAttendantsInsecure } from '../../../database/usersEventsStatus';
+import DownloadIcsButton from '../DownloadIcs/DownloadIcs';
 import EventImage from '../Images/EventImage/EventImage';
 
 type Props = {
@@ -69,7 +70,10 @@ export default async function SingleEventNotLogged(props: Props) {
               ? attendantsCount.count
               : 'No one yet. Be first!'}
           </p>
-          <Link href={`/events/${props.event.id}`}>See more</Link>
+          <p>
+            <Link href={`/events/${props.event.id}`}>See more</Link>
+          </p>
+          <DownloadIcsButton event={props.event} />
         </div>
         <strong>
           <Link

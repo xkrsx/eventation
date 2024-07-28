@@ -22,16 +22,4 @@
       justify-content: flex-end;
     }
   }
-
-  .menu-icon {
-    margin: var(--primary-margin);
-    height: var(--primary-menu-icons-size);
-    width: var(--primary-menu-icons-size);
-    transition: var(--primary-transition);
-    cursor: pointer;
-
-    &:hover {
-      transform: scale(1.2);
-    }
-  }
 }
