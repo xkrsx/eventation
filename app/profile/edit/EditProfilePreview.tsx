@@ -6,6 +6,7 @@ import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { RegisterResponseBodyPost } from '../../(auth)/api/register/route';
@@ -92,9 +93,18 @@ export default function EditProfilePreview(props: Props) {
       <div className="profile">
         <div className="image-info">
           <ProfileImage profile={props.profile} />
-          <div className="profile-info">
+          <div className="profile-upload">
             <h1>Username: {props.profile.username}</h1>
             <h2>Full name: {props.profile.fullName}</h2>
+            <ImageUpload
+              buttonText="Upload profile picture"
+              options={{
+                sources: ['local', 'facebook', 'instagram', 'camera', 'url'],
+              }}
+              addUrlOnUpload={addImageUrl}
+              alt={editedUser.username}
+              uploadType="profile"
+            />
           </div>
         </div>
 
@@ -106,37 +116,27 @@ export default function EditProfilePreview(props: Props) {
             await handleEdit(event);
           }}
         >
-          <div className="upload-username-name">
-            <ImageUpload
-              buttonText="Upload profile picture"
-              options={{
-                sources: ['local', 'facebook', 'instagram', 'camera', 'url'],
-              }}
-              addUrlOnUpload={addImageUrl}
-              alt={editedUser.username}
-              uploadType="profile"
-            />
-            <div className="username-name">
-              <label>
-                username
-                <input
-                  required
-                  name="username"
-                  value={editedUser.username}
-                  onChange={handleChange}
-                />
-              </label>
-              <label>
-                full name
-                <input
-                  required
-                  name="fullName"
-                  value={editedUser.fullName}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+          <div className="username-name">
+            <label>
+              username
+              <input
+                required
+                name="username"
+                value={editedUser.username}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              full name
+              <input
+                required
+                name="fullName"
+                value={editedUser.fullName}
+                onChange={handleChange}
+              />
+            </label>
           </div>
+
           <div className="location">
             <GeoapifyContext apiKey="4ca7dda985114a55bf51c15172c59328">
               <GeoapifyGeocoderAutocomplete
@@ -171,40 +171,43 @@ export default function EditProfilePreview(props: Props) {
               <ErrorMessage>{error.message}</ErrorMessage>
             </div>
           ))}
-          {/* <div className="delete-profile"> */}
-          <button
-            className="button-delete"
-            onClick={async () => {
-              const response = await fetch(`/api/users/${props.profile.id}`, {
-                method: 'DELETE',
-              });
 
-              setErrorMessage('');
+          <div className="cancel-delete">
+            <Link href="/profile">
+              <div className="button-return">Cancel</div>
+            </Link>
+            <button
+              className="button-delete"
+              onClick={async () => {
+                const response = await fetch(`/api/users/${props.profile.id}`, {
+                  method: 'DELETE',
+                });
 
-              if (!response.ok) {
-                let newErrorMessage = 'Error deleting the profile.';
+                setErrorMessage('');
 
-                try {
-                  const body: { error: string } = await response.json();
-                  newErrorMessage = body.error;
-                } catch {
-                  // Don't fail if response JSON body
-                  // cannot be parsed
+                if (!response.ok) {
+                  let newErrorMessage = 'Error deleting the profile.';
+
+                  try {
+                    const body: { error: string } = await response.json();
+                    newErrorMessage = body.error;
+                  } catch {
+                    // Don't fail if response JSON body
+                    // cannot be parsed
+                  }
+
+                  // TODO: Use toast instead of showing
+                  // this below creation / update form
+                  setErrorMessage(newErrorMessage);
+                  return;
                 }
 
-                // TODO: Use toast instead of showing
-                // this below creation / update form
-                setErrorMessage(newErrorMessage);
-                return;
-              }
-
-              router.refresh();
-            }}
-          >
-            Delete my profile
-          </button>
-
-          {/* </div> */}
+                router.refresh();
+              }}
+            >
+              Delete my profile
+            </button>
+          </div>
         </form>
 
         <ErrorMessage>{errorMessage}</ErrorMessage>

@@ -11,10 +11,6 @@
       display: flex;
       justify-content: space-evenly;
       align-items: center;
-
-      .profile-info {
-        padding-left: var(--primary-padding);
-      }
     }
     .form {
       display: flex;
@@ -24,22 +20,36 @@
         margin-left: var(--primary-margin);
       }
 
-      .upload-username-name {
+      .username-name {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        margin: var(--primary-margin);
+      }
+    }
+    .original-location {
+      margin: calc(var(--primary-margin) / 2);
+    }
+    .cancel-delete {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-        .username-name {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
+      .button-return {
+        margin: calc(var(--primary-margin) / 2) 0;
+        background-color: var(--primary-color-two);
+        color: var(--primary-font-color);
+        font-weight: 300;
+        padding: calc(var(--primary-padding) / 2)
+          calc(var(--primary-padding) * 2);
+        border: var(--primary-border-style);
+        border-radius: var(--primary-border-radius);
+        opacity: 0.7;
+        transition: var(--primary-transition);
+        cursor: pointer;
+
+        &:hover {
+          opacity: 1;
+          font-weight: 500;
         }
-      }
-      .original-location {
-        margin: calc(var(--primary-margin) / 2);
-      }
-      .button-delete {
-        align-self: flex-end;
       }
     }
   }
