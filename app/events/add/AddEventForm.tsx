@@ -1,5 +1,6 @@
 'use client';
-
+import '@geoapify/geocoder-autocomplete/styles/minimal.css';
+import './AddEventForm.scss';
 import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
@@ -126,17 +127,19 @@ export default function AddEventForm(props: Props) {
 
   return (
     <div className="wrapper">
-      <div className="event">
-        <h1>Add event</h1>
-        <ImageUpload
-          buttonText="Upload event image"
-          options={{
-            sources: ['local', 'url', 'google_drive'],
-          }}
-          alt={newEvent.name}
-          addUrlOnUpload={addImageUrl}
-          uploadType="event"
-        />
+      <h1>Add event</h1>
+      <div className="add-event">
+        <div className="image-upload">
+          <ImageUpload
+            buttonText="Upload event image"
+            options={{
+              sources: ['local', 'url', 'google_drive'],
+            }}
+            alt={newEvent.name}
+            addUrlOnUpload={addImageUrl}
+            uploadType="event"
+          />
+        </div>
         <form
           className="form"
           onSubmit={async (event) => {
@@ -184,7 +187,6 @@ export default function AddEventForm(props: Props) {
               value={Number(newEvent.price)}
               onChange={handleChange}
             />
-            ,-
           </label>
           <label>
             Category
@@ -203,7 +205,7 @@ export default function AddEventForm(props: Props) {
               })}
             </select>
           </label>
-          City
+
           <GeoapifyContext
             apiKey="4ca7dda985114a55bf51c15172c59328"
             // apiKey={process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY}
