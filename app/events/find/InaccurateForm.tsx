@@ -73,65 +73,62 @@ export default function FindEventInaccurateForm(props: Props) {
   }
 
   return (
-    <div className="wrapper">
-      <div className="event">
-        <form
-          className="form"
-          onSubmit={async (event) => {
-            // eslint error: no preventDefault() even though there is one in called function
-            event.preventDefault();
-            await handleSearch(event);
-          }}
-        >
-          <label htmlFor="name">
-            Name
-            <input
-              name="name"
-              value={searchedEvent.name}
-              onChange={handleChange}
+    <div className="search-form">
+      <form
+        className="form"
+        onSubmit={async (event) => {
+          // eslint error: no preventDefault() even though there is one in called function
+          event.preventDefault();
+          await handleSearch(event);
+        }}
+      >
+        <label htmlFor="name">
+          Name
+          <input
+            name="name"
+            value={searchedEvent.name}
+            onChange={handleChange}
+          />
+        </label>
+        <label htmlFor="organiser">
+          Organiser
+          <input
+            name="username"
+            value={searchedEvent.username}
+            onChange={handleChange}
+          />
+        </label>
+        <label htmlFor="category">
+          Category
+          <select name="category" defaultChecked onChange={handleChange}>
+            <option defaultValue="true" />
+            {categories.map((category) => {
+              return (
+                <option
+                  key={`option-key-${category.name}`}
+                  value={category.name}
+                >
+                  {category.name}
+                </option>
+              );
+            })}
+          </select>
+        </label>
+        <div className="location">
+          <GeoapifyContext apiKey="4ca7dda985114a55bf51c15172c59328">
+            <GeoapifyGeocoderAutocomplete
+              placeholder="City"
+              type="city"
+              limit={3}
+              allowNonVerifiedHouseNumber={true}
+              sendGeocoderRequestFunc={sendGeocoderRequest}
+              addDetails={true}
+              sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
             />
-          </label>
-          <label htmlFor="organiser">
-            Organiser
-            <input
-              name="username"
-              value={searchedEvent.username}
-              onChange={handleChange}
-            />
-          </label>
-          <label htmlFor="category">
-            Category
-            <select name="category" defaultChecked onChange={handleChange}>
-              <option defaultValue="true" />
-              {categories.map((category) => {
-                return (
-                  <option
-                    key={`option-key-${category.name}`}
-                    value={category.name}
-                  >
-                    {category.name}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-          <label htmlFor="location">
-            Location
-            <GeoapifyContext apiKey="4ca7dda985114a55bf51c15172c59328">
-              <GeoapifyGeocoderAutocomplete
-                placeholder="City"
-                type="city"
-                limit={3}
-                allowNonVerifiedHouseNumber={true}
-                sendGeocoderRequestFunc={sendGeocoderRequest}
-                addDetails={true}
-                sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
-              />
-            </GeoapifyContext>
-          </label>
-          <button className="button-action">Find matching events</button>
-        </form>
-      </div>
+          </GeoapifyContext>
+        </div>
+        <button className="button-action">Find matching events</button>
+      </form>
     </div>
   );
 }

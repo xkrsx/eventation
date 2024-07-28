@@ -5,32 +5,32 @@ import { ZodIssue } from 'zod';
 import { Event } from '../../../database/events';
 import { Session } from '../../../migrations/00001-createTableSessions';
 import SingleEventNotLogged from '../../common/SingleEvent/SingleEventNotLogged';
-import ErrorMessage from '../../ErrorMessage';
-import FindEventAccurateForm from './AccurateForm';
 import FindEventInaccurateForm from './InaccurateForm';
+
+// import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
   session: Omit<Session, 'id'> | undefined;
 };
 
 export default function FindEventForm(props: Props) {
-  const [accurate, setAccurate] = useState('inaccurate');
-  const [errorMessage, setErrorMessage] = useState('');
+  // const [accurate, setAccurate] = useState('inaccurate');
+  // const [errorMessage, setErrorMessage] = useState('');
   const [results, setResults] = useState<Event[]>([]);
 
-  const handleRadioChange = (value: string) => {
-    setAccurate(value);
-  };
+  // const handleRadioChange = (value: string) => {
+  //   setAccurate(value);
+  // };
 
   function addSearchResults(events: Event[] | string | ZodIssue[]) {
     if (typeof events === 'object') {
-      return setResults(events);
+      return setResults(events as Event[]);
     }
   }
 
   return (
     <div>
-      <div className="search-engine">
+      {/* <div className="search-engine">
         Search engine:{' '}
         <input
           type="radio"
@@ -54,9 +54,11 @@ export default function FindEventForm(props: Props) {
         ) : (
           <FindEventAccurateForm addResultsToShow={addSearchResults} />
         )}
-      </div>
+      </div> */}
+      <FindEventInaccurateForm addResultsToShow={addSearchResults} />
+
       <div className="results">
-        <ErrorMessage>{errorMessage}</ErrorMessage>
+        {/* <ErrorMessage>{errorMessage}</ErrorMessage> */}
         {results.length !== 0 && (
           <>
             <button

@@ -1,5 +1,4 @@
 import './page.scss';
-import Image from 'next/image';
 import Link from 'next/link';
 import { categoriesObject } from '../../database/categories';
 
@@ -13,7 +12,7 @@ export default function Categories() {
           return (
             <Link key={`id-${category.id}`} href={`/categories/${category.id}`}>
               <div className="category">
-                <Image src={category.url} alt={category.name} fill />
+                <img src={category.url} alt={category.name} />
                 <div className="name-holder">
                   <div className="category-name">{category.name}</div>
                 </div>
