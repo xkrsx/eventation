@@ -1,3 +1,5 @@
+import './page.scss';
+import Image from 'next/image';
 import Link from 'next/link';
 import { categoriesObject } from '../../database/categories';
 
@@ -5,30 +7,24 @@ export default function Categories() {
   const categories = categoriesObject;
   return (
     <div className="wrapper">
+      <h1>Browse all categories</h1>
       <div className="categories">
-        <h1>Browse all categories</h1>
-        <div className="list">
-          {categories.map((category) => {
-            return (
-              <Link
-                key={`id-${category.id}`}
-                href={`/categories/${category.id}`}
-              >
-                <div
-                  style={{
-                    height: '50px',
-                    width: '150px',
-                    border: '1px solid black',
-                    lineHeight: '50px',
-                    textAlign: 'center',
-                  }}
-                >
-                  {category.name}
+        {categories.map((category) => {
+          return (
+            <Link key={`id-${category.id}`} href={`/categories/${category.id}`}>
+              <div className="category">
+                <Image
+                  src={`/images/categories/${category.id}.webp`}
+                  alt={category.name}
+                  fill
+                />
+                <div className="name-holder">
+                  <div className="category-name">{category.name}</div>
                 </div>
-              </Link>
-            );
-          })}
-        </div>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

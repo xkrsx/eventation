@@ -9,6 +9,7 @@
   --primary-margin: 1rem;
   --primary-transition: 0.5s ease-in-out;
   --primary-border-style: 0.1rem var(--primary-color-three) dashed;
+  --primary-border-radius: 0.5rem;
 
   --primary-color-one: #ffea3f;
   --primary-color-two: #e59e73;
@@ -61,6 +62,11 @@ body {
     width: 95vw;
     margin: 0 auto;
     padding: var(--primary-padding);
+
+    h1 {
+      color: var(--primary-logout-color);
+      padding-bottom: var(--primary-padding);
+    }
 
     .logout-button {
       padding: 0;

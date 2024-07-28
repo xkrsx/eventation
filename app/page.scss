@@ -3,17 +3,17 @@
   margin: 0 auto;
 
   .home-banner {
-    position: absolute;
-
-    padding: var(--primary-padding);
-    width: 90vw;
+    position: relative;
+    width: auto;
     height: 70vh;
+    overflow: hidden;
 
     .category-banner {
-      overflow: hidden;
-      padding: var(--primary-padding);
       object-fit: cover;
-      transition: transform var(--primary-transition);
     }
+  }
+  p {
+    padding-top: calc(var(--primary-padding) / 2);
+    text-align: right;
   }
 }
