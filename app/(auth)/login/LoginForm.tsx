@@ -85,7 +85,7 @@ export default function LoginForm(props: Props) {
               onChange={handleChange}
             />
           </label>
-          <Button variant="contained">Login</Button>
+          <button className="button-action">Login</button>
 
           {errors.map((error) => (
             <div className="error" key={`error-${error.message}`}>

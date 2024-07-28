@@ -4,23 +4,19 @@ import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
-import { Button } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
-import { ZodIssue } from 'zod';
 import { categoriesObject } from '../../../database/categories';
 import { Event } from '../../../database/events';
 
 type Props = {
-  addResultsToShow: (
-    events: (Event | undefined)[] | (string | ZodIssue[]),
-  ) => void;
+  addResultsToShow: (events: Event[] | string) => void;
 };
 
 type EventResponseBodyPost =
   | {
-      events: (Event | undefined)[];
+      events: Event[];
     }
-  | { errors: { message: string | ZodIssue[] } };
+  | { message: string };
 
 export default function FindEventInaccurateForm(props: Props) {
   const [searchedEvent, setSearchedEvent] = useState({
@@ -66,10 +62,10 @@ export default function FindEventInaccurateForm(props: Props) {
     });
     const data: EventResponseBodyPost = await response.json();
 
-    if ('errors' in data) {
-      props.addResultsToShow(data.errors.message);
-      return;
-    }
+    // if ('errors' in data) {
+    //   props.addResultsToShow(data.errors.message);
+    //   return;
+    // }
 
     if ('events' in data) {
       props.addResultsToShow(data.events);
@@ -133,7 +129,7 @@ export default function FindEventInaccurateForm(props: Props) {
               />
             </GeoapifyContext>
           </label>
-          <Button variant="outlined">Find matching events</Button>
+          <button className="button-action">Find matching events</button>
         </form>
       </div>
     </div>

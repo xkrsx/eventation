@@ -4,14 +4,11 @@ import {
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
 import React, { ChangeEvent, useState } from 'react';
-import { ZodIssue } from 'zod';
 import { categoriesObject } from '../../../database/categories';
 import { Event } from '../../../database/events';
 
 type Props = {
-  addResultsToShow: (
-    events: (Event | undefined)[] | (string | ZodIssue[]),
-  ) => void;
+  addResultsToShow: (events: Event[] | string) => void;
 };
 
 type FormFields = {
@@ -23,9 +20,9 @@ type FormFields = {
 
 type EventResponseBodyPost =
   | {
-      events: (Event | undefined)[];
+      events: Event[];
     }
-  | { errors: { message: string | ZodIssue[] } };
+  | { message: string };
 
 export default function FindEventCccurateForm(props: Props) {
   const [selectedField, setSelectedField] = useState<keyof FormFields>('name');
@@ -185,7 +182,7 @@ export default function FindEventCccurateForm(props: Props) {
               </label>
             </label>
           </div>
-          <button>Find matching events</button>
+          <button className="button-action">Find matching events</button>
         </form>
       </div>
     </div>
