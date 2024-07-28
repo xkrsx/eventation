@@ -1,5 +1,6 @@
 'use client';
-import { Button } from '@mui/material';
+
+import './ImageUpload.scss';
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
 import { useState } from 'react';
 
@@ -41,63 +42,66 @@ export default function ImageUpload(props: Props) {
   );
 
   return (
-    <div>
-      <CldUploadWidget
-        options={props.options}
-        signatureEndpoint={`/api/imageUpload/${props.uploadType}`}
-        onSuccess={(res) => {
-          setResultImage(res.info as UploadedImageData);
-          setIsUploaded(true);
-          try {
-            if (typeof res.info === 'string') {
-              throw new Error('Unexpected string in res.info');
-            }
-            if (typeof res.info === 'undefined') {
-              throw new Error('Unexpected undefined in res.info');
-            }
-            const secureUrl = res.info.secure_url;
-            setImagePreviewUrl(secureUrl);
-            props.addUrlOnUpload(secureUrl);
-          } catch (error) {
-            console.error('Error: ', error);
-          }
-        }}
-      >
-        {({ open }) => {
-          function handleOnClick() {
-            setResource(undefined);
-            open();
-          }
-          return (
-            <button className="button-action" onClick={handleOnClick}>
-              {!isUploaded ? props.buttonText : 'Reupload new image'}
-            </button>
-          );
-        }}
-      </CldUploadWidget>
-
-      {isUploaded &&
-        (props.uploadType === 'event' ? (
-          <CldImage
-            width="300"
-            height="100"
-            src={imagePreviewUrl}
-            sizes="100vw"
-            crop="fill"
-            alt={props.alt}
-          />
-        ) : (
-          <div style={{ borderRadius: '50%' }}>
+    <div className="preview-upload">
+      <div className="preview">
+        {isUploaded &&
+          (props.uploadType === 'event' ? (
             <CldImage
-              width="100"
-              height="100"
+              width="300"
+              height="500"
               src={imagePreviewUrl}
               sizes="100vw"
               crop="fill"
               alt={props.alt}
             />
-          </div>
-        ))}
+          ) : (
+            <div style={{ borderRadius: '50%' }}>
+              <CldImage
+                width="150"
+                height="150"
+                src={imagePreviewUrl}
+                sizes="100vw"
+                crop="fill"
+                alt={props.alt}
+              />
+            </div>
+          ))}
+      </div>
+      <div className="upload">
+        <CldUploadWidget
+          options={props.options}
+          signatureEndpoint={`/api/imageUpload/${props.uploadType}`}
+          onSuccess={(res) => {
+            setResultImage(res.info as UploadedImageData);
+            setIsUploaded(true);
+            try {
+              if (typeof res.info === 'string') {
+                throw new Error('Unexpected string in res.info');
+              }
+              if (typeof res.info === 'undefined') {
+                throw new Error('Unexpected undefined in res.info');
+              }
+              const secureUrl = res.info.secure_url;
+              setImagePreviewUrl(secureUrl);
+              props.addUrlOnUpload(secureUrl);
+            } catch (error) {
+              console.error('Error: ', error);
+            }
+          }}
+        >
+          {({ open }) => {
+            function handleOnClick() {
+              setResource(undefined);
+              open();
+            }
+            return (
+              <button className="button-action" onClick={handleOnClick}>
+                {!isUploaded ? props.buttonText : 'Reupload new image'}
+              </button>
+            );
+          }}
+        </CldUploadWidget>
+      </div>
     </div>
   );
 }
