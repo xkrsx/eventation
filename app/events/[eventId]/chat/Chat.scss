@@ -1,0 +1,17 @@
+.chat-message {
+  border: var(--primary-border-style);
+  border-radius: var(--primary-border-radius);
+  padding: var(--primary-padding);
+  margin: 10px auto;
+  width: 40vw;
+  background-color: var(--primary-color-five);
+  text-align: right;
+
+  p {
+    padding: calc(var(--primary-padding) / 3);
+  }
+  .message-time {
+    font-style: italic;
+    color: var(--secondary-font-color);
+  }
+}

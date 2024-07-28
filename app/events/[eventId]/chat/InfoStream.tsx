@@ -1,5 +1,6 @@
 'use client';
 
+import './Chat.scss';
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
 import { InfoStreamMessage } from '../../../../migrations/00005-createTableInfoStream';
@@ -68,20 +69,9 @@ export default function InfoStream(props: Props) {
             }
 
             return (
-              <div
-                key={`id-${message.id}`}
-                style={{
-                  border: '1px solid black',
-                  borderRadius: '10px',
-                  padding: '3px',
-                  textAlign: 'right',
-                  backgroundColor: 'lightBlue',
-                  margin: '10px auto',
-                  width: '50vw',
-                }}
-              >
-                <p>{message.content}</p>
-                <p>{sendingTime()}</p>
+              <div key={`id-${message.id}`} className="chat-message">
+                <p className="message-content">{message.content}</p>
+                <p className="message-time">{sendingTime()}</p>
                 <span>
                   {isCurrentUser ? (
                     <strong>You</strong>

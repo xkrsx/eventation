@@ -1,5 +1,6 @@
 'use client';
 
+import './Chat.scss';
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
 import { EventLoungeMessage } from '../../../../migrations/00004-createTableEventLounge';
@@ -64,30 +65,25 @@ export default function EventLounge(props: Props) {
             }
 
             return (
-              <div key={`id-${message.id}`}>
-                <div
-                  style={{
-                    border: '1px solid black',
-                    borderRadius: '10px',
-                    padding: '3px',
-                    textAlign: isCurrentUser ? 'right' : 'left',
-                    backgroundColor: isCurrentUser ? 'lightBlue' : 'white',
-                    margin: '10px',
-                    marginRight: isCurrentUser ? '10px' : 'auto',
-                    marginLeft: isCurrentUser ? 'auto' : '10px',
-                    width: '50vw',
-                  }}
-                >
-                  <p>{message.content}</p>
-                  <p>{sendingTime()}</p>
-                  <span>
-                    {isCurrentUser ? (
-                      <strong>You</strong>
-                    ) : (
-                      <strong>{message.username}</strong>
-                    )}
-                  </span>
-                </div>
+              <div
+                key={`id-${message.id}`}
+                className="chat-message"
+                style={{
+                  textAlign: !isCurrentUser && 'left',
+                  backgroundColor: isCurrentUser && '#b199b2',
+                  marginRight: isCurrentUser && '10px',
+                  marginLeft: !isCurrentUser && '10px',
+                }}
+              >
+                <p className="message-content">{message.content}</p>
+                <p className="message-time">{sendingTime()}</p>
+                <span>
+                  {isCurrentUser ? (
+                    <strong>You</strong>
+                  ) : (
+                    <strong>{message.username}</strong>
+                  )}
+                </span>
               </div>
             );
           })}
