@@ -59,7 +59,7 @@ body {
   font-family: var(--primary-font-style);
 
   .wrapper {
-    width: 95vw;
+    width: 100%;
     margin: 0 auto;
     padding: var(--primary-padding);
 
@@ -92,6 +92,7 @@ body {
   }
   .system-link {
     color: var(--primary-logout-color);
+    text-decoration: underline;
   }
 
   @media (prefers-color-scheme: dark) {
