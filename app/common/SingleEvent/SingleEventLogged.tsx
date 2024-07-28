@@ -13,6 +13,8 @@ import {
   countAttendantsInsecure,
 } from '../../../database/usersEventsStatus';
 import AttendanceStatusForm from '../AttendanceStatus/AttendanceStatusForm';
+import DownloadIcs from '../DownloadIcs/DownloadIcs';
+import DownloadIcsButton from '../DownloadIcs/DownloadIcs';
 import EventImage from '../Images/EventImage/EventImage';
 
 type Props = {
@@ -85,7 +87,6 @@ export default async function SingleEventLogged(props: Props) {
         <p>
           category: <Link href="/categories">{props.event.category}</Link>
         </p>
-
         <div>
           <p>{props.event.description}</p>
           <p>
@@ -100,6 +101,9 @@ export default async function SingleEventLogged(props: Props) {
               ? attendantsCount.count
               : 'No one yet. Be first!'}
           </p>
+
+          <DownloadIcsButton event={props.event} />
+
           <Link href={`/events/${props.event.id}`}>See more</Link>
         </div>
 
@@ -107,7 +111,6 @@ export default async function SingleEventLogged(props: Props) {
           session.userId === organiser?.id ? (
             <div>
               <strong>You are an organiser</strong>
-
               <p>
                 <Link href={`/events/${props.event.id}/edit`}>
                   Edit or delete this event
