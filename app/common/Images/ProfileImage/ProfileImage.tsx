@@ -1,4 +1,5 @@
 'use client';
+import './ProfileImage.scss';
 import { CldImage } from 'next-cloudinary';
 import { User } from '../../../../migrations/00000-createTableUsers';
 
@@ -9,18 +10,7 @@ type Props = {
 export default function ProfileImage(props: Props) {
   if (props.profile.image === '') {
     return (
-      <div
-        style={{
-          height: '45px',
-          width: '45px',
-          border: '1px dotted black',
-          borderRadius: '50%',
-          lineHeight: '45px',
-          textAlign: 'center',
-        }}
-      >
-        {props.profile.username.slice(0, 2)}
-      </div>
+      <div className="user-avatar">{props.profile.username.slice(0, 1)}</div>
     );
   }
   return (

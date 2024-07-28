@@ -18,7 +18,7 @@
   --primary-color-five: #ced3b8;
   --primary-color-six: #203931;
   --primary-color-seven: #0f0c1d;
-  --primary-color-eigth: rgb(253, 249, 254);
+  --primary-color-eigth: #fdf9fe;
   --primary-color-nine: #008524;
   --primary-color-ten: #5200ff;
   --primary-color-eleven: #b21e10;
@@ -60,12 +60,17 @@ body {
 
   .wrapper {
     width: 100%;
+    min-height: 100vh;
     margin: 0 auto;
     padding: var(--primary-padding);
 
     h1 {
       color: var(--primary-logout-color);
       padding-bottom: var(--primary-padding);
+    }
+
+    ul {
+      list-style: none;
     }
 
     .logout-button {
@@ -92,6 +97,97 @@ body {
       &:hover {
         opacity: 1;
         font-weight: 500;
+      }
+    }
+
+    .button-confirm {
+      margin: calc(var(--primary-margin) / 2) var(--primary-margin);
+      background-color: var(--primary-accept-color);
+      color: var(--secondary-font-color);
+      padding: calc(var(--primary-padding) / 2) calc(var(--primary-padding) * 2);
+      border: var(--primary-border-style);
+      border-radius: var(--primary-border-radius);
+      opacity: 0.7;
+      transition: var(--primary-transition);
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+        font-weight: 500;
+      }
+    }
+
+    .button-maybe {
+      margin: calc(var(--primary-margin) / 2) var(--primary-margin);
+
+      background-color: var(--primary-maybe-color);
+      color: var(--secondary-font-color);
+
+      padding: calc(var(--primary-padding) / 2) calc(var(--primary-padding) * 2);
+      border: var(--primary-border-style);
+      border-radius: var(--primary-border-radius);
+      opacity: 0.7;
+      transition: var(--primary-transition);
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+        font-weight: 500;
+      }
+    }
+    .button-no {
+      margin: calc(var(--primary-margin) / 2) var(--primary-margin);
+
+      background-color: var(--primary-error-color);
+      color: var(--secondary-font-color);
+      padding: calc(var(--primary-padding) / 2) calc(var(--primary-padding) * 2);
+      border: var(--primary-border-style);
+      border-radius: var(--primary-border-radius);
+      transition: var(--primary-transition);
+      opacity: 0.7;
+      cursor: pointer;
+
+      &:hover {
+        font-weight: 500;
+        opacity: 1;
+      }
+    }
+
+    .button-delete {
+      margin: calc(var(--primary-margin) / 2) 0;
+      background-color: var(--primary-error-color);
+      color: var(--secondary-font-color);
+      padding: calc(var(--primary-padding) / 2) calc(var(--primary-padding) * 2);
+      border: var(--primary-border-style);
+      border-radius: var(--primary-border-radius);
+      transition: var(--primary-transition);
+      cursor: pointer;
+
+      &:hover {
+        font-weight: 500;
+        animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        transform: translate3d(0, 0, 0);
+        perspective: 1000px;
+      }
+
+      @keyframes shake {
+        10%,
+        90% {
+          transform: translate3d(-1px, 0, 0);
+        }
+        20%,
+        80% {
+          transform: translate3d(2px, 0, 0);
+        }
+        30%,
+        50%,
+        70% {
+          transform: translate3d(-4px, 0, 0);
+        }
+        40%,
+        60% {
+          transform: translate3d(4px, 0, 0);
+        }
       }
     }
 

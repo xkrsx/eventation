@@ -6,6 +6,7 @@ import {
   getUsersEventsPast,
 } from '../../../database/events';
 import { getValidSession } from '../../../database/sessions';
+import ThreeTabs from '../../common/Tabs/ThreeTabs';
 import AttendingEvents from './Attending';
 import OrganisingEvents from './Organising';
 import PastEvents from './Past';
@@ -34,9 +35,20 @@ export default async function UserEvents() {
   return (
     <div className="wrapper">
       <h1>User events</h1>
-      <OrganisingEvents events={eventsOrganising} />
-      <AttendingEvents events={eventsAttending} />
-      <PastEvents events={eventsPast} />
+      <ThreeTabs
+        tabOne={{
+          comp: <OrganisingEvents events={eventsOrganising} />,
+          name: 'Organising',
+        }}
+        tabTwo={{
+          comp: <AttendingEvents events={eventsAttending} />,
+          name: 'Attending',
+        }}
+        tabThree={{
+          comp: <PastEvents events={eventsPast} />,
+          name: 'Past',
+        }}
+      />
     </div>
   );
 }

@@ -6,7 +6,6 @@ import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
-import { Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import {
@@ -247,7 +246,7 @@ export default function RegisterForm(props: Props) {
             )}
           </div>
 
-          <button className="button-action">Register</button>
+          <button className="button-confirm">Register</button>
 
           {errors.map((error) => (
             <div className="error" key={`error-${error.message}`}>

@@ -27,54 +27,59 @@ export default async function SingleEventNotLogged(props: Props) {
   }
   return (
     <div className="event">
-      <div>
+      <div className="event-left">
         <h1>
           <Link href={`/events/${props.event.id}`}>{props.event.name}</Link>
         </h1>
-        <Link href={`/events/${props.event.id}`}>
+        <a href={props.event.image} target="_blank" rel="noreferrer">
           <EventImage event={props.event} />
-        </Link>
+        </a>
+      </div>
+      <div className="event-right">
         <p>
-          <strong>Organiser:</strong>{' '}
+          Organiser:{' '}
           <Link href={`/profile/${organiser.username}`}>
             {organiser.username}
           </Link>
         </p>
         <p>
-          <strong>start:</strong>{' '}
+          start:{' '}
           {dayjs(props.event.timeStart).format('dddd, HH:mm, DD/MM/YYYY')}
         </p>
         <p>
-          <strong>end:</strong>{' '}
-          {dayjs(props.event.timeEnd).format('dddd, HH:mm, DD/MM/YYYY')}
+          end: {dayjs(props.event.timeEnd).format('dddd, HH:mm, DD/MM/YYYY')}
         </p>
+        <p>price: {props.event.price}</p>
+        <p>location: {props.event.location}</p>
         <p>
-          <strong>price:</strong> {props.event.price}
+          category: <Link href="/categories">{props.event.category}</Link>
         </p>
-        <p>
-          <strong>location:</strong> {props.event.location}
-        </p>
-        <p>
-          <strong>category:</strong> {props.event.category}
-        </p>
-        <p>
-          <strong>description:</strong> {props.event.description}
-        </p>
-        <p>
-          <strong>number of attendants:</strong>{' '}
-          {attendantsCount.count
-            ? attendantsCount.count
-            : 'No one yet. Be first!'}
-        </p>
+
+        <div>
+          <p>{props.event.description}</p>
+          <p>
+            <a target="_blank" rel="noreferrer" href={props.event.link}>
+              {props.event.link}
+            </a>
+          </p>
+
+          <p>
+            number of attendants:{' '}
+            {attendantsCount.count
+              ? attendantsCount.count
+              : 'No one yet. Be first!'}
+          </p>
+          <Link href={`/events/${props.event.id}`}>See more</Link>
+        </div>
+        <strong>
+          <Link
+            className="system-link center"
+            href={`/profile?returnTo=/events/${props.event.id}`}
+          >
+            Log in to attend this event or chat with others.
+          </Link>
+        </strong>
       </div>
-      <strong>
-        <Link
-          className="system-link center"
-          href={`/profile?returnTo=/events/${props.event.id}`}
-        >
-          Log in to attend this event or chat with others.
-        </Link>
-      </strong>
     </div>
   );
 }

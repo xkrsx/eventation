@@ -1,5 +1,6 @@
 'use client';
 
+import './EditProfilePreview.scss';
 import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 import {
   GeoapifyContext,
@@ -87,20 +88,25 @@ export default function EditProfilePreview(props: Props) {
 
   return (
     <div className="wrapper">
+      <h1>Edit profile</h1>
       <div className="profile">
-        <h1>Edit profile</h1>
-        <div className="profile">
-          <h1>User: {props.profile.username}</h1>
-          <h2>Location: {props.profile.location}</h2>
+        <div className="image-info">
           <ProfileImage profile={props.profile} />
-          <form
-            className="form"
-            onSubmit={async (event) => {
-              // eslint error: no preventDefault() even though there is one in called function
-              event.preventDefault();
-              await handleEdit(event);
-            }}
-          >
+          <div className="profile-info">
+            <h1>Username: {props.profile.username}</h1>
+            <h2>Full name: {props.profile.fullName}</h2>
+          </div>
+        </div>
+
+        <form
+          className="form"
+          onSubmit={async (event) => {
+            // eslint error: no preventDefault() even though there is one in called function
+            event.preventDefault();
+            await handleEdit(event);
+          }}
+        >
+          <div className="upload-username-name">
             <ImageUpload
               buttonText="Upload profile picture"
               options={{
@@ -110,59 +116,64 @@ export default function EditProfilePreview(props: Props) {
               alt={editedUser.username}
               uploadType="profile"
             />
-            <label>
-              username
-              <input
-                required
-                name="username"
-                value={editedUser.username}
-                onChange={handleChange}
-              />
-            </label>
-            <label>
-              full name
-              <input
-                required
-                name="fullName"
-                value={editedUser.fullName}
-                onChange={handleChange}
-              />
-            </label>
-            <div className="location">
-              <GeoapifyContext apiKey="4ca7dda985114a55bf51c15172c59328">
-                <GeoapifyGeocoderAutocomplete
-                  // value="gorzów"
-                  placeholder="City"
-                  type="city"
-                  limit={3}
-                  allowNonVerifiedHouseNumber={true}
-                  sendGeocoderRequestFunc={sendGeocoderRequest}
-                  addDetails={true}
-                  sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
+            <div className="username-name">
+              <label>
+                username
+                <input
+                  required
+                  name="username"
+                  value={editedUser.username}
+                  onChange={handleChange}
                 />
-              </GeoapifyContext>
-              Original location: {props.profile.location}
+              </label>
+              <label>
+                full name
+                <input
+                  required
+                  name="fullName"
+                  value={editedUser.fullName}
+                  onChange={handleChange}
+                />
+              </label>
             </div>
-            <label>
-              e-mail
-              <input
-                required
-                type="email"
-                name="email"
-                value={editedUser.email}
-                onChange={handleChange}
+          </div>
+          <div className="location">
+            <GeoapifyContext apiKey="4ca7dda985114a55bf51c15172c59328">
+              <GeoapifyGeocoderAutocomplete
+                // value="gorzów"
+                placeholder="City"
+                type="city"
+                limit={3}
+                allowNonVerifiedHouseNumber={true}
+                sendGeocoderRequestFunc={sendGeocoderRequest}
+                addDetails={true}
+                sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
               />
-            </label>
+            </GeoapifyContext>
+            <p className="original-location">
+              Original location: {props.profile.location}
+            </p>
+          </div>
+          <label>
+            e-mail
+            <input
+              required
+              type="email"
+              name="email"
+              value={editedUser.email}
+              onChange={handleChange}
+            />
+          </label>
 
-            <button>Save changes</button>
-            {errors.map((error) => (
-              <div className="error" key={`error-${error.message}`}>
-                <ErrorMessage>{error.message}</ErrorMessage>
-              </div>
-            ))}
-          </form>
-
+          <button className="button-action">Save changes</button>
+          {errors.map((error) => (
+            <div className="error" key={`error-${error.message}`}>
+              <ErrorMessage>{error.message}</ErrorMessage>
+            </div>
+          ))}
+          {/* <div className="delete-profile"> */}
           <button
+            className="button-delete"
             onClick={async () => {
               const response = await fetch(`/api/users/${props.profile.id}`, {
                 method: 'DELETE',
@@ -192,7 +203,10 @@ export default function EditProfilePreview(props: Props) {
           >
             Delete my profile
           </button>
-        </div>
+
+          {/* </div> */}
+        </form>
+
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </div>
     </div>

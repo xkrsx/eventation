@@ -1,0 +1,9 @@
+.event {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+
+  div {
+    padding: var(--primary-padding);
+  }
+}

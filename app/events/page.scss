@@ -10,6 +10,13 @@
     justify-content: space-evenly;
     align-items: space-between;
 
+    .no-events-info {
+      strong,
+      li {
+        padding: calc(var(--primary-padding) / 2);
+      }
+    }
+
     .event {
       display: flex;
       flex-direction: column;
@@ -17,10 +24,18 @@
       padding: var(--primary-padding);
       height: auto;
       width: 45%;
-      border: 1px dashed black;
+      border: var(--primary-border-style);
       overflow: hidden;
       border-radius: var(--primary-border-radius);
       backface-visibility: hidden;
+
+      ul {
+        li {
+          padding: calc(var(--primary-padding) / 2);
+          display: flex;
+          justify-content: space-around;
+        }
+      }
 
       p {
         line-height: 1.5rem;

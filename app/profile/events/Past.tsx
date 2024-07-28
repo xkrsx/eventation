@@ -8,16 +8,19 @@ type Props = {
 
 export default function PastEvents(props: Props) {
   return (
-    <div className="attending">
-      <h2>Past</h2>
+    <div className="events">
       {props.events.length === 0 ? (
-        <div>
+        <div className="event">
           <strong>There are currently no events you were attending.</strong>{' '}
           <Link href="/events/find">Find event</Link>
         </div>
       ) : (
         props.events.map((event) => {
-          return <SingleEventLogged key={`id-${event.id}`} event={event} />;
+          return (
+            <div className="event" key={`id-${event.id}`}>
+              return <SingleEventLogged event={event} />
+            </div>
+          );
         })
       )}
     </div>

@@ -194,8 +194,9 @@ export default function EditEventPreview(props: Props) {
               onChange={handleChange}
             />
           </label>
-          <button>Save changes</button>
+          <button className="button-confirm">Save changes</button>
           <button
+            className="button-action"
             onClick={() => {
               setShowForm(!showForm);
             }}
@@ -212,6 +213,7 @@ export default function EditEventPreview(props: Props) {
         <div style={{ border: '1px solid black' }}>
           <SingleEventLogged event={props.event} />
           <button
+            className="button-action"
             onClick={() => {
               setShowForm(!showForm);
               setEventId(props.event.id);
@@ -233,9 +235,10 @@ export default function EditEventPreview(props: Props) {
               });
             }}
           >
-            {showForm ? 'Cancel event' : 'Edit event'}
+            {showForm ? 'Cancel edit' : 'Edit event'}
           </button>
           <button
+            className="button-delete"
             onClick={async () => {
               const response = await fetch(`/api/events/${props.event.id}`, {
                 method: 'DELETE',

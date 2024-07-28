@@ -23,7 +23,7 @@ export default async function EventsLogged(props: Props) {
   return (
     <div className="wrapper">
       {user?.location === '' ? (
-        <>
+        <div className="event">
           <h1>All events</h1>
           <div className="events">
             <strong>Please add location to see events in your city.</strong>
@@ -31,14 +31,40 @@ export default async function EventsLogged(props: Props) {
               Edit your profile
             </Link>
           </div>
-        </>
+        </div>
       ) : (
         <>
           <h1>Events in {user?.location}</h1>
           <div className="events">
-            {events.map((event) => {
-              return <SingleEventLogged key={`id-${event.id}`} event={event} />;
-            })}
+            {events.length === 0 ? (
+              <div className="event">
+                <ul>
+                  <li>
+                    <strong>Sorry, no events found in {user?.location}</strong>
+                  </li>
+                  <li>
+                    <Link className="system-link" href="/categories">
+                      Browse categories
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="system-link" href="/events/add">
+                      Add event
+                    </Link>
+
+                    <Link className="system-link" href="/events/find">
+                      Find event
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              events.map((event) => {
+                return (
+                  <SingleEventLogged key={`id-${event.id}`} event={event} />
+                );
+              })
+            )}
           </div>
         </>
       )}
