@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@mui/material';
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
 import { useState } from 'react';
 
@@ -68,9 +69,9 @@ export default function ImageUpload(props: Props) {
             open();
           }
           return (
-            <button onClick={handleOnClick}>
+            <Button variant="outlined" onClick={handleOnClick}>
               {!isUploaded ? props.buttonText : 'Reupload new image'}
-            </button>
+            </Button>
           );
         }}
       </CldUploadWidget>

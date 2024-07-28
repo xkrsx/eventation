@@ -13,11 +13,7 @@ export default function Categories() {
           return (
             <Link key={`id-${category.id}`} href={`/categories/${category.id}`}>
               <div className="category">
-                <Image
-                  src={`/images/categories/${category.id}.webp`}
-                  alt={category.name}
-                  fill
-                />
+                <Image src={category.url} alt={category.name} fill />
                 <div className="name-holder">
                   <div className="category-name">{category.name}</div>
                 </div>

@@ -1,4 +1,6 @@
 'use client';
+
+import { Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { getSafeReturnToPath } from '../../../util/validation';
@@ -54,10 +56,9 @@ export default function LoginForm(props: Props) {
 
   return (
     <div className="wrapper">
-      <div className="register">
-        <h1>Login</h1>
+      <div className="login-form">
         <form
-          className="form"
+          className="form login"
           onSubmit={async (event) => {
             // eslint error: no preventDefault() even though there is one in called function
             event.preventDefault();
@@ -65,7 +66,7 @@ export default function LoginForm(props: Props) {
           }}
         >
           <label>
-            username{' '}
+            username
             <input
               required
               name="username"
@@ -75,7 +76,7 @@ export default function LoginForm(props: Props) {
           </label>
 
           <label>
-            password{' '}
+            password
             <input
               required
               type="password"
@@ -84,8 +85,7 @@ export default function LoginForm(props: Props) {
               onChange={handleChange}
             />
           </label>
-
-          <button>Login</button>
+          <Button variant="contained">Login</Button>
 
           {errors.map((error) => (
             <div className="error" key={`error-${error.message}`}>

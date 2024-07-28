@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&display=swap');
+
 .home-wrapper {
   padding: var(--primary-padding);
   margin: 0 auto;
@@ -5,16 +7,24 @@
   .home-banner {
     position: relative;
     width: auto;
-    height: 70vh;
     overflow: hidden;
     border-radius: var(--primary-border-radius);
-
-    .category-banner {
-      object-fit: cover;
-    }
   }
-  a {
-    padding-top: calc(var(--primary-padding) / 2);
-    text-align: right;
+  .main-slogans {
+    width: 50%;
+    margin: 0 auto;
+
+    p {
+      font-family: 'Edu AU VIC WA NT Hand', cursive;
+      font-size: 1.5rem;
+      font-weight: 300;
+      margin: 0 var(--primary-margin) 0;
+      color: var(--primary-color-three);
+
+      &:nth-child(even) {
+        color: var(--primary-color-four);
+        text-align: right;
+      }
+    }
   }
 }

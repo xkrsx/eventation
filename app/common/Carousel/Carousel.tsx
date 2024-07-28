@@ -11,20 +11,15 @@ import {
   NextButton,
   PrevButton,
   usePrevNextButtons,
-} from './EmblaCarouselArrowButtons';
-import { DotButton, useDotButton } from './EmblaCarouselDotButton';
+} from './CarouselArrowButtons';
 
-type PropType = {
-  slides: number[];
+type Props = {
   options?: EmblaOptionsType;
 };
 
-const EmblaCarousel: React.FC<PropType> = (props) => {
-  const { slides, options } = props;
+export default function Carousel(props: Props) {
+  const { options } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Fade(), Autoplay()]);
-
-  const { selectedIndex, scrollSnaps, onDotButtonClick } =
-    useDotButton(emblaApi);
 
   const categories = categoriesObject;
 
@@ -47,6 +42,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                   src={category.url}
                   alt={category.name}
                 />
+                <div className="name-holder">{category.name}</div>
               </Link>
             </div>
           ))}
@@ -61,6 +57,4 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       </div>
     </div>
   );
-};
-
-export default EmblaCarousel;
+}

@@ -78,11 +78,6 @@ body {
       color: var(--primary-logout-color);
       cursor: pointer;
     }
-
-    form {
-      display: flex;
-      flex-direction: column;
-    }
   }
 
   a {
@@ -93,6 +88,7 @@ body {
   .system-link {
     color: var(--primary-logout-color);
     text-decoration: underline;
+    text-align: center;
   }
 
   @media (prefers-color-scheme: dark) {
