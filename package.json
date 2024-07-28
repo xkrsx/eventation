@@ -25,6 +25,7 @@
     "embla-carousel-autoplay": "^8.1.7",
     "embla-carousel-fade": "^8.1.7",
     "embla-carousel-react": "^8.1.7",
+    "ics": "^3.7.6",
     "next": "15.0.0-canary.51",
     "next-cloudinary": "^6.6.2",
     "postgres": "^3.4.4",

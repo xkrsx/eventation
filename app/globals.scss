@@ -73,6 +73,18 @@ body {
       list-style: none;
     }
 
+    .menu-icon {
+      margin: var(--primary-margin);
+      height: var(--primary-menu-icons-size);
+      width: var(--primary-menu-icons-size);
+      transition: var(--primary-transition);
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+
     .logout-button {
       padding: 0;
       border: none;
