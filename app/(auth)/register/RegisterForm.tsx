@@ -247,7 +247,7 @@ export default function RegisterForm(props: Props) {
             )}
           </div>
 
-          <Button variant="contained">Register</Button>
+          <button className="button-action">Register</button>
 
           {errors.map((error) => (
             <div className="error" key={`error-${error.message}`}>

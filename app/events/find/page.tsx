@@ -1,3 +1,4 @@
+import './page.scss';
 import { cookies } from 'next/headers';
 import { getValidSession } from '../../../database/sessions';
 import FindEventForm from './FindEventForm';

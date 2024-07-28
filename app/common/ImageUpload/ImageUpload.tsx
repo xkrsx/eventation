@@ -69,9 +69,9 @@ export default function ImageUpload(props: Props) {
             open();
           }
           return (
-            <Button variant="outlined" onClick={handleOnClick}>
+            <button className="button-action" onClick={handleOnClick}>
               {!isUploaded ? props.buttonText : 'Reupload new image'}
-            </Button>
+            </button>
           );
         }}
       </CldUploadWidget>

@@ -1,35 +1,36 @@
 'use client';
-
+import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 import { useState } from 'react';
 import { ZodIssue } from 'zod';
 import { Event } from '../../../database/events';
 import { Session } from '../../../migrations/00001-createTableSessions';
-import FindEventAccurateForm from './AccurateForm';
+import SingleEventNotLogged from '../../common/SingleEvent/SingleEventNotLogged';
 import FindEventInaccurateForm from './InaccurateForm';
+
+// import ErrorMessage from '../../ErrorMessage';
 
 type Props = {
   session: Omit<Session, 'id'> | undefined;
 };
 
 export default function FindEventForm(props: Props) {
-  const [accurate, setAccurate] = useState('inaccurate');
-  const [results, setResults] = useState<
-    (Event | undefined)[] | (string | ZodIssue[])
-  >([]);
+  // const [accurate, setAccurate] = useState('inaccurate');
+  // const [errorMessage, setErrorMessage] = useState('');
+  const [results, setResults] = useState<Event[]>([]);
 
-  const handleRadioChange = (value: string) => {
-    setAccurate(value);
-  };
+  // const handleRadioChange = (value: string) => {
+  //   setAccurate(value);
+  // };
 
-  function addSearchResults(
-    events: (Event | undefined)[] | (string | ZodIssue[]),
-  ) {
-    setResults(events);
+  function addSearchResults(events: Event[] | string | ZodIssue[]) {
+    if (typeof events === 'object') {
+      return setResults(events as Event[]);
+    }
   }
 
   return (
     <div>
-      <div className="search">
+      {/* <div className="search-engine">
         Search engine:{' '}
         <input
           type="radio"
@@ -53,13 +54,29 @@ export default function FindEventForm(props: Props) {
         ) : (
           <FindEventAccurateForm addResultsToShow={addSearchResults} />
         )}
-        <h2>Results</h2>
-        {/* TODO FIX show results */}
-        {/* <ErrorMessage>{results as string}</ErrorMessage> */}
-        {/* {results.length >= 1 &&
-          results.map((event) => (
-            <SingleEventNotLogged key={`key-${event!.id}`} event={event} />
-          ))} */}
+      </div> */}
+      <FindEventInaccurateForm addResultsToShow={addSearchResults} />
+
+      <div className="results">
+        {/* <ErrorMessage>{errorMessage}</ErrorMessage> */}
+        {results.length !== 0 && (
+          <>
+            <button
+              className="button-action"
+              onClick={(event) => {
+                event.preventDefault();
+                setResults([]);
+              }}
+            >
+              Clear results
+            </button>
+            <h2>Results</h2>
+
+            {results.map((event) => (
+              <SingleEventNotLogged key={`key-${event.id}`} event={event} />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
