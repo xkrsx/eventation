@@ -6,6 +6,7 @@ import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
+import { Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import {
@@ -121,19 +122,20 @@ export default function RegisterForm(props: Props) {
 
   return (
     <div className="wrapper">
-      <div className="register">
-        <h1>Register</h1>
-        <ImageUpload
-          buttonText="Upload profile picture"
-          options={{
-            sources: ['local', 'camera', 'url', 'dropbox', 'google_drive'],
-          }}
-          addUrlOnUpload={addImageUrl}
-          alt={newUser.username}
-          uploadType="profile"
-        />
+      <div className="registration-form">
+        <div className="image-upload">
+          <ImageUpload
+            buttonText="Upload profile picture"
+            options={{
+              sources: ['local', 'camera', 'url', 'dropbox', 'google_drive'],
+            }}
+            addUrlOnUpload={addImageUrl}
+            alt={newUser.username}
+            uploadType="profile"
+          />
+        </div>
         <form
-          className="form"
+          className="form registration"
           onSubmit={async (event) => {
             // eslint error: no preventDefault() even though there is one in called function
             event.preventDefault();
@@ -178,7 +180,7 @@ export default function RegisterForm(props: Props) {
               onChange={handleChange}
             />
           </label>
-          <div className="location">
+          <label className="location">
             <GeoapifyContext apiKey="4ca7dda985114a55bf51c15172c59328">
               <GeoapifyGeocoderAutocomplete
                 placeholder="City"
@@ -190,7 +192,7 @@ export default function RegisterForm(props: Props) {
                 sendPlaceDetailsRequestFunc={sendPlaceDetailsRequest}
               />
             </GeoapifyContext>
-          </div>
+          </label>
           <label>
             e-mail
             <input
@@ -245,7 +247,8 @@ export default function RegisterForm(props: Props) {
             )}
           </div>
 
-          <button>Register</button>
+          <Button variant="contained">Register</Button>
+
           {errors.map((error) => (
             <div className="error" key={`error-${error.message}`}>
               <ErrorMessage>{error.message}</ErrorMessage>

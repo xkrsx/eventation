@@ -9,7 +9,7 @@ export default async function FindEvent() {
   // 2. Check if the sessionToken from cookie is still valid in DB
   const session = sessionCookie && (await getValidSession(sessionCookie.value));
   return (
-    <div>
+    <div className="wrapper">
       <h1>Find events</h1>
       <FindEventForm session={session} />
     </div>

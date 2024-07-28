@@ -28,8 +28,8 @@ export default function FindEventForm(props: Props) {
   }
 
   return (
-    <div className="wrapper">
-      <div className="event">
+    <div>
+      <div className="search">
         Search engine:{' '}
         <input
           type="radio"

@@ -4,6 +4,7 @@ import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from '@geoapify/react-geocoder-autocomplete';
+import { Button } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { ZodIssue } from 'zod';
 import { categoriesObject } from '../../../database/categories';
@@ -132,7 +133,7 @@ export default function FindEventInaccurateForm(props: Props) {
               />
             </GeoapifyContext>
           </label>
-          <button>Find matching events</button>
+          <Button variant="outlined">Find matching events</Button>
         </form>
       </div>
     </div>

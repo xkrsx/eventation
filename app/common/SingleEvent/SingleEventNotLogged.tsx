@@ -69,7 +69,7 @@ export default async function SingleEventNotLogged(props: Props) {
       </div>
       <strong>
         <Link
-          className="system-link"
+          className="system-link center"
           href={`/profile?returnTo=/events/${props.event.id}`}
         >
           Log in to attend this event or chat with others.
