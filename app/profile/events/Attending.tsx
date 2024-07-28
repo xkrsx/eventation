@@ -18,7 +18,7 @@ export default function AttendingEvents(props: Props) {
         props.events.map((event) => {
           return (
             <div className="event" key={`id-${event.id}`}>
-              return <SingleEventLogged event={event} />
+              <SingleEventLogged event={event} />
             </div>
           );
         })

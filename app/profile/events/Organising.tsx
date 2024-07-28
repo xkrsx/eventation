@@ -183,7 +183,7 @@ export default function OrganisingEvents(props: Props) {
       <ErrorMessage>{errorMessage}</ErrorMessage>
 
       {props.events.length === 0 ? (
-        <div>
+        <div className="event">
           <strong>There are currently no events you are organising.</strong>{' '}
           <Link href="/events/add">Add new event</Link>
         </div>
