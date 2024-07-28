@@ -1,3 +1,4 @@
+import './page.scss';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { getAllEventsSingleCategoryInsecure } from '../../../database/events';
@@ -24,9 +25,30 @@ export default async function SingleCategoryFromParams(props: Props) {
 
   if (categoryName === undefined) {
     return (
-      <div>
-        <strong>Sorry, category not found.</strong>
-        <Link href="/events/find">Find event.</Link>
+      <div className="wrapper">
+        <p>
+          <Link className="system-link" href="/categories">
+            categories
+          </Link>
+          /
+        </p>
+        <h1>Category not found</h1>
+        <div className="category">
+          <div className="event">
+            <ul>
+              <li>
+                <Link className="system-link" href="/categories">
+                  Browse categories
+                </Link>
+              </li>
+              <li>
+                <Link className="system-link" href="/events/find">
+                  Find event
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     );
   }
@@ -35,24 +57,49 @@ export default async function SingleCategoryFromParams(props: Props) {
 
   // // 5. if no events, show info; show events for not logged and logged
   return (
-    <div>
+    <div className="wrapper">
+      <p>
+        <Link className="system-link" href="/categories">
+          categories
+        </Link>{' '}
+        /
+      </p>
       <h1>{categoryName}</h1>
-      {events.length === 0 ? (
-        <div>
-          <strong>Sorry, no events found in this category.</strong>
-          <Link href="/events/find">Find event.</Link>
-        </div>
-      ) : (
-        events.map(
-          (event) =>
-            events.length >= 1 &&
-            (session ? (
-              <SingleEventLogged key={`id-${event.id}`} event={event} />
-            ) : (
-              <SingleEventNotLogged key={`id-${event.id}`} event={event} />
-            )),
-        )
-      )}
+      <div className="category">
+        {events.length === 0 ? (
+          <div className="event">
+            <ul>
+              <li>
+                <strong>Sorry, no events found in this category</strong>
+              </li>
+              <li>
+                <Link className="system-link" href="/categories">
+                  Browse categories
+                </Link>
+              </li>
+              <li>
+                <Link className="system-link" href="/events/add">
+                  Add event
+                </Link>
+
+                <Link className="system-link" href="/events/find">
+                  Find event
+                </Link>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          events.map(
+            (event) =>
+              events.length >= 1 &&
+              (session ? (
+                <SingleEventLogged key={`id-${event.id}`} event={event} />
+              ) : (
+                <SingleEventNotLogged key={`id-${event.id}`} event={event} />
+              )),
+          )
+        )}
+      </div>
     </div>
   );
 }

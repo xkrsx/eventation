@@ -1,5 +1,6 @@
 import './globals.scss';
 import type { Metadata } from 'next';
+import Footer from './common/Footer/Footer';
 import Header from './common/Header/Header';
 import CookieBanner from './CookieBanner';
 
@@ -26,6 +27,7 @@ export default function RootLayout({
           <Header />
           {children}
           <CookieBanner />
+          <Footer />
         </div>
       </body>
     </html>

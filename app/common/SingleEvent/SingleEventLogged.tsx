@@ -1,5 +1,6 @@
 'use server';
 
+import './SingleEvent.scss';
 import dayjs from 'dayjs';
 import { cookies } from 'next/headers';
 import Link from 'next/link';

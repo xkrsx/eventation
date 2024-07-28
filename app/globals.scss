@@ -9,6 +9,7 @@
   --primary-margin: 1rem;
   --primary-transition: 0.5s ease-in-out;
   --primary-border-style: 0.1rem var(--primary-color-three) dashed;
+  --primary-border-radius: 0.5rem;
 
   --primary-color-one: #ffea3f;
   --primary-color-two: #e59e73;
@@ -58,9 +59,14 @@ body {
   font-family: var(--primary-font-style);
 
   .wrapper {
-    width: 95vw;
+    width: 100%;
     margin: 0 auto;
     padding: var(--primary-padding);
+
+    h1 {
+      color: var(--primary-logout-color);
+      padding-bottom: var(--primary-padding);
+    }
 
     .logout-button {
       padding: 0;
@@ -70,7 +76,6 @@ body {
       height: var(--primary-menu-icons-size);
       width: var(--primary-menu-icons-size);
       color: var(--primary-logout-color);
-
       cursor: pointer;
     }
 
@@ -81,8 +86,13 @@ body {
   }
 
   a {
-    color: inherit;
+    color: var(--secondary-background-color);
+    font-weight: 500;
     text-decoration: none;
+  }
+  .system-link {
+    color: var(--primary-logout-color);
+    text-decoration: underline;
   }
 
   @media (prefers-color-scheme: dark) {

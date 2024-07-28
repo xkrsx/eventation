@@ -1,0 +1,19 @@
+.category {
+  margin: 0 auto;
+  width: 90%;
+
+  .event {
+    background-color: var(--third-background-color);
+    padding: var(--primary-padding);
+    border-radius: var(--primary-border-radius);
+
+    ul {
+      list-style: none;
+      li {
+        padding: calc(var(--primary-padding) / 2);
+        display: flex;
+        justify-content: space-around;
+      }
+    }
+  }
+}
