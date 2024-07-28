@@ -1,4 +1,18 @@
 .footer {
   border-top: var(--primary-border-style);
   padding: var(--primary-padding);
+  display: flex;
+  justify-content: space-between;
+
+  .nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: calc(2 * var(--primary-padding));
+
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  }
 }
