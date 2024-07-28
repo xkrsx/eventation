@@ -60,6 +60,7 @@ export default function EditEventPreview(props: Props) {
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLSelectElement>,
   ) {
+    event.preventDefault();
     const value = event.target.value;
 
     setErrorMessage('');

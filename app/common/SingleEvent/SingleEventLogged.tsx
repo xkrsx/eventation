@@ -13,7 +13,6 @@ import {
   countAttendantsInsecure,
 } from '../../../database/usersEventsStatus';
 import AttendanceStatusForm from '../AttendanceStatus/AttendanceStatusForm';
-import DownloadIcs from '../DownloadIcs/DownloadIcs';
 import DownloadIcsButton from '../DownloadIcs/DownloadIcs';
 import EventImage from '../Images/EventImage/EventImage';
 
@@ -105,6 +104,7 @@ export default async function SingleEventLogged(props: Props) {
           <p>
             <Link href={`/events/${props.event.id}`}>See more</Link>
           </p>
+
           <DownloadIcsButton event={props.event} />
         </div>
 
