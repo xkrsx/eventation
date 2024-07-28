@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ZodIssue } from 'zod';
 import { Event } from '../../../database/events';
 import { Session } from '../../../migrations/00001-createTableSessions';
+import SingleEventLogged from '../../common/SingleEvent/SingleEventLogged';
 import SingleEventNotLogged from '../../common/SingleEvent/SingleEventNotLogged';
 import FindEventInaccurateForm from './InaccurateForm';
 
@@ -72,9 +73,13 @@ export default function FindEventForm(props: Props) {
             </button>
             <h2>Results</h2>
 
-            {results.map((event) => (
-              <SingleEventNotLogged key={`key-${event.id}`} event={event} />
-            ))}
+            {results.map((event) =>
+              props.session ? (
+                <SingleEventLogged key={`key-${event.id}`} event={event} />
+              ) : (
+                <SingleEventNotLogged key={`key-${event.id}`} event={event} />
+              ),
+            )}
           </>
         )}
       </div>
