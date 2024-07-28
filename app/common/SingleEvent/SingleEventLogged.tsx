@@ -25,14 +25,9 @@ export default async function SingleEventLogged(props: Props) {
   if (!session) {
     return redirect('/profile?returnTo=/profile/events');
   }
-  if (!props.event) {
-    return redirect('/events/find');
-  }
 
   const organiser = await getUserPublicByIdInsecure(props.event.userId);
-  if (!organiser) {
-    redirect(`/events/find`);
-  }
+
   const attendanceSessionCheck = await checkStatus(
     session.token,
     session.userId,

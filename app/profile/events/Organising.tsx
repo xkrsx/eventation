@@ -52,8 +52,7 @@ export default function OrganisingEvents(props: Props) {
   const categories = categoriesObject;
 
   return (
-    <div className="organising">
-      <h2>Organising</h2>
+    <div className="events">
       {showForm ? (
         <form
           onSubmit={async (e) => {
@@ -183,7 +182,12 @@ export default function OrganisingEvents(props: Props) {
       )}
       <ErrorMessage>{errorMessage}</ErrorMessage>
 
-      {props.events.length >= 1 ? (
+      {props.events.length === 0 ? (
+        <div>
+          <strong>There are currently no events you are organising.</strong>{' '}
+          <Link href="/events/add">Add new event</Link>
+        </div>
+      ) : (
         props.events.map((event) => {
           return (
             <div
@@ -192,6 +196,7 @@ export default function OrganisingEvents(props: Props) {
             >
               <SingleEventLogged event={event} />
               <button
+                className="button-action"
                 onClick={() => {
                   setShowForm(!showForm);
                   setEventId(event.id);
@@ -216,6 +221,7 @@ export default function OrganisingEvents(props: Props) {
                 {showForm ? 'Cancel event' : 'Edit event'}
               </button>
               <button
+                className="button-delete"
                 onClick={async () => {
                   const response = await fetch(`/api/events/${event.id}`, {
                     method: 'DELETE',
@@ -248,11 +254,6 @@ export default function OrganisingEvents(props: Props) {
             </div>
           );
         })
-      ) : (
-        <div>
-          <strong>There are currently no events you are organising.</strong>{' '}
-          <Link href="/events/add">Add new event</Link>
-        </div>
       )}
     </div>
   );

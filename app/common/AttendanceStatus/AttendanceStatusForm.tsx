@@ -54,25 +54,37 @@ export default function AttendanceStatusForm(props: Props) {
     <form>
       {props.session !== undefined ? (
         attendanceStatus ? (
-          <strong>attending? {attendanceStatus}</strong>
+          <>
+            <p>attending?</p>
+            <strong>{attendanceStatus}</strong>
+          </>
         ) : (
           <strong>you have not responded yet</strong>
         )
       ) : (
         ''
       )}
+      <div className="attendance-buttons">
+        <button
+          className="button-confirm"
+          onClick={handleStatusChange}
+          name="yes"
+        >
+          YES
+        </button>
 
-      <button onClick={handleStatusChange} name="yes">
-        YES
-      </button>
-      {' | '}
-      <button onClick={handleStatusChange} name="maybe">
-        MAYBE
-      </button>
-      {' | '}
-      <button onClick={handleStatusChange} name="no">
-        NO
-      </button>
+        <button
+          className="button-maybe"
+          onClick={handleStatusChange}
+          name="maybe"
+        >
+          MAYBE
+        </button>
+
+        <button className="button-no" onClick={handleStatusChange} name="no">
+          NO
+        </button>
+      </div>
 
       {errors.map((error) => (
         <div className="error" key={`error-${error.message}`}>

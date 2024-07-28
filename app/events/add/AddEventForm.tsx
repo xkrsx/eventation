@@ -231,7 +231,9 @@ export default function AddEventForm(props: Props) {
             Link
             <input name="link" value={newEvent.link} onChange={handleChange} />
           </label>
-          <button disabled={isDisabled}>Add event</button>
+          <button className="button-confirm" disabled={isDisabled}>
+            Add event
+          </button>
         </form>
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </div>
