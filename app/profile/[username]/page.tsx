@@ -68,7 +68,9 @@ export default async function UserProfile(props: Props) {
         <ProfileImage profile={profile} />
 
         {session.userId === profile.id && (
-          <Link href="/profile/edit">Edit your profile</Link>
+          <p>
+            <Link href="/profile/edit">Edit your profile</Link>
+          </p>
         )}
       </div>
     </div>
