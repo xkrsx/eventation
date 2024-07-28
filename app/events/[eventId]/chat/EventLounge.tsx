@@ -69,10 +69,10 @@ export default function EventLounge(props: Props) {
                 key={`id-${message.id}`}
                 className="chat-message"
                 style={{
-                  textAlign: !isCurrentUser && 'left',
-                  backgroundColor: isCurrentUser && '#b199b2',
-                  marginRight: isCurrentUser && '10px',
-                  marginLeft: !isCurrentUser && '10px',
+                  textAlign: isCurrentUser ? 'right' : 'left',
+                  backgroundColor: isCurrentUser ? '#b199b2' : '#ced3b8',
+                  marginRight: isCurrentUser ? '10px' : 'auto',
+                  marginLeft: !isCurrentUser ? '10px' : 'auto',
                 }}
               >
                 <p className="message-content">{message.content}</p>
