@@ -68,6 +68,10 @@ body {
       padding-bottom: var(--primary-padding);
     }
 
+    ul {
+      list-style: none;
+    }
+
     .logout-button {
       padding: 0;
       border: none;

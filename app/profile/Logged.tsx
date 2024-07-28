@@ -14,7 +14,9 @@ export default function ProfileLogged(props: Props) {
       <div className="profile">
         <div className="image-info">
           <div className="user-image">
-            <ProfileImage profile={props.profile} />
+            <Link href={`/profile/${props.profile.username}`}>
+              <ProfileImage profile={props.profile} />
+            </Link>
           </div>
           <div className="info-actions">
             <div className="profile-info">

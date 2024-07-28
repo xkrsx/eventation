@@ -1,6 +1,3 @@
-// TODO edit profile, eg.: username, full name, location etc.
-// show edit options only for each logged user
-
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
