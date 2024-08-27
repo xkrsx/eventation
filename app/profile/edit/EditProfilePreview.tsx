@@ -1,6 +1,6 @@
 'use client';
 
-import './EditProfilePreview.scss';
+// import './EditProfilePreview.scss';
 import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 import {
   GeoapifyContext,

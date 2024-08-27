@@ -1,4 +1,4 @@
-import './page.scss';
+// import './page.scss';
 import { cookies } from 'next/headers';
 import { getValidSession } from '../../database/sessions';
 import EventsLogged from './EventsLogged';

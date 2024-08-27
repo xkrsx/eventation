@@ -1,4 +1,4 @@
-import './Logged.scss';
+// import './Logged.scss';
 import Link from 'next/link';
 import LogoutButton from '../(auth)/logout/LogoutButton';
 import { User } from '../../migrations/00000-createTableUsers';

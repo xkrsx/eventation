@@ -1,4 +1,4 @@
-import './ErrorMessage.scss';
+// import './ErrorMessage.scss';
 import { ReactNode } from 'react';
 
 type Props = {

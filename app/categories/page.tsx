@@ -1,4 +1,4 @@
-import './page.scss';
+// import './page.scss';
 import Link from 'next/link';
 import { categoriesObject } from '../../database/categories';
 

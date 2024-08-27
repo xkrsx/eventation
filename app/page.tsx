@@ -1,7 +1,6 @@
-import './page.scss';
-import './common/Carousel/Carousel.scss';
+// import './page.scss';
+// import './common/Carousel/Carousel.css';
 import { EmblaOptionsType } from 'embla-carousel';
-// import Image from 'next/image';
 import Carousel from './common/Carousel/Carousel';
 
 const OPTIONS: EmblaOptionsType = { loop: true, duration: 60 };

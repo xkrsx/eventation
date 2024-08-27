@@ -1,5 +1,5 @@
 'use client';
-import './ProfileImage.scss';
+// import './ProfileImage.scss';
 import { CldImage } from 'next-cloudinary';
 import { User } from '../../../../migrations/00000-createTableUsers';
 

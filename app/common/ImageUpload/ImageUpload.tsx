@@ -1,6 +1,6 @@
 'use client';
 
-import './ImageUpload.scss';
+// import './ImageUpload.scss';
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
 import { useState } from 'react';
 

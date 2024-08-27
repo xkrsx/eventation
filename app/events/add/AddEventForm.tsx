@@ -1,6 +1,6 @@
 'use client';
 import '@geoapify/geocoder-autocomplete/styles/minimal.css';
-import './AddEventForm.scss';
+// import './AddEventForm.scss';
 import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,

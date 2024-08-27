@@ -1,4 +1,4 @@
-import './Header.scss';
+// import './Header.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import logoPic from '../../../public/images/logo-1028-412.webp';

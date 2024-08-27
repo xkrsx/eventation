@@ -1,6 +1,6 @@
 'use server';
 
-import './SingleEvent.scss';
+// import './SingleEvent.scss';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';

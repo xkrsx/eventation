@@ -1,4 +1,4 @@
-import './Events.scss';
+// import './Events.scss';
 import Link from 'next/link';
 import { Event } from '../../../database/events';
 import SingleEventLogged from '../../common/SingleEvent/SingleEventLogged';

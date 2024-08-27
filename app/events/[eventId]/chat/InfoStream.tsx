@@ -1,6 +1,6 @@
 'use client';
 
-import './Chat.scss';
+// import './Chat.scss';
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
 import { InfoStreamMessage } from '../../../../migrations/00005-createTableInfoStream';

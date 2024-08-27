@@ -1,6 +1,6 @@
 'use client';
 
-import './CookieBanner.scss';
+// import './CookieBanner.scss';
 import { useEffect, useState } from 'react';
 import { parseJson } from '../util/json';
 import { getLocalStorage, setLocalStorage } from '../util/localStorage';

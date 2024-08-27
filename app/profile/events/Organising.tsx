@@ -1,6 +1,6 @@
 'use client';
 
-import './Events.scss';
+// import './Events.scss';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
